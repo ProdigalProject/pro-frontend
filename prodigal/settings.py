@@ -26,7 +26,7 @@ SECRET_KEY = '9dcaj!(s3f5g60=nf+b7$(fg(2mn7gu4&!c1v-=socg&chz@*a'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'prodigal.azurewebsites.net',         
+    'prodigal-beta.azurewebsites.net',         
         
 ]
 
