@@ -76,6 +76,16 @@ class AuthUserUserPermissions(models.Model):
         unique_together = (('user', 'permission'),)
 
 
+class DemoChat(models.Model):
+    id = models.IntegerField(blank=True, null=True)
+    created = models.DateTimeField(blank=True, null=True)
+    message = models.CharField(max_length=200, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'demo_chat'
+
+
 class DjangoAdminLog(models.Model):
     action_time = models.DateTimeField()
     user = models.ForeignKey(AuthUser, models.DO_NOTHING)

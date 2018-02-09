@@ -1,0 +1,88 @@
+<html>
+<head>
+<title>
+CS411
+</title>
+</head>
+
+<body>
+<style>
+body{
+   background-color: #ADDFFF
+}
+
+</style>
+<center><font size="15"><h1> Movie Hunter </h1></font></center>
+
+<center><h1> Feedback Messages: {{sentence}} </h1></center>
+<center><h1> Title: {{title}} </h1></center>
+<center><h1> Genres: {{genres}}</h1></center>
+<center><h1> tags: {{tags}} </h1></center>
+<center><h1> Average rating: {{ratings}}</h1></center>
+<center><h1> Movies you may like: {{recommendation}}</h1></center>
+<center><form id="form_id" method="post" name="myform" action="/getMovie/">
+	{% csrf_token %}
+        <label>Movie ID :</font></label>
+	<input type="text" name="movieID"/>
+	<input type="submit" value="Search" id="submit"/>
+	<span name="movieName">
+	<span name="movieGere">
+</form></center>
+
+<center><form id="form_id2" method="post" name="myform2" action = "/insertMovieRating/">
+	{% csrf_token %}
+	<label> Insert Movie Rating : </label>
+<!--
+	<input type="text" name = "insertUserid" value = {{userId}}/>
+-->
+	<input type="text" name = "insertMovieid" value = "movieid"/>
+	<input type="text" name = "insertRating" value = "rating"/>
+	<input type = "submit" value = "Insert" id="submit2"/>
+</form></center>
+
+
+<center><form id="form_id3" method="post" name="myform3" action="/deleteMovieRating/">
+	{% csrf_token %}
+	<label>Delete your rating :</label>
+<!--
+	<input type="text" name = "deleteUserid" value = {{userId}}/>
+-->
+	<input type="text" name = "deleteMovieid" value = "movieid"/>
+	<input type="submit" value="Delete" id="submit3"/>
+</form></center>
+
+<center><form id="form_id4" method="post" name="myform4" action="/updateMovieRating/">
+        {% csrf_token %}
+<!--        
+	<label>User ID :</label>
+        <input type="text" name="updateUserid" value = {{userId}}/>
+-->
+        <label>Updata your rating :</label>
+        <input type="text" name="updateMovieid" value = "movieid"/>
+        <input type="text" name="updateRating" value = "rating"/>
+        <input type="submit" value="Update" id="submit4"/>
+</form></center>
+
+<center><form id="form_id5" method="post" action="/recommend/">
+        {% csrf_token %}
+        <input type="submit" value="Recommend movies for me!"/>
+</form></center>
+
+<center><form id="form_id6" method="post" action="/login/">
+        {% csrf_token %}
+        <input type="submit" value="Logout"/>
+</form></center>
+
+<script>
+	document.getElementById("button1").onclick = function(){
+		var r = new XMLHttpRequest();
+		r.open("GET","/getRandomWord", false);
+		r.send(null);
+		console.log(r.responseText);
+		alert(r.responseText);
+	}
+
+</script>
+
+</body>
+</html>

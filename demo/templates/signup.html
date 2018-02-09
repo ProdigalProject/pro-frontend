@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/3/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+<head>
+  <title>SignUp</title>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="w3-bar w3-black">
+  <a id="openNav" class="w3-button w3-bar-item w3-xlarge">&#9776;</a>
+  <a href="index.html" class="w3-button w3-bar-item w3-xlarge w3-right">Home</a>
+  <a href="login.html" class="w3-button w3-bar-item w3-xlarge w3-right">Log In</a> 
+</nav>
+
+<!-- login Form -->
+<div id="form">
+    <div class="w3-card-4" style="max-width:2000px">
+      <div class="w3-center"><br>
+          <img src="https://a.scpr.org/i/8e77b375a5cc54f830b5574eb43ef7fc/108474-full.jpg" alt="Avatar" style="width:31%" class="w3-round-large w3-margin-top">
+      </div>
+      <form class="w3-container" id="form_id" method="post" name="myform" action="/create_user/">
+          {% csrf_token %}
+            <label><b>User Name</b></label>
+            <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="username" required>
+            <label><b>Full Name</b></label>
+            <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Fullname" name="fullname" required>
+            <label><b>Password</b></label>
+            <input class="w3-input w3-border" type="password" placeholder="Enter Password" name="password" required>
+            <button class="w3-button w3-block w3-black w3-section w3-padding" type="submit" id="submit">Sign Up!</button>
+      </form>
+	{{sentence}}
+    </div>
+</div>
+
+<!-- Footer -->
+<footer id="Home" class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
+  <a href="#"><i class="fa fa-facebook-official"></i></a>
+  <a href="#"><i class="fa fa-pinterest-p"></i></a>
+  <a href="#"><i class="fa fa-twitter"></i></a>
+  <a href="#"><i class="fa fa-flickr"></i></a>
+  <a href="#"><i class="fa fa-linkedin"></i></a>
+  <p class="w3-medium">
+  Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a>
+  </p>
+</footer>
+
+</body>
+</html>

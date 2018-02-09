@@ -1,0 +1,89 @@
+(0.000) SELECT @@SQL_AUTO_IS_NULL; args=None
+(0.000) SELECT VERSION(); args=None
+(0.001) SHOW FULL TABLES; args=None
+(0.000) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+"GET /login HTTP/1.1" 200 2259
+(0.000) SELECT @@SQL_AUTO_IS_NULL; args=None
+(0.000) select fullname from users WHERE username='testuser' and password=''; args=[u'testuser', u'']
+"GET /authenticate?username=testuser&password= HTTP/1.1" 200 4
+(0.000) SELECT @@SQL_AUTO_IS_NULL; args=None
+(0.000) SELECT VERSION(); args=None
+(0.001) SHOW FULL TABLES; args=None
+(0.000) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+"GET /login HTTP/1.1" 200 2259
+"GET /login HTTP/1.1" 200 2259
+(0.000) SELECT @@SQL_AUTO_IS_NULL; args=None
+(0.000) select fullname from users WHERE username='testuser' and password=''; args=[u'testuser', u'']
+"GET /authenticate?username=testuser&password= HTTP/1.1" 200 4
+(0.000) SELECT @@SQL_AUTO_IS_NULL; args=None
+(0.000) SELECT VERSION(); args=None
+(0.001) SHOW FULL TABLES; args=None
+(0.000) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+"GET /login HTTP/1.1" 200 2259
+"GET /login HTTP/1.1" 200 2259
+(0.000) SELECT @@SQL_AUTO_IS_NULL; args=None
+(0.000) select fullname from users WHERE username='testuser' and password=''; args=[u'testuser', u'']
+"GET /authenticate?username=testuser&password= HTTP/1.1" 200 4
+(0.000) SELECT @@SQL_AUTO_IS_NULL; args=None
+(0.000) select fullname from users WHERE username='testuser' and password=''; args=[u'testuser', u'']
+"GET /authenticate?username=testuser&password= HTTP/1.1" 200 4
+(0.000) SELECT @@SQL_AUTO_IS_NULL; args=None
+(0.000) SELECT VERSION(); args=None
+(0.001) SHOW FULL TABLES; args=None
+(0.000) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+(0.000) SELECT @@SQL_AUTO_IS_NULL; args=None
+(0.000) select fullname from users WHERE username='testuser' and password=''; args=[u'testuser', u'']
+"GET /authenticate?username=testuser&password= HTTP/1.1" 200 4
+(0.000) SELECT @@SQL_AUTO_IS_NULL; args=None
+(0.000) SELECT VERSION(); args=None
+(0.001) SHOW FULL TABLES; args=None
+(0.000) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+"GET /login HTTP/1.1" 200 2259
+(0.000) SELECT @@SQL_AUTO_IS_NULL; args=None
+(0.000) select fullname from users WHERE username='testuser' and password=''; args=[u'testuser', u'']
+"GET /authenticate?username=testuser&password= HTTP/1.1" 200 4
+(0.000) SELECT @@SQL_AUTO_IS_NULL; args=None
+(0.000) SELECT VERSION(); args=None
+(0.001) SHOW FULL TABLES; args=None
+(0.000) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+(0.008) SELECT @@SQL_AUTO_IS_NULL; args=None
+(0.000) SELECT VERSION(); args=None
+(0.066) SHOW FULL TABLES; args=None
+(0.017) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/lib64/python2.7/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/usr/lib64/python2.7/site-packages/django/core/handlers/base.py", line 249, in _legacy_get_response
+    response = self._get_response(request)
+  File "/usr/lib64/python2.7/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/usr/lib64/python2.7/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/jwu105/cs411projectdemo/demo/views.py", line 11, in index
+    return render(request, "index.html")
+  File "/usr/lib64/python2.7/site-packages/django/shortcuts.py", line 30, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/usr/lib64/python2.7/site-packages/django/template/loader.py", line 67, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/usr/lib64/python2.7/site-packages/django/template/loader.py", line 25, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+TemplateDoesNotExist: index.html
+Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "/usr/lib64/python2.7/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    (bit, current))  # missing attribute
+VariableDoesNotExist: Failed lookup for key [name] in u'None'
+Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "/usr/lib64/python2.7/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    (bit, current))  # missing attribute
+VariableDoesNotExist: Failed lookup for key [name] in u'None'
+"GET / HTTP/1.1" 500 82927
+Exception while resolving variable 'name' in template 'unknown'.
+Traceback (most recent call last):
+  File "/usr/lib64/python2.7/site-packages/django/template/base.py", line 903, in _resolve_lookup
+    (bit, current))  # missing attribute
+VariableDoesNotExist: Failed lookup for key [name] in u'<RegexURLResolver <RegexURLPattern list> (admin:admin) ^admin/>'
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2308
