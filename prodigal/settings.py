@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'prodigal-beta.azurewebsites.net',         
-        
+    '*'
 ]
 
 
