@@ -4,6 +4,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/3/w3.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+<!-- google login api -->
+<meta name="google-signin-scope" content="profile email">
+<meta name="google-signin-client_id" content="980240961216-5av3cni9q9lpl9mpjfvkc26l9fq0guka.apps.googleusercontent.com">
+<script src="https://apis.google.com/js/platform.js" async defer></script>
 <head>
   <title>Login</title>
 </head>
@@ -41,7 +45,7 @@
 <!-- Footer -->
 <footer id="Home" class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
   <a href="#"><i class="fa fa-facebook-official"></i></a>
-  <a href="#"><i class="fa fa-pinterest-p"></i></a>
+  <a href="#"><i class="fa fa-google" data-onsuccess="onSignIn"></i></a>
   <a href="#"><i class="fa fa-twitter"></i></a>
   <a href="#"><i class="fa fa-flickr"></i></a>
   <a href="#"><i class="fa fa-linkedin"></i></a>
@@ -49,6 +53,23 @@
   Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a>
   </p>
 </footer>
+<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+<script>
+      function onSignIn(googleUser) {
+        // Useful data for your client-side scripts:
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+      };
+</script>
 
 </body>
 </html>
