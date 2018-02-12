@@ -4,6 +4,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/3/w3.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="slick/slick.css"/>
+<link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
 <head>
     <meta charset="UTF-8">
     <title>Welcome to Prodigal!</title>
@@ -15,8 +17,29 @@
       <a href="/prodigal_app" class="w3-button w3-bar-item w3-large w3-right">Home</a>
       <a href="signup" class="w3-button w3-bar-item w3-large w3-right">Sign Up</a>
     </nav>
+    <!-- Sliding Images -->
+    <div class="sliding_images" align="center">
+        <div>Image 1</div>
+        <div>Image 2</div>
+        <div>Image 3</div>
+    </div>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script type="text/javascript" src="slick/slick.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() { // Extract to external js?
+            $('.sliding_images').slick({ // Slick settings here
+                dots: true,
+                autoplay: true,
+                autoplaySpeed: 5000,
+                pauseOnFocus: false
+            });
+        });
+    </script>
+
     <h1 align="center"> This is index page. </h1>
     <h3 align="center"><a href="profile"> To different page. </a></h3>
     <h3 align="center"><a href="login"> To login page. </a></h3>
+
 </body>
 </html>
