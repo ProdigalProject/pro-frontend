@@ -24,7 +24,7 @@
 <div id="form">
     <div class="w3-card-4" style="max-width:2000px">
       <div class="w3-center"><br>
-          <img src="https://i.stack.imgur.com/GmDqj.jpg" alt="Avatar" style="width:40%" class="w3-round-large w3-margin-to:p">
+          <img src="https://i.stack.imgur.com/GmDqj.jpg" alt="Avatar" style="width:40%" class="w3-round-large w3-margin-top">
       </div>
       <form class="w3-container" id="form_id" method="post" name="myform" action="/authenticate/">
           {% csrf_token %}
@@ -35,8 +35,9 @@
             <button class="w3-button w3-block w3-black w3-section w3-padding" type="submit" id="submit">Login</button>
             <input class="w3-check w3-margin-top" type="checkbox" checked="checked"> Remember me
       </form>
-      <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
-          <a href="signup_new.html" class="w3-button w3-red">Sign Up</a>
+      <div class="w3-bar w3-border-top w3-padding-16 w3-light-grey">
+          <a href="signup_new.html" class="w3-button w3-bar-item w3-red">Sign Up</a>
+          <a class="g-signin2 w3-bar-item" style="margin-left:40%;" data-onsuccess="onSignIn" data-theme="dark"></a>
           <span class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span>
       </div>
     </div>
@@ -45,7 +46,7 @@
 <!-- Footer -->
 <footer id="Home" class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
   <a href="#"><i class="fa fa-facebook-official"></i></a>
-  <a href="#"><i class="fa fa-google g-signin2" data-onsuccess="onSignIn"></i></a>
+  <a href="#"><i class="fa fa-google"></i></a>
   <a href="#"><i class="fa fa-twitter"></i></a>
   <a href="#"><i class="fa fa-flickr"></i></a>
   <a href="#"><i class="fa fa-linkedin"></i></a>
@@ -53,7 +54,6 @@
   Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a>
   </p>
 </footer>
-<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
 <script>
       function onSignIn(googleUser) {
         // Useful data for your client-side scripts:
