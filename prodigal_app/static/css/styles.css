@@ -1,1 +1,8 @@
+div.paragraphs{
+    margin: 0 2% 0 2%
+}
 
+div.searchbar-container{
+    background-color: white;
+    display:inline
+}
