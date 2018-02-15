@@ -37,8 +37,9 @@
             <input class="w3-check w3-margin-top" type="checkbox" checked="checked"> Remember me
       </form>
       <div class="w3-bar w3-border-top w3-padding-16 w3-light-grey">
-          <a href="signup_new.html" class="w3-button w3-bar-item w3-red">Sign Up</a>
-          <a class="g-signin2 w3-bar-item" style="margin-left:40%;" data-onsuccess="onSignIn" data-theme="dark"></a>
+          <a href="signup" class="w3-button w3-bar-item w3-red">Sign Up</a>
+          <a id="login" class="g-signin2 w3-bar-item" style="margin-left:40%;display:block;" data-onsuccess="onSignIn" data-theme="dark"></a>
+          <a id="signout" class="w3-button w3-bar-item w3-red" style="margin-left:40%;display:none;" onclick="signOut()" data-theme="dark">Sign Out</a>
           <span class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span>
       </div>
     </div>
@@ -69,7 +70,49 @@
         // The ID token you need to pass to your backend:
         var id_token = googleUser.getAuthResponse().id_token;
         console.log("ID Token: " + id_token);
+/*
+        // Send id_token to server
+        var xhr = new XMLHttpRequest();
+        //xhr.open('POST', 'https://prodigal-beta.azurewebsites.net/tokensignin');
+        {% csrf_token %}
+        xhr.open('POST', 'tokensignin');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+          console.log('Signed in as: ' + xhr.responseText);
+        };
+        xhr.send('idtoken=' + id_token);
+*/
+        // Hide login button
+        var login = document.getElementById("login");
+        login.style.display = "none";
+        // Show signout button
+        var signout = document.getElementById("signout");
+        signout.style.display = "block";
+
+        var auth2 = gapi.auth2.getAuthInstance();
+        if (auth2.isSignedIn.get()) {
+          window.location = "profile";
+        }
+        
+        // automatically signout after send id_token to server
+         auth2.signOut().then(function () {
+          console.log('User signed out.');
+        });
       };
+
+      function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function () {
+          console.log('User signed out.');
+        });
+
+        // Show login button
+        var login = document.getElementById("login");
+        login.style.display = "block";
+        // Hide signout button
+        var signout = document.getElementById("signout");
+        signout.style.display = "none";
+      }
 </script>
 
 </body>
