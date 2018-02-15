@@ -3,6 +3,23 @@ div.paragraphs{
 }
 
 div.searchbar-container{
-    background-color: white;
-    display:inline
+    display:inline-block;
+    position:absolute;
+    left:33%
+}
+
+.search-bar{
+    height:43px;
+    width:400px;
+    vertical-align: middle;
+    padding:0 5px 0 5px
+}
+
+.search-bar::-webkit-input-placeholder{
+    font-size: 16px;
+    font-style: italic
+}
+
+#navbar_logo{
+    padding: 0 8px 0 8px
 }

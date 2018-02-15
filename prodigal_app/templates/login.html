@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
+{% load static %}
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/3/w3.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}"/>
 <!-- google login api -->
 <meta name="google-signin-scope" content="profile email">
 <meta name="google-signin-client_id" content="980240961216-j1jkheikdjiklppbr2m7rn0u61mv6a7o.apps.googleusercontent.com">
@@ -15,9 +17,8 @@
 
 <!-- Navigation -->
 <nav class="w3-bar w3-black w3-padding-16">
-  <a id="openNav" class="w3-button w3-bar-item w3-xlarge">&#9776;</a>
-  <a href="/prodigal_app" class="w3-button w3-bar-item w3-large w3-right">Home</a>
-    <a href="signup" class="w3-button w3-bar-item w3-large w3-right">Sign Up</a>
+  <a href="/prodigal_app" id="navbar_logo" class="w3-bar-item"><img src="{% static "images/navbar_logo.png" %}"></a>
+  <a href="signup" id="navbar_signup" class="w3-button w3-bar-item w3-large w3-right">Sign Up</a>
 </nav>
 
 <!-- login Form -->

@@ -15,12 +15,12 @@
 <body>
     <!-- Navigation -->
     <nav class="w3-bar w3-black w3-padding-16">
-      <a href="/prodigal_app" class="w3-button w3-bar-item w3-xlarge">Logo Here woohoo</a>
-      <a href="login" class="w3-button w3-bar-item w3-large w3-right">Log In</a>
-      <a href="signup" class="w3-button w3-bar-item w3-large w3-right">Sign Up</a>
+      <a href="/prodigal_app" id="navbar_logo" class="w3-bar-item"><img src="{% static "images/navbar_logo.png" %}"></a>
+      <a href="login" id="navbar_login" class="w3-button w3-bar-item w3-large w3-right">Log In</a>
+      <a href="signup" id="navbar_signup" class="w3-button w3-bar-item w3-large w3-right">Sign Up</a>
     </nav>
     <!-- Sliding Images -->
-    <div class="slick-container">
+    <div id="image_carousel" class="slick-container">
         <img src="{% static 'images/index_slick_image1.jpeg' %}">
         <img src="{% static 'images/index_slick_image2.jpeg' %}">
         <img src="{% static 'images/index_slick_image3.jpeg' %}">
@@ -40,10 +40,11 @@
             });
         });
     </script>
-
-    <h1 align="center"> Prodigal </h1>
+    <div id="main_logo">
+        <h1 align="center"> Prodigal </h1>
+    </div>
     <br>
-    <div class="paragraphs">
+    <div id="index_intro" class="paragraphs">
         <h2> Prodigal? </h2>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. At imperdiet dui accumsan sit amet nulla facilisi morbi tempus. Aliquet lectus proin nibh nisl condimentum id venenatis a. Sed lectus vestibulum mattis ullamcorper velit sed ullamcorper morbi tincidunt. At auctor urna nunc id cursus. Tempor orci dapibus ultrices in iaculis. Vel elit scelerisque mauris pellentesque. Vivamus at augue eget arcu. Egestas tellus rutrum tellus pellentesque eu. Commodo elit at imperdiet dui accumsan. Id eu nisl nunc mi ipsum faucibus. Senectus et netus et malesuada fames ac turpis. Quam elementum pulvinar etiam non quam lacus suspendisse faucibus interdum. Cursus mattis molestie a iaculis at erat pellentesque adipiscing commodo. Sit amet purus gravida quis blandit turpis. Enim ut sem viverra aliquet eget sit amet tellus cras. Netus et malesuada fames ac turpis egestas maecenas pharetra convallis. Ultrices tincidunt arcu non sodales neque sodales ut etiam sit.</p>
         <h2> Prodigal? </h2>
