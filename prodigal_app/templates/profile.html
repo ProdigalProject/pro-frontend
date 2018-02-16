@@ -1,36 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-{% load static %}
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/3/w3.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-<link rel="stylesheet" href="{% static "css/styles.css" %}">
-<head>
-    <meta charset="UTF-8">
-    <title>Prodigal - Profile</title>
-</head>
-<body>
-    <!-- Navigation -->
-    <nav class="w3-bar w3-black w3-padding-16">
-        <a href="/prodigal_app" class="w3-button w3-bar-item w3-xlarge">Logo Here woohoo</a>
-        <div class="searchbar-container w3-bar-item w3-large">
-            <input type="text" class="w3-input" placeholder="Search by ticker symbol...">
-        </div>
-        <a href="#" class="w3-button w3-blue w3-bar-item w3-large">Search</a>
-
-    </nav>
-    <h1 align="center"> This is a secret profile page.</h1>
-
-    <!-- Footer -->
-    <footer id="Home" class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
-    <a href="#"><i class="fa fa-facebook-official"></i></a>
-    <a href="#"><i class="fa fa-twitter"></i></a>
-    <a href="#"><i class="fa fa-flickr"></i></a>
-    <a href="#"><i class="fa fa-linkedin"></i></a>
-    <p class="w3-medium">
-    Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a>
-    </p>
-    </footer>
-</body>
+    <head>
+        {% load static %}
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/3/w3.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+        <link rel="stylesheet" href="{% static "css/styles.css" %}">
+        <title>Prodigal - Profile</title>
+    </head>
+    <body>
+        <!-- Navigation -->
+        <nav class="w3-bar w3-black w3-padding-16">
+            <a href="/prodigal_app" id="navbar_logo" class="w3-bar-item"><img src="{% static "images/navbar_logo.png" %}" alt="prodigal_logo_horizontal"></a>
+            <div class="searchbar-container w3-large">
+                <input type="text" id="navbar_searchbox" class="search-bar" placeholder="Search by ticker symbol...">
+                <a href="#" id="navbar_search_submit" class="search-submit w3-button w3-blue w3-large">Search</a>
+            </div>
+        </nav>
+        <h1 align="center"> This is a secret profile page.</h1>
+        <div style="height:1440px"></div>
+        <!-- Footer -->
+        <footer id="Home" class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
+            <a href="#"><i class="fa fa-facebook-official"></i></a>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+            <a href="#"><i class="fa fa-flickr"></i></a>
+            <a href="#"><i class="fa fa-linkedin"></i></a>
+            <p class="w3-medium">
+                Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a>
+            </p>
+        </footer>
+    </body>
 </html>
