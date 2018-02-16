@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html>
 {% load static %}
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/3/w3.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}"/>
-<!-- google login api -->
-<meta name="google-signin-scope" content="profile email">
-<meta name="google-signin-client_id" content="980240961216-j1jkheikdjiklppbr2m7rn0u61mv6a7o.apps.googleusercontent.com">
-<script src="https://apis.google.com/js/platform.js" async defer></script>
 <head>
-  <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/3/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}"/>
+<!-- google login api -->
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="980240961216-j1jkheikdjiklppbr2m7rn0u61mv6a7o.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <title>Login</title>
 </head>
+
 <body>
 
 <!-- Navigation -->
 <nav class="w3-bar w3-black w3-padding-16">
-  <a href="/prodigal_app" id="navbar_logo" class="w3-bar-item"><img src="{% static "images/navbar_logo.png" %}"></a>
-  <a href="signup" id="navbar_signup" class="w3-button w3-bar-item w3-large w3-right">Sign Up</a>
+    <a href="/prodigal_app" id="navbar_logo" class="w3-bar-item"><img src="{% static "images/navbar_logo.png" %}" alt="navbar_logo"></a>
+    <a href="signup" id="navbar_signup" class="w3-button w3-bar-item w3-large w3-right">Sign Up</a>
 </nav>
 
 <!-- login Form -->
@@ -47,14 +48,12 @@
 
 <!-- Footer -->
 <footer id="Home" class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
-  <a href="#"><i class="fa fa-facebook-official"></i></a>
-  <a href="#"><i class="fa fa-google"></i></a>
-  <a href="#"><i class="fa fa-twitter"></i></a>
-  <a href="#"><i class="fa fa-flickr"></i></a>
-  <a href="#"><i class="fa fa-linkedin"></i></a>
-  <p class="w3-medium">
-  Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a>
-  </p>
+    <a href="#"><i class="fa fa-facebook-official"></i></a>
+    <a href="#"><i class="fa fa-google"></i></a>
+    <a href="#"><i class="fa fa-twitter"></i></a>
+    <a href="#"><i class="fa fa-flickr"></i></a>
+    <a href="#"><i class="fa fa-linkedin"></i></a>
+    <p class="w3-medium"> Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
 </footer>
 <script>
       function onSignIn(googleUser) {
@@ -70,7 +69,7 @@
         // The ID token you need to pass to your backend:
         var id_token = googleUser.getAuthResponse().id_token;
         console.log("ID Token: " + id_token);
-/*
+        /*
         // Send id_token to server
         var xhr = new XMLHttpRequest();
         //xhr.open('POST', 'https://prodigal-beta.azurewebsites.net/tokensignin');
@@ -81,7 +80,7 @@
           console.log('Signed in as: ' + xhr.responseText);
         };
         xhr.send('idtoken=' + id_token);
-*/
+        */
         // Hide login button
         var login = document.getElementById("login");
         login.style.display = "none";
