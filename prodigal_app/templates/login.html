@@ -1,118 +1,115 @@
 <!DOCTYPE html>
 <html>
-{% load static %}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/3/w3.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}"/>
-<!-- google login api -->
-    <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="980240961216-j1jkheikdjiklppbr2m7rn0u61mv6a7o.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <title>Login</title>
-</head>
+    {% load static %}
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/3/w3.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}"/>
+        <!-- google login api -->
+        <meta name="google-signin-scope" content="profile email">
+        <meta name="google-signin-client_id" content="980240961216-j1jkheikdjiklppbr2m7rn0u61mv6a7o.apps.googleusercontent.com">
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <title>Login</title>
+    </head>
+    <body>
+        <!-- Navigation -->
+        <nav class="w3-bar w3-black w3-padding-16">
+            <a href="/prodigal_app" id="navbar_logo" class="w3-bar-item"><img src="{% static "images/navbar_logo.png" %}" alt="prodigal_logo_horizontal"></a>
+            <a href="signup" id="navbar_signup" class="w3-button w3-bar-item w3-large w3-right">Sign Up</a>
+        </nav>
 
-<body>
+        <!-- login Form -->
+        <div id="form">
+            <div class="w3-card-4" style="max-width:2000px">
+              <div class="w3-center"><br>
+                  <img src="https://i.stack.imgur.com/GmDqj.jpg" alt="Avatar" style="width:40%" class="w3-round-large w3-margin-top">
+              </div>
+              <form class="w3-container" id="form_id" method="post" name="myform">
+                  {% csrf_token %}
+                    <label><b>Username</b></label>
+                    <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="username" required>
+                    <label><b>Password</b></label>
+                    <input class="w3-input w3-border" type="password" placeholder="Enter Password" name="password" required>
+                    <button class="w3-button w3-block w3-black w3-section w3-padding" type="submit" id="submit">Login</button>
+                    <input class="w3-check w3-margin-top" type="checkbox" checked="checked"> Remember me
+              </form>
+              <div class="w3-bar w3-border-top w3-padding-16 w3-light-grey">
+                  <a href="signup" class="w3-button w3-bar-item w3-red">Sign Up</a>
+                  <a id="login" class="g-signin2 w3-bar-item" style="margin-left:40%;display:block;" data-onsuccess="onSignIn" data-theme="dark"></a>
+                  <a id="signout" class="w3-button w3-bar-item w3-red" style="margin-left:40%;display:none;" onclick="signOut()" data-theme="dark">Sign Out</a>
+                  <span class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span>
+              </div>
+            </div>
+        </div>
 
-<!-- Navigation -->
-<nav class="w3-bar w3-black w3-padding-16">
-    <a href="/prodigal_app" id="navbar_logo" class="w3-bar-item"><img src="{% static "images/navbar_logo.png" %}" alt="navbar_logo"></a>
-    <a href="signup" id="navbar_signup" class="w3-button w3-bar-item w3-large w3-right">Sign Up</a>
-</nav>
+        <!-- Footer -->
+        <footer id="Home" class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
+            <a href="#"><i class="fa fa-facebook-official"></i></a>
+            <a href="#"><i class="fa fa-google"></i></a>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+            <a href="#"><i class="fa fa-flickr"></i></a>
+            <a href="#"><i class="fa fa-linkedin"></i></a>
+            <p class="w3-medium"> Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+        </footer>
+        <script>
+            function onSignIn(googleUser) {
+                // Useful data for your client-side scripts:
+                var profile = googleUser.getBasicProfile();
+                console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+                console.log('Full Name: ' + profile.getName());
+                console.log('Given Name: ' + profile.getGivenName());
+                console.log('Family Name: ' + profile.getFamilyName());
+                console.log("Image URL: " + profile.getImageUrl());
+                console.log("Email: " + profile.getEmail());
 
-<!-- login Form -->
-<div id="form">
-    <div class="w3-card-4" style="max-width:2000px">
-      <div class="w3-center"><br>
-          <img src="https://i.stack.imgur.com/GmDqj.jpg" alt="Avatar" style="width:40%" class="w3-round-large w3-margin-top">
-      </div>
-      <form class="w3-container" id="form_id" method="post" name="myform" action="/authenticate/">
-          {% csrf_token %}
-            <label><b>Username</b></label>
-            <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="username" required>
-            <label><b>Password</b></label>
-            <input class="w3-input w3-border" type="password" placeholder="Enter Password" name="password" required>
-            <button class="w3-button w3-block w3-black w3-section w3-padding" type="submit" id="submit">Login</button>
-            <input class="w3-check w3-margin-top" type="checkbox" checked="checked"> Remember me
-      </form>
-      <div class="w3-bar w3-border-top w3-padding-16 w3-light-grey">
-          <a href="signup" class="w3-button w3-bar-item w3-red">Sign Up</a>
-          <a id="login" class="g-signin2 w3-bar-item" style="margin-left:40%;display:block;" data-onsuccess="onSignIn" data-theme="dark"></a>
-          <a id="signout" class="w3-button w3-bar-item w3-red" style="margin-left:40%;display:none;" onclick="signOut()" data-theme="dark">Sign Out</a>
-          <span class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span>
-      </div>
-    </div>
-</div>
+                // The ID token you need to pass to your backend:
+                var id_token = googleUser.getAuthResponse().id_token;
+                console.log("ID Token: " + id_token);
+                /*
+                // Send id_token to server
+                var xhr = new XMLHttpRequest();
+                //xhr.open('POST', 'https://prodigal-beta.azurewebsites.net/tokensignin');
+                {% csrf_token %}
+                xhr.open('POST', 'tokensignin');
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onload = function() {
+                console.log('Signed in as: ' + xhr.responseText);
+                };
+                xhr.send('idtoken=' + id_token);
+                */
+                // Hide login button
+                var login = document.getElementById("login");
+                login.style.display = "none";
+                // Show signout button
+                var signout = document.getElementById("signout");
+                signout.style.display = "block";
 
-<!-- Footer -->
-<footer id="Home" class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
-    <a href="#"><i class="fa fa-facebook-official"></i></a>
-    <a href="#"><i class="fa fa-google"></i></a>
-    <a href="#"><i class="fa fa-twitter"></i></a>
-    <a href="#"><i class="fa fa-flickr"></i></a>
-    <a href="#"><i class="fa fa-linkedin"></i></a>
-    <p class="w3-medium"> Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
-</footer>
-<script>
-      function onSignIn(googleUser) {
-        // Useful data for your client-side scripts:
-        var profile = googleUser.getBasicProfile();
-        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-        console.log('Full Name: ' + profile.getName());
-        console.log('Given Name: ' + profile.getGivenName());
-        console.log('Family Name: ' + profile.getFamilyName());
-        console.log("Image URL: " + profile.getImageUrl());
-        console.log("Email: " + profile.getEmail());
+                var auth2 = gapi.auth2.getAuthInstance();
+                if (auth2.isSignedIn.get()) {
+                    window.location = "profile";
+                }
 
-        // The ID token you need to pass to your backend:
-        var id_token = googleUser.getAuthResponse().id_token;
-        console.log("ID Token: " + id_token);
-        /*
-        // Send id_token to server
-        var xhr = new XMLHttpRequest();
-        //xhr.open('POST', 'https://prodigal-beta.azurewebsites.net/tokensignin');
-        {% csrf_token %}
-        xhr.open('POST', 'tokensignin');
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onload = function() {
-          console.log('Signed in as: ' + xhr.responseText);
-        };
-        xhr.send('idtoken=' + id_token);
-        */
-        // Hide login button
-        var login = document.getElementById("login");
-        login.style.display = "none";
-        // Show signout button
-        var signout = document.getElementById("signout");
-        signout.style.display = "block";
+                // automatically signout after send id_token to server
+                auth2.signOut().then(function () {
+                console.log('User signed out.');
+                });
+            };
 
-        var auth2 = gapi.auth2.getAuthInstance();
-        if (auth2.isSignedIn.get()) {
-          window.location = "profile";
-        }
-        
-        // automatically signout after send id_token to server
-         auth2.signOut().then(function () {
-          console.log('User signed out.');
-        });
-      };
+            function signOut() {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                console.log('User signed out.');
+                });
 
-      function signOut() {
-        var auth2 = gapi.auth2.getAuthInstance();
-        auth2.signOut().then(function () {
-          console.log('User signed out.');
-        });
-
-        // Show login button
-        var login = document.getElementById("login");
-        login.style.display = "block";
-        // Hide signout button
-        var signout = document.getElementById("signout");
-        signout.style.display = "none";
-      }
-</script>
-
-</body>
+                // Show login button
+                var login = document.getElementById("login");
+                login.style.display = "block";
+                // Hide signout button
+                var signout = document.getElementById("signout");
+                signout.style.display = "none";
+            }
+        </script>
+    </body>
 </html>
