@@ -38,6 +38,15 @@ def signup(request):
     return render(request, "signup.html")
 
 
+def search(request):
+    """
+    Renders search page from template.
+    :param request: request from user
+    :return: rendered html
+    """
+    return render(request, "search.html")
+
+
 def receive_token(request):
     """
     Renders profile page after receiving user auth ID token.
