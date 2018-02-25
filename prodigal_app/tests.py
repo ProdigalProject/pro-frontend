@@ -3,16 +3,19 @@ from django.test import TestCase
 # Create your tests here.
 import unittest
 from selenium import webdriver
+from selenium.webdriver import FirefoxOptions
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
 class TestSignup(unittest.TestCase):
 
     def setUp(self):
+        opts = FirefoxOptions()
+        opts.add_argument("--headless")
         firefox_capabilities = DesiredCapabilities.FIREFOX
         firefox_capabilities['marionette'] = True
         firefox_capabilities['binary'] = '/usr/bin/firefox'
-        self.driver = webdriver.Firefox(capabilities=firefox_capabilities)
+        self.driver = webdriver.Firefox(capabilities=firefox_capabilities, firefox_options=opts)
 
     def test_homepage_rendering(self):
         self.driver.get("https://prodigal-beta.azurewebsites.net/")
