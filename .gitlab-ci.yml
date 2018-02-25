@@ -1,0 +1,13 @@
+Test:
+  script:
+    - python3 /home/gitlab-runner/builds/b74f8bb5/0/prodigal/pro-frontend/prodigal_app/tests.py
+  only:
+    - master
+
+Deploy:
+  script:
+    - az login --msi
+    - az webapp deployment source sync -n Prodigal-beta -g Prodigal-beta
+    - az logout
+  only:
+    - master
