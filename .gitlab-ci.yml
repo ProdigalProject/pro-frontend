@@ -1,6 +1,4 @@
 test:
   script:
-    - apt-get update -qy
-    - apt-get install -y python-dev python-pip
-    - pip install -r requirements.txt
-    - python prodigal_app/test.py
+    - pip3 install -r requirements.txt
+    - python3 prodigal_app/test.py
