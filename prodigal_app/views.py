@@ -45,8 +45,8 @@ def search(request):
     :param request: request from user
     :return: rendered html
     """
-    news_list, company_desc = nasdaq_scraper.scrape(request.POST.get('search_key',''))  # for testing now, should be from request in production
-    return render(request, "search.html", {"newslist": news_list, "desc": company_desc})
+    news_list, company_desc, company_name = nasdaq_scraper.scrape(request.POST.get('search_key',''))
+    return render(request, "search.html", {"newslist": news_list, "desc": company_desc, "name":company_name})
 
 
 def receive_token(request):

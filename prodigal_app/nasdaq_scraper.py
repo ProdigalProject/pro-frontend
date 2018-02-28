@@ -6,12 +6,16 @@ def scrape(ticker):
     """
     Scrapes recent news and company description from nasdaq.com
     :param ticker: Ticker Symbol entered by user.
-    :return: List of tuples (news_text, news_link) and list of company description paragraph.
+    :return: List of tuples (news_text, news_link), list of company description paragraph and string of company name.
     """
     # send request to nasdaq.com
     url = "https://www.nasdaq.com/symbol/"
     raw = requests.get(url + ticker)
     soup = BeautifulSoup(raw.text, 'lxml')
+    # search company name
+    name_div = soup.find('div', id='qwidget_pageheader')
+    name = name_div.find("h1").text
+    name = name.rstrip("Common Stock Quote & Summary Data")
     # search news
     news_div = soup.find('div', id='CompanyNewsCommentary')
     news_list = news_div.findAll('li')
@@ -26,4 +30,4 @@ def scrape(ticker):
     return_desc = []
     for p in bio_plist:
         return_desc.append(p.text)
-    return return_news, return_desc
+    return return_news, return_desc, name
