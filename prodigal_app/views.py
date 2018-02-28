@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from . import nasdaq_scraper
 
 
 # Create your views here.
@@ -44,7 +45,8 @@ def search(request):
     :param request: request from user
     :return: rendered html
     """
-    return render(request, "search.html")
+    news_list, company_desc = nasdaq_scraper.scrape("AAPL")  # for testing now, should be from request in production
+    return render(request, "search.html", {"newslist": news_list, "desc": company_desc})
 
 
 def receive_token(request):

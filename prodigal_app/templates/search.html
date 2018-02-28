@@ -21,9 +21,22 @@
                 <a href="profile" id="navbar_profile" class="w3-button w3-bar-item w3-large w3-right">Profile</a>
             </nav>
         </div>
-        Only chickens here!
-        <div style="height:1440px">
-            Placeholder div
+        <!-- Search results -->
+        <div id="result" style="margin-top:80px">
+            <div id="company_description">
+                <h2>Company Description</h2>
+                {% for p in desc %}
+                    <p> {{ p }} </p>
+                {% endfor %}
+            </div>
+            <div id="news">
+                <h2>News</h2>
+                <ul id="news_list">
+                    {% for news, link in newslist %}
+                        <li><a href={{ link }} target="_blank">{{ news }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
         <!-- Footer -->
         <footer id="Home" class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
