@@ -1,2 +1,5 @@
 selenium
 Django==2.0.2
+requests
+BeautifulSoup4
+lxml
