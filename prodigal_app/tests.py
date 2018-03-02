@@ -5,6 +5,7 @@ import unittest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
+
 class TestSignup(unittest.TestCase):
 
     def setUp(self):
@@ -16,6 +17,7 @@ class TestSignup(unittest.TestCase):
           self.driver = webdriver.Chrome("/usr/local/bin/chromedriver",chrome_options=chrome_opts)
           self.driver.get("https://prodigal-gamma.azurewebsites.net/")
           #self.driver.get("http://0.0.0.0:8000/")
+
     def test_homepage_rendering(self):
         assert "Welcome to Prodigal!" in self.driver.title
 
@@ -37,12 +39,11 @@ class TestSignup(unittest.TestCase):
         elem = self.driver.find_element_by_id('company_description')
         assert elem.text
         elem = self.driver.find_element_by_id('news')
-        assert elem.
+        assert elem.text
         # test exception handle
 
         # test api status
-        
-        
+
     def tearDown(self):
         self.driver.quit
 

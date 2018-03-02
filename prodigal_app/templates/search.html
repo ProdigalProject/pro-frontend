@@ -24,26 +24,56 @@
                 <a href="profile" id="navbar_profile" class="w3-button w3-bar-item w3-large w3-right">Profile</a>
             </nav>
         </div>
-        <!-- Search results -->
-        <div id="result" style="margin-top:80px">
-            <div id="company_name">
-                <h1>{{ name }}</h1>
-            </div>
-            <div id="company_description">
-                <h2>Company Description</h2>
-                {% for p in desc %}
-                    <p> {{ p }} </p>
-                {% endfor %}
-            </div>
-            <div id="news">
-                <h2>News</h2>
-                <ul id="news_list">
-                    {% for news, link in newslist %}
-                        <li><a href={{ link }} target="_blank">{{ news }}</a></li>
+        <!-- No matching search results -->
+        {% if msg %}
+        <div id="search-container" style="margin: 80px 2% 0 2%; height: 1000px">
+            <h1> {{ msg }} </h1>
+        </div>
+        <!-- Search Results -->
+        {% else %}
+        <div id="search-container" style="margin: 80px 2% 0 2%">
+            <div id="result">
+                <div id="company_name">
+                    <h1>{{ name }}</h1>
+                </div>
+                <div id="company_basic_stock">
+                    <table>
+                        <tr>
+                            <th>High:</th>
+                            <td>{{ high }}</td>
+                        </tr>
+                        <tr>
+                            <th>Low:</th>
+                            <td>{{ low }}</td>
+                        </tr>
+                        <tr>
+                            <th>Opening:</th>
+                            <td>{{ opening }}</td>
+                        </tr>
+                        <tr>
+                            <th>Closing:</th>
+                            <td>{{ closing }}</td>
+                        </tr>
+                    </table>
+                    <br>
+                </div>
+                <div id="company_description">
+                    <h2>Company Description</h2>
+                    {% for p in desc %}
+                        <p> {{ p }} </p>
                     {% endfor %}
-                </ul>
+                </div>
+                <div id="news">
+                    <h2>News</h2>
+                    <ul id="news_list">
+                        {% for news, link in newslist %}
+                            <li><a href={{ link }} target="_blank">{{ news }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
+        {% endif %}
         <!-- Footer -->
         <footer id="Home" class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
             <a href="#"><i class="fa fa-facebook-official"></i></a>

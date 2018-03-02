@@ -14,8 +14,12 @@ def scrape(ticker):
     soup = BeautifulSoup(raw.text, 'lxml')
     # search company name
     name_div = soup.find('div', id='qwidget_pageheader')
-    name = name_div.find("h1").text
-    name = name.rstrip("Common Stock Quote & Summary Data")
+    try:
+        name = name_div.find("h1").text
+    except AttributeError:
+        # Failed to find matching stock
+        return None, None, None
+    name = name[:-34]  # found case of rstrip() not working correctly
     # search news
     news_div = soup.find('div', id='CompanyNewsCommentary')
     news_list = news_div.findAll('li')
