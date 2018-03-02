@@ -17,7 +17,7 @@ class TestSignup(unittest.TestCase):
         firefox_capabilities = DesiredCapabilities.FIREFOX
         firefox_capabilities['marionette'] = True
         firefox_capabilities['binary'] = '/usr/bin/firefox'
-        self.driver = webdriver.Firefox(capabilities=firefox_capabilities, firefox_options=opts)
+        self.driver = webdriver.Firefox(capabilities=firefox_capabilities,firefox_options=opts)
 
     def test_homepage_rendering(self):
         self.driver.get("https://prodigal-beta.azurewebsites.net/")
@@ -33,7 +33,7 @@ class TestSignup(unittest.TestCase):
     
     def test_search_bar(self):
         self.driver.get("https://prodigal-beta.azurewebsites.net/")
-        elem = self.driver.find_element_by_id('Secret backdoor to profile page')
+        elem = self.driver.find_element_by_xpath('Secret backdoor to profile page')
         elem.click()
         elem = self.driver.find_element_by_id('navbar_searchbox')
         elem.send_keys('aapl')
