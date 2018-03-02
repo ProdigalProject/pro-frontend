@@ -57,12 +57,14 @@
                     </table>
                     <br>
                 </div>
+                {% if desc %}
                 <div id="company_description">
                     <h2>Company Description</h2>
                     {% for p in desc %}
                         <p> {{ p }} </p>
                     {% endfor %}
                 </div>
+                {% endif %}
                 <div id="news">
                     <h2>News</h2>
                     <ul id="news_list">
