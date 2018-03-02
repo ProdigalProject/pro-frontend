@@ -11,10 +11,13 @@ class TestSignup(unittest.TestCase):
     def setUp(self):
           chrome_opts = Options()
           chrome_opts.add_argument("--disable-extensions")
+          chrome_opts.add_argument("--headless")
+          chrome_opts.add_argument("--no-sandbox")
+          chrome_opts.add_argument("--disable-gpu")
         # firefox_capabilities = DesiredCapabilities.FIREFOX
         # firefox_capabilities['marionette'] = True
         # firefox_capabilities['binary'] = '/usr/bin/firefox'
-          self.driver = webdriver.Chrome("/usr/local/bin/chromedriver",chrome_options=chrome_opts)
+          self.driver = webdriver.Chrome(options=chrome_opts)
           self.driver.get("https://prodigal-gamma.azurewebsites.net/")
           #self.driver.get("http://0.0.0.0:8000/")
 
