@@ -3,26 +3,23 @@ from django.test import TestCase
 # Create your tests here.
 import unittest
 from selenium import webdriver
-from selenium.webdriver import FirefoxOptions
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-
+from selenium.webdriver.chrome.options import Options
 
 class TestSignup(unittest.TestCase):
 
     def setUp(self):
-        opts = FirefoxOptions()
-        opts.add_argument("--headless")
-        firefox_capabilities = DesiredCapabilities.FIREFOX
-        firefox_capabilities['marionette'] = True
-        firefox_capabilities['binary'] = '/usr/bin/firefox'
-        self.driver = webdriver.Firefox(capabilities=firefox_capabilities, firefox_options=opts)
-
+          chrome_opts = Options()
+          chrome_opts.add_argument("--disable-extensions")
+        # firefox_capabilities = DesiredCapabilities.FIREFOX
+        # firefox_capabilities['marionette'] = True
+        # firefox_capabilities['binary'] = '/usr/bin/firefox'
+          self.driver = webdriver.Chrome("/usr/local/bin/chromedriver",chrome_options=chrome_opts)
+          self.driver.get("https://prodigal-gamma.azurewebsites.net/")
+          #self.driver.get("http://0.0.0.0:8000/")
     def test_homepage_rendering(self):
-        self.driver.get("https://prodigal-beta.azurewebsites.net/")
         assert "Welcome to Prodigal!" in self.driver.title
 
     def test_logo_return_to_homepage(self):
-        self.driver.get("https://prodigal-beta.azurewebsites.net/")
         elem = self.driver.find_element_by_id('navbar_login')
         elem.click()
         elem = self.driver.find_element_by_id('navbar_logo')
@@ -30,14 +27,20 @@ class TestSignup(unittest.TestCase):
         assert "Welcome to Prodigal!" in self.driver.title
     
     def test_search_bar(self):
-        self.driver.get("https://prodigal-beta.azurewebsites.net/")
-        elem = self.driver.find_element_by_id('Secret backdoor to profile page')
+        elem = self.driver.find_element_by_xpath("//a[contains(text(),'Secret backdoor to profile page')]")
         elem.click()
         elem = self.driver.find_element_by_id('navbar_searchbox')
         elem.send_keys('aapl')
         elem.submit() 
         elem = self.driver.find_element_by_id('company_name')
         assert elem.text == 'Apple Inc.'
+        elem = self.driver.find_element_by_id('company_description')
+        assert elem.text
+        elem = self.driver.find_element_by_id('news')
+        assert elem.
+        # test exception handle
+
+        # test api status
         
         
     def tearDown(self):
