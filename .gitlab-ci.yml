@@ -1,5 +1,14 @@
 Selenium_Test:
   script:
+    - az login --msi
+    - az webapp deployment source sync -n prodigal-gamma -g prodigal
+    - sudo apt-get install -y openjdk-8-jre-headless xvfb libxi6 libgconf-2-4
+    - sudo apt-get install chromium-chromedriver
+    - sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver
+    - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+    - echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list
+    - sudo apt-get update
+    - sudo apt-get install google-chrome-stable
     - python3 /home/gitlab-runner/builds/b74f8bb5/0/prodigal/pro-frontend/prodigal_app/tests.py
   stage: test
   only:
