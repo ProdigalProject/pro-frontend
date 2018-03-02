@@ -28,7 +28,18 @@ class TestSignup(unittest.TestCase):
         elem = self.driver.find_element_by_id('navbar_logo')
         elem.click()
         assert "Welcome to Prodigal!" in self.driver.title
-
+    
+    def test_search_bar(self):
+        self.driver.get("https://prodigal-beta.azurewebsites.net/")
+        elem = self.driver.find_element_by_id('Secret backdoor to profile page')
+        elem.click()
+        elem = self.driver.find_element_by_id('navbar_searchbox')
+        elem.send_keys('aapl')
+        elem.submit() 
+        elem = self.driver.find_element_by_id('company_name')
+        assert elem.text == 'Apple Inc.'
+        
+        
     def tearDown(self):
         self.driver.quit
 
