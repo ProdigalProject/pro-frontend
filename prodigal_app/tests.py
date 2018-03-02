@@ -7,8 +7,6 @@ from selenium.webdriver import FirefoxOptions
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
-
-
 class TestSignup(unittest.TestCase):
 
     def setUp(self):
@@ -17,7 +15,7 @@ class TestSignup(unittest.TestCase):
         firefox_capabilities = DesiredCapabilities.FIREFOX
         firefox_capabilities['marionette'] = True
         firefox_capabilities['binary'] = '/usr/bin/firefox'
-        self.driver = webdriver.Firefox(capabilities=firefox_capabilities,firefox_options=opts)
+        self.driver = webdriver.Firefox(capabilities=firefox_capabilities, firefox_options=opts)
 
     def test_homepage_rendering(self):
         self.driver.get("https://prodigal-beta.azurewebsites.net/")
@@ -40,8 +38,7 @@ class TestSignup(unittest.TestCase):
         elem.submit() 
         elem = self.driver.find_element_by_id('company_name')
         assert elem.text == 'Apple Inc.'
-        
-        
+
     def tearDown(self):
         self.driver.quit
 
