@@ -1,4 +1,6 @@
 from django.shortcuts import render
+import requests
+from . import nasdaq_scraper
 
 
 # Create your views here.
@@ -36,6 +38,25 @@ def signup(request):
     :return: rendered html
     """
     return render(request, "signup.html")
+
+
+def search(request):
+    """
+    Renders search page from template.
+    :param request: request from user
+    :return: rendered html
+    """
+    ticker = request.POST.get('search_key', '')
+    news_list, company_desc, company_name = nasdaq_scraper.scrape(ticker)
+    if news_list is None:
+        return render(request, "search.html", {"msg": "No Matching Result."})
+    # use ticker symbol to get info when API gets done
+    url = "http://prodigal-ml.us-east-2.elasticbeanstalk.com/stocks/4/?format=json"
+    response = requests.get(url)
+    company_json = response.json()  # company_json now holds dictionary created by json data
+    return_dict = dict(newslist=news_list, desc=company_desc, name=company_name, high=company_json["high"],
+                       low=company_json["low"], opening=company_json["opening"], closing=company_json["closing"])
+    return render(request, "search.html", return_dict)
 
 
 def receive_token(request):

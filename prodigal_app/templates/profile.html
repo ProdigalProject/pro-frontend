@@ -15,13 +15,17 @@
             <nav class="w3-bar w3-black w3-padding-16">
                 <a href="/prodigal_app" id="navbar_logo" class="w3-bar-item"><img src="{% static "images/navbar_logo.png" %}" alt="prodigal_logo_horizontal"></a>
                 <div class="searchbar-container w3-large">
-                    <input type="text" id="navbar_searchbox" class="search-bar" placeholder="Search by ticker symbol...">
-                    <a href="#" id="navbar_search_submit" class="search-submit w3-button w3-blue w3-large">Search</a>
+                    <form id="search" method="POST" name="search_form" action="search">
+                        {% csrf_token %}
+                        <input type="search" id="navbar_searchbox" name="search_key" class="search-bar" placeholder="Search by ticker symbol...">
+                        <button id="navbar_search_submit" type="submit" class="search-submit w3-button w3-blue w3-large"><i class="fa fa-search"></i></button>
+                    </form>
                 </div>
             </nav>
         </div>
-        <h1 align="center"> This is a secret profile page.</h1>
-        <div style="height:1440px"></div>
+        <div style="height: 1440px; margin: 80px 2% 0 2%">
+            <h1 align="center"> This is a secret profile page.</h1>
+        </div>
         <!-- Footer -->
         <footer id="Home" class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
             <a href="#"><i class="fa fa-facebook-official"></i></a>
