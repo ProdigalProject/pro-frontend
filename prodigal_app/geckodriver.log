@@ -82,3 +82,111 @@ See /usr/include/servers/bootstrap_defs.h for the error codes.
 *** UTM:SVC TimerManager:registerTimer called after profile-before-change notification. Ignoring timer registration for id: telemetry_modules_ping
 2018-02-16 00:17:13.417 plugin-container[12990:2246503] *** CFMessagePort: bootstrap_register(): failed 1100 (0x44c) 'Permission denied', port = 0xaa37, name = 'com.apple.tsm.portname'
 See /usr/include/servers/bootstrap_defs.h for the error codes.
+1519965222268	geckodriver	INFO	geckodriver 0.19.1
+1519965222272	geckodriver	INFO	Listening on 127.0.0.1:60927
+1519965223387	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.nYT5IvpQmrwf"
+XPCOMGlueLoad error for file /usr/local/firefox/libmozgtk.so:
+libgtk-3.so.0: cannot open shared object file: No such file or directory
+Couldn't load XPCOM.
+1519965223494	geckodriver	INFO	geckodriver 0.19.1
+1519965223498	geckodriver	INFO	Listening on 127.0.0.1:46535
+1519965224615	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.A8y8xng2Zlm0"
+XPCOMGlueLoad error for file /usr/local/firefox/libmozgtk.so:
+libgtk-3.so.0: cannot open shared object file: No such file or directory
+Couldn't load XPCOM.
+1519965224721	geckodriver	INFO	geckodriver 0.19.1
+1519965224725	geckodriver	INFO	Listening on 127.0.0.1:49665
+1519965225842	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.3BNrvSCnAkPb"
+XPCOMGlueLoad error for file /usr/local/firefox/libmozgtk.so:
+libgtk-3.so.0: cannot open shared object file: No such file or directory
+Couldn't load XPCOM.
+1519965537504	geckodriver	INFO	geckodriver 0.19.1
+1519965537507	geckodriver	INFO	Listening on 127.0.0.1:39471
+1519965538631	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--headless" "-profile" "/tmp/rust_mozprofile.V1AfZq5CSIxj"
+XPCOMGlueLoad error for file /usr/local/firefox/libmozgtk.so:
+libgtk-3.so.0: cannot open shared object file: No such file or directory
+Couldn't load XPCOM.
+1519965538738	geckodriver	INFO	geckodriver 0.19.1
+1519965538741	geckodriver	INFO	Listening on 127.0.0.1:50797
+1519965539858	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--headless" "-profile" "/tmp/rust_mozprofile.r6kljN1wgsUY"
+XPCOMGlueLoad error for file /usr/local/firefox/libmozgtk.so:
+libgtk-3.so.0: cannot open shared object file: No such file or directory
+Couldn't load XPCOM.
+1519965539965	geckodriver	INFO	geckodriver 0.19.1
+1519965539969	geckodriver	INFO	Listening on 127.0.0.1:41997
+1519965541085	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--headless" "-profile" "/tmp/rust_mozprofile.ACx4VCQgswnH"
+XPCOMGlueLoad error for file /usr/local/firefox/libmozgtk.so:
+libgtk-3.so.0: cannot open shared object file: No such file or directory
+Couldn't load XPCOM.
+1519965567260	geckodriver	INFO	geckodriver 0.19.1
+1519965567263	geckodriver	INFO	Listening on 127.0.0.1:55349
+1519965568386	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--headless" "-profile" "/tmp/rust_mozprofile.Ak2m7PxRCfp2"
+XPCOMGlueLoad error for file /usr/local/firefox/libmozgtk.so:
+libgtk-3.so.0: cannot open shared object file: No such file or directory
+Couldn't load XPCOM.
+1519965568493	geckodriver	INFO	geckodriver 0.19.1
+1519965568496	geckodriver	INFO	Listening on 127.0.0.1:42309
+1519965569621	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--headless" "-profile" "/tmp/rust_mozprofile.KURkCDAB4GuW"
+XPCOMGlueLoad error for file /usr/local/firefox/libmozgtk.so:
+libgtk-3.so.0: cannot open shared object file: No such file or directory
+Couldn't load XPCOM.
+1519965569728	geckodriver	INFO	geckodriver 0.19.1
+1519965569731	geckodriver	INFO	Listening on 127.0.0.1:47583
+1519965570856	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--headless" "-profile" "/tmp/rust_mozprofile.3Z0lhRqlAJsW"
+XPCOMGlueLoad error for file /usr/local/firefox/libmozgtk.so:
+libgtk-3.so.0: cannot open shared object file: No such file or directory
+Couldn't load XPCOM.
+1519965926564	geckodriver	INFO	geckodriver 0.19.1
+1519965926568	geckodriver	INFO	Listening on 127.0.0.1:49233
+1519965927694	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--headless" "-profile" "/tmp/rust_mozprofile.afZsD6kB4QV7"
+XPCOMGlueLoad error for file /usr/local/firefox/libmozgtk.so:
+libgtk-3.so.0: cannot open shared object file: No such file or directory
+Couldn't load XPCOM.
+1519965927801	geckodriver	INFO	geckodriver 0.19.1
+1519965927804	geckodriver	INFO	Listening on 127.0.0.1:33127
+1519965928929	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--headless" "-profile" "/tmp/rust_mozprofile.0x0woKID5CFg"
+XPCOMGlueLoad error for file /usr/local/firefox/libmozgtk.so:
+libgtk-3.so.0: cannot open shared object file: No such file or directory
+Couldn't load XPCOM.
+1519965929036	geckodriver	INFO	geckodriver 0.19.1
+1519965929039	geckodriver	INFO	Listening on 127.0.0.1:49509
+1519965930163	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--headless" "-profile" "/tmp/rust_mozprofile.yap00R2cbflI"
+XPCOMGlueLoad error for file /usr/local/firefox/libmozgtk.so:
+libgtk-3.so.0: cannot open shared object file: No such file or directory
+Couldn't load XPCOM.
+1519967090476	geckodriver	INFO	geckodriver 0.19.1
+1519967090480	geckodriver	INFO	Listening on 127.0.0.1:35351
+1519967091597	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--headless" "-profile" "/tmp/rust_mozprofile.uOMpl9BUqUUY"
+XPCOMGlueLoad error for file /usr/local/firefox/libmozgtk.so:
+libgtk-3.so.0: cannot open shared object file: No such file or directory
+Couldn't load XPCOM.
+1519967091705	geckodriver	INFO	geckodriver 0.19.1
+1519967091708	geckodriver	INFO	Listening on 127.0.0.1:57871
+1519967092832	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--headless" "-profile" "/tmp/rust_mozprofile.nUDBo5lAkfy2"
+XPCOMGlueLoad error for file /usr/local/firefox/libmozgtk.so:
+libgtk-3.so.0: cannot open shared object file: No such file or directory
+Couldn't load XPCOM.
+1519967092939	geckodriver	INFO	geckodriver 0.19.1
+1519967092942	geckodriver	INFO	Listening on 127.0.0.1:60297
+1519967094061	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--headless" "-profile" "/tmp/rust_mozprofile.wjIbO7yUpzzU"
+XPCOMGlueLoad error for file /usr/local/firefox/libmozgtk.so:
+libgtk-3.so.0: cannot open shared object file: No such file or directory
+Couldn't load XPCOM.
+1519967173947	geckodriver	INFO	geckodriver 0.19.1
+1519967173950	geckodriver	INFO	Listening on 127.0.0.1:45743
+1519967175068	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--headless" "-profile" "/tmp/rust_mozprofile.cfHQIX3BLtCM"
+XPCOMGlueLoad error for file /usr/local/firefox/libmozgtk.so:
+libgtk-3.so.0: cannot open shared object file: No such file or directory
+Couldn't load XPCOM.
+1519967175175	geckodriver	INFO	geckodriver 0.19.1
+1519967175179	geckodriver	INFO	Listening on 127.0.0.1:54717
+1519967176303	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--headless" "-profile" "/tmp/rust_mozprofile.bcEY2FMo3qai"
+XPCOMGlueLoad error for file /usr/local/firefox/libmozgtk.so:
+libgtk-3.so.0: cannot open shared object file: No such file or directory
+Couldn't load XPCOM.
+1519967176410	geckodriver	INFO	geckodriver 0.19.1
+1519967176413	geckodriver	INFO	Listening on 127.0.0.1:40591
+1519967177536	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "--headless" "-profile" "/tmp/rust_mozprofile.1wL2Nv2D1ceE"
+XPCOMGlueLoad error for file /usr/local/firefox/libmozgtk.so:
+libgtk-3.so.0: cannot open shared object file: No such file or directory
+Couldn't load XPCOM.
