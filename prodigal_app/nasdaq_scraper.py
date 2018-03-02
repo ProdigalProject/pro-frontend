@@ -30,6 +30,8 @@ def scrape(ticker):
         return_news.append(text_link_tup)
     # search description
     bio_div = soup.find('div', id="company-description")
+    if bio_div is None:
+        return return_news, None, name
     bio_plist = bio_div.findAll('p')
     return_desc = []
     for p in bio_plist:
