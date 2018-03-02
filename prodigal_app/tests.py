@@ -17,7 +17,7 @@ class TestSignup(unittest.TestCase):
         # firefox_capabilities = DesiredCapabilities.FIREFOX
         # firefox_capabilities['marionette'] = True
         # firefox_capabilities['binary'] = '/usr/bin/firefox'
-          self.driver = webdriver.Chrome("/usr/bin/chromedriver",chrome_options=chrome_opts)
+          self.driver = webdriver.Chrome(chrome_options=chrome_opts)
           self.driver.get("https://prodigal-gamma.azurewebsites.net/")
           #self.driver.get("http://0.0.0.0:8000/")
 
