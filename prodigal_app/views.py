@@ -53,6 +53,35 @@ def login(request):
     return render(request, "login.html")
 
 
+def create_user(request):
+    """
+    Create a user with given username, email address and password. 
+    Signup fail if customer leave any line blank or have same username with others.
+    :param request: request from user
+    :return: profile page if signup succeed and automatically login, stay signup and show error message if fail
+    """
+    username = request.POST.get('username', '')
+    email = request.POST.get('email', '')
+    password = request.POST.get('password', '')
+    if username == '':
+        messages.add_message(request, messages.INFO, 'username is required')
+        return render(request, "Signup.html")
+    elif email == '':
+        messages.add_message(request, messages.INFO, 'email is required')
+        return render(request, "Signup.html")
+    elif password == '':
+        messages.add_message(request, messages.INFO, 'password is required')
+        return render(request, "Signup.html")
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT userID FROM User WHERE username = %s or email = %s", [username, email])
+        userID = cursor.fetchone()
+        if userID is not None:
+            messages.add_message(request, messages.INFO, 'username/email is used, pick another one')
+            return render(request, "Signup.html")
+        cursor.execute("INSERT INTO User VALUES(NULL, %s, %s, 'Male', %s, 'abcd', NULL, NULL)", [username, email, password])
+        return redirect('profile')
+
+
 def signup(request):
     """
     Renders signup page from template. Signup process links 3rd-party auth data with prodigal profile.
