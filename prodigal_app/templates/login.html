@@ -22,14 +22,11 @@
             </nav>
         </div>
         <!-- login Form -->
-        <div id="form">
-            <div class="w3-card-4" style="max-width:2000px;margin-top: 80px">
-              <div class="w3-center"><br>
-                  <img src="{% static 'images/city.jpeg' %}" alt="Avatar" style="width:40%" class="w3-round-large w3-margin-top">
-              </div>
-              <form class="w3-container" id="form_id" method="post" name="myform">
+        <div id="form" style="width: 500px; margin:80px auto 80px auto">
+            <div class="w3-card-4" style="max-width:2000px">
+              <form class="w3-container w3-white" id="form_id" method="post" name="myform" style="padding:16px 16px 16px 16px">
                   {% csrf_token %}
-                    <label><b>Username</b></label>
+                    <label class="w3-margin-top"><b>Username</b></label>
                     <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="username" required>
                     <label><b>Password</b></label>
                     <input class="w3-input w3-border" type="password" placeholder="Enter Password" name="password" required>
@@ -37,10 +34,14 @@
                     <input class="w3-check w3-margin-top" type="checkbox" checked="checked"> Remember me
               </form>
               <div class="w3-bar w3-border-top w3-padding-16 w3-light-grey">
-                  <a href="signup" class="w3-button w3-bar-item w3-red">Sign Up</a>
-                  <a id="login" class="g-signin2 w3-bar-item" style="margin-left:40%;display:block;" data-onsuccess="onSignIn" data-theme="dark"></a>
+                  <div style="width:120px; margin: 0 auto 16px auto">
+                      <a href="signup" class="w3-button w3-red w3-block">Sign Up</a>
+                  </div>
+                  <div class="w3-center">
+                      <a id="login" class="g-signin2 w3-button" data-onsuccess="onSignIn" data-theme="dark"></a>
+                  </div>
                   <a id="signout" class="w3-button w3-bar-item w3-red" style="margin-left:40%;display:none;" onclick="signOut()" data-theme="dark">Sign Out</a>
-                  <span class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span>
+                  <span class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span><br>
               </div>
             </div>
         </div>

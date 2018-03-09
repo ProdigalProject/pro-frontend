@@ -80,7 +80,11 @@ WSGI_APPLICATION = 'prodigal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': 'webappdb',
+        'USER': 'prodigal',
+        'PASSWORD': 'DarkoMarinov1',
+        'HOST': 'prodigal-mysql-db.cwrjwojncyjz.us-east-2.rds.amazonaws.com/',
+        'PORT': '3306',
     }
 }
 
