@@ -13,7 +13,7 @@
         <script src="https://apis.google.com/js/platform.js" async defer></script>
         <title>Login</title>
     </head>
-    <body>
+    <body style="background-image: url(../static/images/city.jpeg); background-size: cover">
         <!-- Navigation -->
         <div class="w3-top">
             <nav class="w3-bar w3-black w3-padding-16">
@@ -22,31 +22,37 @@
             </nav>
         </div>
         <!-- login Form -->
-        <div id="form">
-            <div class="w3-card-4" style="max-width:2000px;margin-top: 80px">
-              <div class="w3-center"><br>
-                  <img src="{% static 'images/city.jpeg' %}" alt="Avatar" style="width:40%" class="w3-round-large w3-margin-top">
-              </div>
-              <form class="w3-container" id="form_id" method="post" name="myform">
-                  {% csrf_token %}
-                    <label><b>Username</b></label>
-                    <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="username" required>
-                    <label><b>Password</b></label>
-                    <input class="w3-input w3-border" type="password" placeholder="Enter Password" name="password" required>
-                    <button class="w3-button w3-block w3-black w3-section w3-padding" type="submit" id="submit">Login</button>
-                    <input class="w3-check w3-margin-top" type="checkbox" checked="checked"> Remember me
-              </form>
-              <div class="w3-bar w3-border-top w3-padding-16 w3-light-grey">
-                  <a href="signup" class="w3-button w3-bar-item w3-red">Sign Up</a>
-                  <a id="login" class="g-signin2 w3-bar-item" style="margin-left:40%;display:block;" data-onsuccess="onSignIn" data-theme="dark"></a>
-                  <a id="signout" class="w3-button w3-bar-item w3-red" style="margin-left:40%;display:none;" onclick="signOut()" data-theme="dark">Sign Out</a>
-                  <span class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span>
-              </div>
+        <div id="form" style="width: 500px; margin:160px auto 80px auto">
+            <div class="w3-card-4" style="max-width:2000px">
+                <form class="w3-container w3-white" id="form_id" method="post" name="myform" action="login_query" style="padding:16px 16px 16px 16px">
+                {% csrf_token %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <h2 align="center"> <b>{{ message }}</b> </h2>
+                    {% endfor %}
+                {% endif %}
+                <label class="w3-margin-top"><b>Username</b></label>
+                <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="username" required>
+                <label><b>Password</b></label>
+                <input class="w3-input w3-border" type="password" placeholder="Enter Password" name="password" required>
+                <button class="w3-button w3-block w3-black w3-section w3-padding" type="submit" id="submit">Login</button>
+                <input class="w3-check w3-margin-top" type="checkbox" checked="checked"> Remember me
+                </form>
+            <div class="w3-bar w3-border-top w3-padding-16 w3-light-grey">
+                <div style="width:120px; margin: 0 auto 16px auto">
+                    <a href="signup" class="w3-button w3-red w3-block">Sign Up</a>
+                </div>
+                <div class="w3-center">
+                    <a id="login" class="g-signin2 w3-button" data-onsuccess="onSignIn" data-theme="dark"></a>
+                </div>
+                <a id="signout" class="w3-button w3-bar-item w3-red" style="margin-left:40%;display:none;" onclick="signOut()" data-theme="dark">Sign Out</a>
+                <span class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span><br>
             </div>
         </div>
+</div>
 
         <!-- Footer -->
-        <footer id="Home" class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
+        <footer id="Home" class="w3-container w3-padding-32 w3-center w3-black w3-xlarge w3-bottom w3-opacity-min">
             <a href="#"><i class="fa fa-facebook-official"></i></a>
             <a href="#"><i class="fa fa-google"></i></a>
             <a href="#"><i class="fa fa-twitter"></i></a>
