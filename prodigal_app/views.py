@@ -41,6 +41,7 @@ def login_query(request):
     if row is None:
         messages.add_message(request, messages.INFO, 'Login Failed!')
         return render(request, "login.html")
+    request.session['userID'] = int(row[0])
     return redirect('profile')
 
 
@@ -63,6 +64,7 @@ def create_user(request):
     username = request.POST.get('username', '')
     email = request.POST.get('email', '')
     password = request.POST.get('password', '')
+    # fail if blank
     if username == '':
         messages.add_message(request, messages.INFO, 'username is required')
         return render(request, "Signup.html")
@@ -75,10 +77,13 @@ def create_user(request):
     with connection.cursor() as cursor:
         cursor.execute("SELECT userID FROM User WHERE username = %s or email = %s", [username, email])
         userID = cursor.fetchone()
+        # fail if username/email is userd
         if userID is not None:
             messages.add_message(request, messages.INFO, 'username/email is used, pick another one')
             return render(request, "Signup.html")
         cursor.execute("INSERT INTO User VALUES(NULL, %s, %s, 'Male', %s, 'abcd', NULL, NULL)", [username, email, password])
+        # store userID in session
+        request.session['userID'] = float(userID)
         return redirect('profile')
 
 
@@ -97,16 +102,47 @@ def search(request):
     :param request: request from user
     :return: rendered html
     """
+    userID = request.session.get('userID', '')
     ticker = request.POST.get('search_key', '')
     news_list, company_desc, company_name = nasdaq_scraper.scrape(ticker)
     if news_list is None:
         return render(request, "search.html", {"msg": "No Matching Result."})
     # use ticker symbol to get info when API gets done
-    url = "http://prodigal-ml.us-east-2.elasticbeanstalk.com/stocks/4/?format=json"
-    response = requests.get(url)
-    company_json = response.json()  # company_json now holds dictionary created by json data
-    return_dict = dict(newslist=news_list, desc=company_desc, name=company_name, high=company_json["high"],
-                       low=company_json["low"], opening=company_json["opening"], closing=company_json["closing"])
+    #url = "http://prodigal-ml.us-east-2.elasticbeanstalk.com/stocks/4/?format=json"
+    #response = requests.get(url)
+    #company_json = response.json()  # company_json now holds dictionary created by json data
+    #return_dict = dict(newslist=news_list, desc=company_desc, name=company_name, high=company_json["high"], low=company_json["low"], opening=company_json["opening"], closing=company_json["closing"])
+    return_dict = dict(newslist=news_list, desc=company_desc, name=company_name)
+    # capitalize ticker
+    TICKER = ticker.capitalize()
+    # get companyID by ticker
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT companyID FROM Nasdaq_Companies WHERE Symbol = %s", [TICKER])
+        companyID = cursor.fetchone()
+        cursor.execute("SELECT history FROM User WHERE userID = %s", [userID])
+        # cid1, cdi2, cid3, cid4, cid5
+        # cid1 is the newest and cid5 is the oldest
+        # result = (None, )????
+        result = cursor.fetchone()
+        # history = (NULL)
+        history = result[0]
+        print (history)
+        if history is not None:
+            h = history.split(',')
+            # history search less than 5
+            if len(h) < 5:
+                # compare the most recent one with search result this term
+                if h[0] != companyID:
+                    history = str(companyID) + ',' + history
+            # more than 5 history
+            else:
+                # compare the most recent one with search result this term
+                if h[0] != companyID:
+                    history = str(companyID) + ',' + h[0] + ',' + h[1] + ',' + h[2] + ',' + h[3]
+        else:
+            history = str(companyID)
+        # update search history
+        cursor.execute("UPDATE User SET history = %s WHERE userID = %s", [history, userID])
     return render(request, "search.html", return_dict)
 
 
