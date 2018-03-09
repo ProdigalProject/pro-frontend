@@ -17,10 +17,34 @@
                 <a href="login" id="navbar_login" class="w3-button w3-bar-item w3-large w3-right">Log In</a>
             </nav>
         </div>
-        Only chickens here!
-        <div style="height:1440px">
-            Placeholder div
+    <div id="form">
+        <div class="w3-card-4" style="max-width:2000px;margin-top:100px">
+            <div class="w3-container w3-center">
+                <img id="male_avatar" src="{% static "images/male_avatar.png" %}" alt="Avatar" style="width:31%" class="w3-round-large w3-margin-top">
+                <img id="female_avatar" src="{% static "images/female_avatar.png" %}" alt="Avatar" style="width:31%" class="w3-round-large w3-margin-top">
+            </div>
+            <div class="w3-container w3-center">
+                <span style="white-space:nowrap;">
+                    <input type="radio" id="male" name="gender_male" value="male"> 
+                    <label> Male </label>
+                </span>
+                <span style="white-space:nowrap;">
+                    <input type="radio" id="female" name="gender_female" value="female"> 
+                    <label> Female </label>
+                </span>
+            </div>
+            <form class="w3-container" id="form_id" method="post" name="myform" action="/create_user/">
+                {% csrf_token %}
+                <label><b>User Name</b></label>
+                <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="username" required>
+                <label><b>Emalil Address</b></label>
+                <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter email address" name="email" required>
+                <label><b>Password</b></label>
+                <input class="w3-input w3-border" type="password" placeholder="Enter Password" name="password" required>
+                <button class="w3-button w3-block w3-red w3-section w3-padding" type="submit" id="submit">Sign Up!</button>
+            </form>
         </div>
+    </div>
         <!-- Footer -->
         <footer id="Home" class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
             <a href="#"><i class="fa fa-facebook-official"></i></a>
@@ -32,4 +56,19 @@
             </p>
         </footer>
     </body>
+
+    <script type="text/javascript">
+        function alternate(){
+            if(this.checked)
+                this.checked = false;
+            else
+                this.checked = true;
+        }
+        function change_avatar(){
+            male_avatar = document.getElementById('male_avatar');
+            female_avatar = document.getElementById('female_avatar');
+            male_avatar.style.display = "block";
+            female_avatar.style.display = "none";
+        }
+    </script>
 </html>
