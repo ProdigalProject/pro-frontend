@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
+from django.contrib import messages
+from django.db import connection
 import requests
 from . import nasdaq_scraper
 
@@ -20,6 +23,25 @@ def profile(request):
     :return: rendered html
     """
     return render(request, "profile.html")
+
+
+def login_query(request):
+    """
+    Queries username and password to database and redirect to profile if match found, alert and return to login page
+    when match is not found.
+    :param request: request from user
+    :return: profile if match, login if mismatch
+    """
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    # TODO: Hashing and salting password
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM User WHERE username=%s AND password=%s", [username, password])
+    row = cursor.fetchone()
+    if row is None:
+        messages.add_message(request, messages.INFO, 'Login Failed!')
+        return render(request, "login.html")
+    return redirect('profile')
 
 
 def login(request):
