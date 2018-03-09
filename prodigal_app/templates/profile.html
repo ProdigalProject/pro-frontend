@@ -23,8 +23,19 @@
                 </div>
             </nav>
         </div>
-        <div style="height: 1440px; margin: 80px 2% 0 2%">
-            <h1 align="center"> This is a secret profile page.</h1>
+        <!-- Page body -->
+        <div id="profile_container" style="width:70%;margin:80px auto 32px auto;overflow:hidden">
+            <div id="user_container" style="overflow:hidden;margin: 32px 0 32px 0">
+                <img src="{% static 'images/male_avatar.png' %}" style="float:left;margin: 0 16px 16px 16px;width:128px"/>
+                <h2>User_name</h2>
+                <h4>email@address.here</h4>
+            </div>
+            <div id="profile_favorite" style="height:500px;width:45%;float:left;background-color:lightgray;border-radius: 16px">
+                <span style="margin:16px 16px 16px 16px"><b>Favorites</b></span>
+            </div>
+            <div id="profile_history" style="height:500px;width:45%;float:right;background-color:lightgray;border-radius: 16px">
+                <span style="margin:16px 16px 16px 16px"><b>History</b></span>
+            </div>
         </div>
         <!-- Footer -->
         <footer id="Home" class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
