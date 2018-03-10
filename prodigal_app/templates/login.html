@@ -29,7 +29,7 @@
                     {% csrf_token %}
                     {% if messages %}
                         {% for message in messages %}
-                            <h2 align="center"> <b>{{ message }}</b> </h2>
+                            <h2 id="login_fail_msg" align="center"> <b>{{ message }}</b> </h2>
                         {% endfor %}
                     {% endif %}
                     <label class="w3-margin-top"><b>Username</b></label>

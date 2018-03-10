@@ -21,14 +21,15 @@
                         <button id="navbar_search_submit" type="submit" class="search-submit w3-button w3-blue w3-large"><i class="fa fa-search"></i></button>
                     </form>
                 </div>
+                <a href="signout" class="w3-bar-item w3-button w3-large w3-right">Sign Out</a>
             </nav>
         </div>
         <!-- Page body -->
         <div id="profile_container" style="width:70%;margin:80px auto 32px auto;overflow:hidden">
             <div id="user_container" style="overflow:hidden;margin: 32px 0 32px 0">
                 <img src="{% static 'images/male_avatar.png' %}" style="float:left;margin: 0 16px 16px 16px;width:128px"/>
-                <h2>{{ username }}</h2>
-                <h4>{{ email }}</h4>
+                <h2 id="profile_username">{{ request.session.username }}</h2>
+                <h4 id="profile_email">{{ request.session.email }}</h4>
             </div>
             <div id="profile_favorite" style="height:500px;width:45%;float:left;background-color:lightgray;border-radius: 16px">
                 <span style="margin:16px 16px 16px 16px"><b>Favorites</b></span>
