@@ -27,8 +27,8 @@
         <div id="profile_container" style="width:70%;margin:80px auto 32px auto;overflow:hidden">
             <div id="user_container" style="overflow:hidden;margin: 32px 0 32px 0">
                 <img src="{% static 'images/male_avatar.png' %}" style="float:left;margin: 0 16px 16px 16px;width:128px"/>
-                <h2>User_name</h2>
-                <h4>email@address.here</h4>
+                <h2>{{ username }}</h2>
+                <h4>{{ email }}</h4>
             </div>
             <div id="profile_favorite" style="height:500px;width:45%;float:left;background-color:lightgray;border-radius: 16px">
                 <span style="margin:16px 16px 16px 16px"><b>Favorites</b></span>

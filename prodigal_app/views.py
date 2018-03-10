@@ -1,7 +1,9 @@
 from django.shortcuts import render
-from django.shortcuts import redirect
 from django.contrib import messages
 from django.db import connection
+from os import urandom
+from base64 import b64encode
+import hashlib
 import requests
 from . import nasdaq_scraper
 
@@ -22,7 +24,18 @@ def profile(request):
     :param request: request from user
     :return: rendered html
     """
-    return render(request, "profile.html")
+    user_id = request.session.get('user_id')
+    if user_id is None:  # If user_id not present in session, it is an invalid access.
+        request.session.flush()  # Clear all session data
+        return render(request, 'login.html')
+    username = request.session.get('username')
+    email = request.session.get('email')
+    gender = request.session.get('gender')
+    history = request.session.get('history')
+    favorites = request.session.get('favorites')
+    return_dict = dict(user_id=user_id, username=username, email=email, gender=gender,
+                       history=history, favorites=favorites)
+    return render(request, "profile.html", return_dict)
 
 
 def login_query(request):
@@ -30,19 +43,30 @@ def login_query(request):
     Queries username and password to database and redirect to profile if match found, alert and return to login page
     when match is not found.
     :param request: request from user
-    :return: profile if match, login if mismatch
+    :return: calls profile if match, login if mismatch
     """
     username = request.POST.get('username')
     password = request.POST.get('password')
-    # TODO: Hashing and salting password
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM User WHERE username=%s AND password=%s", [username, password])
+    cursor.execute("SELECT * FROM User WHERE username=%s", [username])
     row = cursor.fetchone()
-    if row is None:
+    if row is None:  # User doesn't exit
         messages.add_message(request, messages.INFO, 'Login Failed!')
         return render(request, "login.html")
-    request.session['userID'] = int(row[0])
-    return redirect('profile')
+    # Check password hash
+    salt = row[5]
+    input_hash = hashlib.sha256((salt + password).encode()).hexdigest()
+    if row[4] != input_hash:  # Invalid password
+        messages.add_message(request, messages.INFO, 'Login Failed!')
+        return render(request, "login.html")
+    # Update session to pass to profile
+    request.session['user_id'] = int(row[0])
+    request.session['username'] = row[1]
+    request.session['email'] = row[2]
+    request.session['gender'] = row[3]
+    request.session['history'] = row[6]
+    request.session['favorites'] = row[7]
+    return profile(request)
 
 
 def login(request):
@@ -76,15 +100,18 @@ def create_user(request):
         return render(request, "Signup.html")
     with connection.cursor() as cursor:
         cursor.execute("SELECT userID FROM User WHERE username = %s or email = %s", [username, email])
-        userID = cursor.fetchone()
-        # fail if username/email is userd
-        if userID is not None:
+        user_id = cursor.fetchone()
+        # fail if username/email is used
+        if user_id is not None:
             messages.add_message(request, messages.INFO, 'username/email is used, pick another one')
             return render(request, "Signup.html")
-        cursor.execute("INSERT INTO User VALUES(NULL, %s, %s, 'Male', %s, 'abcd', NULL, NULL)", [username, email, password])
-        # store userID in session
-        request.session['userID'] = float(userID)
-        return redirect('profile')
+        salt = b64encode(urandom(48)).decode()
+        hashed_pw = hashlib.sha256((salt + password).encode()).hexdigest()
+        cursor.execute("INSERT INTO User VALUES(NULL, %s, %s, 'Male', %s, %s, NULL, NULL)",
+                       [username, email, hashed_pw, salt])
+        # Redirect to login page
+        messages.add_message(request, messages.INFO, 'Account created!')
+        return render(request, "login.html")
 
 
 def signup(request):
