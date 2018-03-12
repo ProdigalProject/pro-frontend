@@ -31,7 +31,41 @@ def profile(request):
     if user_id is None:  # If user_id not present in session, it is an invalid access.
         request.session.flush()  # Clear all session data
         return redirect('login')
-    return render(request, 'profile.html')
+    return_dict = {}
+    cursor = connection.cursor()
+    # Update history, favorites to reflect changes real time
+    if request.session.get('first_login'):
+        history = request.session.get('history')
+        favorites = request.session.get('favorites')
+    else:
+        cursor.execute("SELECT history, favorites FROM User WHERE userID = %s", [user_id])
+        row = cursor.fetchone()
+        history = row[0]
+        favorites = row[1]
+    # Handle history data
+    if history is not None:  # History data exist in database
+        history_arr = []
+        hist_cid_arr = history.split(',')
+        for cid in hist_cid_arr:
+            cursor.execute("SELECT Symbol, Name FROM Nasdaq_Companies WHERE companyID = %s", [cid])
+            row = cursor.fetchone()
+            ticker = row[0]
+            company_name = row[1]
+            history_arr.append((ticker, company_name))
+        return_dict['history'] = history_arr  # List of tuples of ticker and company name
+    # Handle favorites data
+    if favorites is not None:  # Favorite data exist in database
+        favorite_arr = []
+        fav_cid_arr = favorites.split(',')
+        for cid in fav_cid_arr:
+            cursor.execute("SELECT Symbol, Name FROM Nasdaq_Companies WHERE companyID = %s", [cid])
+            row = cursor.fetchone()
+            ticker = row[0]
+            company_name = row[1]
+            favorite_arr.append((ticker, company_name))
+        return_dict['favorites'] = favorite_arr  # List of tuples of ticker and company name
+    request.session['first_login'] = False
+    return render(request, 'profile.html', return_dict)
 
 
 def login_query(request):
@@ -62,6 +96,7 @@ def login_query(request):
     request.session['gender'] = row[3]
     request.session['history'] = row[6]
     request.session['favorites'] = row[7]
+    request.session['first_login'] = True
     return redirect('profile')
 
 
@@ -71,6 +106,8 @@ def login(request):
     :param request: request from user
     :return: rendered html
     """
+    if request.session.get("user_id") is not None:
+        return redirect('profile')
     return render(request, "login.html")
 
 
@@ -94,6 +131,7 @@ def create_user(request):
     username = request.POST.get('username', '')
     email = request.POST.get('email', '')
     password = request.POST.get('password', '')
+    gender = request.POST.get('gender', '')
     # fail if blank
     if username == '':
         messages.add_message(request, messages.INFO, 'username is required')
@@ -109,12 +147,12 @@ def create_user(request):
         user_id = cursor.fetchone()
         # fail if username/email is used
         if user_id is not None:
-            messages.add_message(request, messages.INFO, 'username/email is used, pick another one')
-            return render(request, "Signup.html")
+            messages.add_message(request, messages.INFO, 'Username/Email is already used.')
+            return redirect("signup.html")
         salt = b64encode(urandom(48)).decode()
         hashed_pw = hashlib.sha256((salt + password).encode()).hexdigest()
-        cursor.execute("INSERT INTO User VALUES(NULL, %s, %s, 'Male', %s, %s, NULL, NULL)",
-                       [username, email, hashed_pw, salt])
+        cursor.execute("INSERT INTO User VALUES(NULL, %s, %s, %s, %s, %s, NULL, NULL)",
+                       [username, email, gender, hashed_pw, salt])
         # Redirect to login page
         messages.add_message(request, messages.INFO, 'Account created!')
         return render(request, "login.html")
@@ -126,6 +164,8 @@ def signup(request):
     :param request: request from user
     :return: rendered html
     """
+    if request.session.get("user_id") is not None:
+        return redirect('profile')
     return render(request, "signup.html")
 
 
@@ -143,16 +183,14 @@ def search(request):
     # get companyID by ticker
     with connection.cursor() as cursor:
         cursor.execute("SELECT companyID FROM Nasdaq_Companies WHERE Symbol = %s", [ticker])
-        company_id = cursor.fetchone()
+        company_id = cursor.fetchone()  # returned row
         if company_id is None:  # No matching company found
             return render(request, "search.html", {"msg": "No Matching Result."})
+        company_id = company_id[0]  # pick value from row
         cursor.execute("SELECT history FROM User WHERE userID = %s", [user_id])
         # cid1, cdi2, cid3, cid4, cid5
         # cid1 is the newest and cid5 is the oldest
-        # result = (None, )????
         result = cursor.fetchone()
-        # history = (NULL)
-        # print(history)
         if result[0] is not None:
             history = result[0]
             h = history.split(',')
@@ -173,13 +211,15 @@ def search(request):
     # If company is in database, start scraper
     news_list, company_desc, company_name = nasdaq_scraper.scrape(ticker)
     # use ticker symbol to get info when API gets done
-    """
-    url = "http://prodigal-ml.us-east-2.elasticbeanstalk.com/stocks/4/?format=json"
+    url = "http://prodigal-ml.us-east-2.elasticbeanstalk.com/stocks/" + ticker + "/?ordering=-date&format=json"
     response = requests.get(url)
-    company_json = response.json()  # company_json now holds dictionary created by json data
-    return_dict = dict(newslist=news_list, desc=company_desc, name=company_name, high=company_json["high"], low=company_json["low"], opening=company_json["opening"], closing=company_json["closing"])
-    """
-    return_dict = dict(newslist=news_list, desc=company_desc, name=company_name)
+    if response.status_code == 404:  # company not found in api
+        return_dict = dict(newslist=news_list, desc=company_desc, name=company_name)
+    else:
+        company_json = response.json()[0]  # company_json now holds dictionary created by json data
+        return_dict = dict(newslist=news_list, desc=company_desc, name=company_name, high=company_json["high"],
+                           low=company_json["low"], opening=company_json["opening"], closing=company_json["closing"],
+                           volume=company_json["volume"])
     return render(request, "search.html", return_dict)
 
 

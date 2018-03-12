@@ -25,18 +25,58 @@
             </nav>
         </div>
         <!-- Page body -->
-        <div id="profile_container" style="width:70%;margin:80px auto 32px auto;overflow:hidden">
+        <div id="profile_container" style="width:70%;margin:80px auto 32px auto;padding:0 16px 0 16px;overflow:hidden;min-height:100vh">
             <div id="user_container" style="overflow:hidden;margin: 32px 0 32px 0">
-                <img src="{% static 'images/male_avatar.png' %}" style="float:left;margin: 0 16px 16px 16px;width:128px"/>
+                {% if request.session.gender == 'Male' %}
+                    <img src="{% static 'images/male_avatar.png' %}" style="float:left;margin: 0 16px 16px 16px;width:128px"/>
+                {% else %}
+                    <img src="{% static 'images/female_avatar.png' %}" style="float:left;margin: 0 16px 16px 16px;width:128px"/>
+                {% endif %}
                 <h2 id="profile_username">{{ request.session.username }}</h2>
                 <h4 id="profile_email">{{ request.session.email }}</h4>
             </div>
-            <div id="profile_favorite" style="height:500px;width:45%;float:left;background-color:lightgray;border-radius: 16px">
-                <span style="margin:16px 16px 16px 16px"><b>Favorites</b></span>
+            <div id="profile_history" style="background-color:#eeeeee;border-radius: 16px;margin-bottom: 32px;box-shadow:5px 5px 2px grey">
+                <form method="post" id="hisfav_search" action="search">{% csrf_token %}</form>
+                <table style="padding:16px;width:100%;font-size:16px">
+                    <tr>
+                        <th style="text-align: left;font-size: 24px"> Recent Searches </th>
+                    </tr>
+                    {% if history %}
+                        {% for ticker, name in history %}
+                            <tr>
+                                <td>
+                                    <button class="w3-button" type="submit" name="search_key" value="{{ ticker }}" form="hisfav_search">
+                                        {{ ticker }} - {{ name }}
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td>Search history is empty.</td></tr>
+                    {% endif %}
+                </table>
             </div>
-            <div id="profile_history" style="height:500px;width:45%;float:right;background-color:lightgray;border-radius: 16px">
-                <span style="margin:16px 16px 16px 16px"><b>History</b></span>
+            <div id="profile_favorite" style="background-color:#eeeeee;border-radius: 16px;margin-bottom: 32px;box-shadow:5px 5px 2px grey">
+                <table style="padding:16px;width:100%;font-size:16px">
+                    <tr>
+                        <th style="text-align: left;font-size:24px"> Favorites </th>
+                    </tr>
+                    {% if favorites %}
+                        {% for ticker, name in favorites %}
+                            <tr>
+                                <td>
+                                    <button class="w3-button" type="submit" name="search_key" value="{{ ticker }}" form="hisfav_search">
+                                        {{ ticker }} - {{ name }}
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td>No favorite companies.</td></tr>
+                    {% endif %}
+                </table>
             </div>
+
         </div>
         <!-- Footer -->
         <footer id="Home" class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">

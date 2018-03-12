@@ -26,16 +26,17 @@
         </div>
         <!-- No matching search results -->
         {% if msg %}
-        <div id="search-container" style="margin: 80px 2% 0 2%; height: 1000px">
+        <div id="search-container" style="margin: 80px 2% 0 2%; min-height:100vh">
             <h1> {{ msg }} </h1>
         </div>
         <!-- Search Results -->
         {% else %}
-        <div id="search-container" style="margin: 80px 2% 0 2%">
+        <div id="search-container" style="margin: 80px 2% 0 2%; min-height:100vh">
             <div id="result">
                 <div id="company_name">
                     <h1>{{ name }}</h1>
                 </div>
+                {% if high %}
                 <div id="company_basic_stock">
                     <table>
                         <tr>
@@ -54,9 +55,14 @@
                             <th>Closing:</th>
                             <td>{{ closing }}</td>
                         </tr>
+                        <tr>
+                            <th>Volume:</th>
+                            <td>{{ volume }}</td>
+                        </tr>
                     </table>
                     <br>
                 </div>
+                {% endif %}
                 {% if desc %}
                 <div id="company_description">
                     <h2>Company Description</h2>

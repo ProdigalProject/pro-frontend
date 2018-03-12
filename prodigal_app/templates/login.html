@@ -11,7 +11,7 @@
         <meta name="google-signin-scope" content="profile email">
         <meta name="google-signin-client_id" content="980240961216-j1jkheikdjiklppbr2m7rn0u61mv6a7o.apps.googleusercontent.com">
         <script src="https://apis.google.com/js/platform.js" async defer></script>
-        <title>Login</title>
+        <title>Prodigal - Login</title>
     </head>
     <body>
         <!-- Navigation -->
@@ -31,6 +31,8 @@
                         {% for message in messages %}
                             <h2 id="login_fail_msg" align="center"> <b>{{ message }}</b> </h2>
                         {% endfor %}
+                    {% else %}
+                        <h2 align="center"><b>Welcome to Prodigal!</b></h2>
                     {% endif %}
                     <label class="w3-margin-top"><b>Username</b></label>
                     <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="username" required>
