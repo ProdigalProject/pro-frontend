@@ -2,11 +2,9 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.db import connection
-from os import urandom
-from base64 import b64encode
-import hashlib
 import requests
 from . import nasdaq_scraper
+from prodigal_app.models import *
 
 
 # Create your views here.
@@ -32,25 +30,22 @@ def profile(request):
         request.session.flush()  # Clear all session data
         return redirect('login')
     return_dict = {}
-    cursor = connection.cursor()
     # Update history, favorites to reflect changes real time
     if request.session.get('first_login'):
         history = request.session.get('history')
         favorites = request.session.get('favorites')
     else:
-        cursor.execute("SELECT history, favorites FROM User WHERE userID = %s", [user_id])
-        row = cursor.fetchone()
-        history = row[0]
-        favorites = row[1]
+        user_obj = User.objects.get(userid=user_id)
+        history = user_obj.history
+        favorites = user_obj.favorites
     # Handle history data
     if history is not None:  # History data exist in database
         history_arr = []
         hist_cid_arr = history.split(',')
         for cid in hist_cid_arr:
-            cursor.execute("SELECT Symbol, Name FROM Nasdaq_Companies WHERE companyID = %s", [cid])
-            row = cursor.fetchone()
-            ticker = row[0]
-            company_name = row[1]
+            company_obj = NasdaqCompanies.objects.get(companyid=cid)
+            ticker = company_obj.symbol
+            company_name = company_obj.name
             history_arr.append((ticker, company_name))
         return_dict['history'] = history_arr  # List of tuples of ticker and company name
     # Handle favorites data
@@ -58,10 +53,9 @@ def profile(request):
         favorite_arr = []
         fav_cid_arr = favorites.split(',')
         for cid in fav_cid_arr:
-            cursor.execute("SELECT Symbol, Name FROM Nasdaq_Companies WHERE companyID = %s", [cid])
-            row = cursor.fetchone()
-            ticker = row[0]
-            company_name = row[1]
+            company_obj = NasdaqCompanies.objects.get(companyid=cid)
+            ticker = company_obj.symbol
+            company_name = company_obj.name
             favorite_arr.append((ticker, company_name))
         return_dict['favorites'] = favorite_arr  # List of tuples of ticker and company name
     request.session['first_login'] = False
@@ -77,25 +71,18 @@ def login_query(request):
     """
     username = request.POST.get('username')
     password = request.POST.get('password')
-    cursor = connection.cursor()
-    cursor.execute("SELECT * FROM User WHERE username=%s", [username])
-    row = cursor.fetchone()
-    if row is None:  # User doesn't exit
-        messages.add_message(request, messages.INFO, 'Login Failed!')
-        return redirect('login')
-    # Check password hash
-    salt = row[5]
-    input_hash = hashlib.sha256((salt + password).encode()).hexdigest()
-    if row[4] != input_hash:  # Invalid password
+    # Try login
+    user_obj = User.verify_login(username, password)
+    if user_obj is None:  # login failed
         messages.add_message(request, messages.INFO, 'Login Failed!')
         return redirect('login')
     # Update session to pass to profile
-    request.session['user_id'] = int(row[0])
-    request.session['username'] = row[1]
-    request.session['email'] = row[2]
-    request.session['gender'] = row[3]
-    request.session['history'] = row[6]
-    request.session['favorites'] = row[7]
+    request.session['user_id'] = int(user_obj.userid)
+    request.session['username'] = user_obj.username
+    request.session['email'] = user_obj.email
+    request.session['gender'] = user_obj.gender
+    request.session['history'] = user_obj.history
+    request.session['favorites'] = user_obj.favorites
     request.session['first_login'] = True
     return redirect('profile')
 
@@ -142,20 +129,16 @@ def create_user(request):
     elif password == '':
         messages.add_message(request, messages.INFO, 'password is required')
         return render(request, "Signup.html")
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT userID FROM User WHERE username = %s or email = %s", [username, email])
-        user_id = cursor.fetchone()
-        # fail if username/email is used
-        if user_id is not None:
-            messages.add_message(request, messages.INFO, 'Username/Email is already used.')
-            return redirect("signup.html")
-        salt = b64encode(urandom(48)).decode()
-        hashed_pw = hashlib.sha256((salt + password).encode()).hexdigest()
-        cursor.execute("INSERT INTO User VALUES(NULL, %s, %s, %s, %s, %s, NULL, NULL)",
-                       [username, email, gender, hashed_pw, salt])
+    # Create user using given values
+    signup_status = User.create_user(username, email, gender, password)
+    if signup_status == 1:
+        # Username / email already used
+        messages.add_message(request, messages.INFO, 'Username/Email is already used.')
+        return redirect('signup')
+    else:
         # Redirect to login page
         messages.add_message(request, messages.INFO, 'Account created!')
-        return render(request, "login.html")
+        return redirect('login')
 
 
 def signup(request):
@@ -177,37 +160,19 @@ def search(request):
     :param request: request from user
     :return: rendered html
     """
+    if request.session.get("user_id") is None:
+        return redirect('login')
     user_id = request.session.get('user_id', '')
+    user_obj = User.objects.get(userid=user_id)
     ticker = request.POST.get('search_key', '')
     ticker = ticker.capitalize()
     # get companyID by ticker
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT companyID FROM Nasdaq_Companies WHERE Symbol = %s", [ticker])
-        company_id = cursor.fetchone()  # returned row
-        if company_id is None:  # No matching company found
-            return render(request, "search.html", {"msg": "No Matching Result."})
-        company_id = company_id[0]  # pick value from row
-        cursor.execute("SELECT history FROM User WHERE userID = %s", [user_id])
-        # cid1, cdi2, cid3, cid4, cid5
-        # cid1 is the newest and cid5 is the oldest
-        result = cursor.fetchone()
-        if result[0] is not None:
-            history = result[0]
-            h = history.split(',')
-            # history search less than 5
-            if len(h) < 5:
-                # compare the most recent one with search result this term
-                if h[0] != company_id:
-                    history = str(company_id) + ',' + history
-            # more than 5 history
-            else:
-                # compare the most recent one with search result this term
-                if h[0] != company_id:
-                    history = str(company_id) + ',' + h[0] + ',' + h[1] + ',' + h[2] + ',' + h[3]
-        else:
-            history = str(company_id)
-        # update search history
-        cursor.execute("UPDATE User SET history = %s WHERE userID = %s", [history, user_id])
+    try:
+        company_obj = NasdaqCompanies.objects.get(symbol=ticker)
+    except NasdaqCompanies.DoesNotExist:
+        return render(request, "search.html", {"msg": "No Matching Result."})
+    # update search history
+    user_obj.update_history(company_obj.companyid)
     # If company is in database, start scraper
     news_list, company_desc, company_name = nasdaq_scraper.scrape(ticker)
     # use ticker symbol to get info when API gets done
@@ -220,7 +185,7 @@ def search(request):
         return_dict = dict(newslist=news_list, desc=company_desc, name=company_name, high=company_json["high"],
                            low=company_json["low"], opening=company_json["opening"], closing=company_json["closing"],
                            volume=company_json["volume"])
-    request.session['last_search'] = company_id  # For use in favorites
+    request.session['last_search'] = company_obj.companyid  # For use in favorites
     return render(request, "search.html", return_dict)
 
 
