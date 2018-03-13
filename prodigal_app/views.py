@@ -220,15 +220,75 @@ def search(request):
         return_dict = dict(newslist=news_list, desc=company_desc, name=company_name, high=company_json["high"],
                            low=company_json["low"], opening=company_json["opening"], closing=company_json["closing"],
                            volume=company_json["volume"])
+    request.session['last_search'] = company_id  # For use in favorites
     return render(request, "search.html", return_dict)
 
 
 def receive_token(request):
     """
     Renders profile page after receiving user auth ID token.
-    :param request: requeset from user
+    :param request: request from user
     :return: rendered html
     """
     return render(request, "profile.html")
 
 
+def favorite(request):
+    """
+    Only called when first displaying the favorite button. Checks if currently displaying company is in favorite
+    list and display favorite button or unfavorite button.
+    :param request: request from user
+    :return: rendered html
+    """
+    favorite_list = request.session.get('favorites')
+    print(favorite_list)
+    if favorite_list is None:
+        return render(request, "favorite_btn.html", {'favorited': False})
+    favorite_list = favorite_list.split(',')
+    last_search = request.session.get('last_search')
+    return_dict = {}
+    if last_search in favorite_list:
+        return_dict['favorited'] = True
+    else:
+        return_dict['favorited'] = False
+    return render(request, "favorite_btn.html", return_dict)
+
+
+def add_favorite(request):
+    """
+    Adds favorite company to database. This function only renders a button to iframe in search page.
+    :param request: request from user
+    :return: rendered html
+    """
+    user_id = request.session.get('user_id')
+    company_id = request.session.get('last_search')
+    favorite_list = request.session.get('favorites')
+    if favorite_list is None:
+        favorite_list = str(company_id)
+    else:
+        favorite_list = favorite_list + ',' + company_id
+    print(favorite_list)
+    request.session['favorites'] = favorite_list
+    cursor = connection.cursor()
+    cursor.execute("UPDATE User SET favorites = %s WHERE userID = %s", [favorite_list, user_id])
+    return render(request, "favorite_btn.html", {'favorited': True})
+
+
+def remove_favorite(request):
+    """
+    Removes favorite company from database. This function only renders a button to iframe in search page.
+    :param request: request from user
+    :return: rendered html
+    """
+    user_id = request.session.get('user_id')
+    company_id = request.session.get('last_search')
+    favorite_list = request.session.get('favorites')
+    if favorite_list is None:
+        return render(request, "favorite_btn.html")
+    else:
+        favorite_list.replace(',' + str(company_id), '')
+    print(favorite_list)
+    request.session['favorites'] = favorite_list
+    cursor = connection.cursor()
+    cursor.execute("UPDATE User SET favorites = %s WHERE userID = %s", [favorite_list, user_id])
+    return render(request, "favorite_btn.html", {'favorited': False})
