@@ -8,10 +8,15 @@
 from django.db import models
 from os import urandom
 from base64 import b64encode
+from . import nasdaq_scraper
 import hashlib
+import requests
 
 
 class NasdaqCompanies(models.Model):
+    """
+    Model for companies listed in Nasdaq market.
+    """
     companyid = models.AutoField(db_column='companyID', primary_key=True)  # Field name made lowercase.
     symbol = models.CharField(db_column='Symbol', max_length=5)  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=75)  # Field name made lowercase.
@@ -23,6 +28,9 @@ class NasdaqCompanies(models.Model):
 
 
 class User(models.Model):
+    """
+    Model for user. All user related actions will be taken care by this class.
+    """
     userid = models.AutoField(db_column='userID', primary_key=True)  # Field name made lowercase.
     username = models.CharField(max_length=50)
     email = models.CharField(max_length=50)
@@ -73,15 +81,39 @@ class User(models.Model):
             return None
         return user_obj
 
-    def show_history(self):
+    def get_favorite(self):
         """
-        Returns history field to view.
-        :return: List of string of company ids
+        Returns list of favorites to view.
+        :return: None or list of tuples (symbol, company_name)
+        """
+        if self.favorites is None:
+            return None
+        else:
+            favorite_arr = []
+            fav_cid_arr = self.favorites.split(',')
+            for cid in fav_cid_arr:
+                company_obj = NasdaqCompanies.objects.get(companyid=cid)
+                ticker = company_obj.symbol
+                company_name = company_obj.name
+                favorite_arr.append((ticker, company_name))
+            return favorite_arr
+
+    def get_history(self):
+        """
+        Returns list of search history to view.
+        :return: None or list of tuples (symbol, company_name)
         """
         if self.history is None:
             return None
         else:
-            return self.history.split(',')
+            history_arr = []
+            hist_cid_arr = self.history.split(',')
+            for cid in hist_cid_arr:
+                company_obj = NasdaqCompanies.objects.get(companyid=cid)
+                ticker = company_obj.symbol
+                company_name = company_obj.name
+                history_arr.append((ticker, company_name))
+            return history_arr
 
     def update_history(self, company_id):
         """
@@ -106,3 +138,40 @@ class User(models.Model):
                     history = str(company_id) + ',' + h[0] + ',' + h[1] + ',' + h[2] + ',' + h[3]
         self.history = history
         self.save()
+
+
+class SearchUtility(User):
+    """
+    Class to handle searches. Since search function doesn't need its own table and updates history field of User,
+    it is made a proxy class of User class.
+    """
+    class Meta:
+        proxy = True
+
+    def nasdaq_search(self, ticker):
+        """
+        Query user input of ticker symbol to database, then uses API and scraper to fetch data.
+        Search history is also updated.
+        :param ticker: ticker symbol passed in from view.
+        :return: None if no match, dictionary of required data if match is found
+        """
+        # get companyID by symbol
+        try:
+            company_obj = NasdaqCompanies.objects.get(symbol=ticker)
+        except NasdaqCompanies.DoesNotExist:  # ticker not in company list
+            return None
+        # update search history
+        self.update_history(company_obj.companyid)
+        # start scraper
+        news_list, company_desc, company_name = nasdaq_scraper.scrape(ticker)
+        # use ticker symbol to get info from API
+        url = "http://prodigal-ml.us-east-2.elasticbeanstalk.com/stocks/" + ticker + "/?ordering=-date&format=json"
+        response = requests.get(url)
+        if response.status_code == 404:  # company not found in api
+            return_dict = dict(newslist=news_list, desc=company_desc, name=company_name)
+        else:
+            company_json = response.json()[0]  # company_json now holds dictionary created by json data
+            return_dict = dict(newslist=news_list, desc=company_desc, name=company_name, high=company_json["high"],
+                               low=company_json["low"], opening=company_json["opening"],
+                               closing=company_json["closing"], volume=company_json["volume"])
+        return return_dict, company_obj.companyid

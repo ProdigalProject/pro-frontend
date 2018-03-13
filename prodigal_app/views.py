@@ -31,32 +31,16 @@ def profile(request):
         return redirect('login')
     return_dict = {}
     # Update history, favorites to reflect changes real time
-    if request.session.get('first_login'):
-        history = request.session.get('history')
-        favorites = request.session.get('favorites')
-    else:
+    if request.session.get('first_login'):  # First visiting profile
+        history_arr = request.session.get('history')
+        return_dict['history'] = history_arr
+        favorite_arr = request.session.get('favorites')
+        return_dict['favorites'] = favorite_arr
+    else:  # Not first visiting profile; history/favorite in session might be old
         user_obj = User.objects.get(userid=user_id)
-        history = user_obj.history
-        favorites = user_obj.favorites
-    # Handle history data
-    if history is not None:  # History data exist in database
-        history_arr = []
-        hist_cid_arr = history.split(',')
-        for cid in hist_cid_arr:
-            company_obj = NasdaqCompanies.objects.get(companyid=cid)
-            ticker = company_obj.symbol
-            company_name = company_obj.name
-            history_arr.append((ticker, company_name))
+        history_arr = user_obj.get_history()
         return_dict['history'] = history_arr  # List of tuples of ticker and company name
-    # Handle favorites data
-    if favorites is not None:  # Favorite data exist in database
-        favorite_arr = []
-        fav_cid_arr = favorites.split(',')
-        for cid in fav_cid_arr:
-            company_obj = NasdaqCompanies.objects.get(companyid=cid)
-            ticker = company_obj.symbol
-            company_name = company_obj.name
-            favorite_arr.append((ticker, company_name))
+        favorite_arr = user_obj.get_favorite()
         return_dict['favorites'] = favorite_arr  # List of tuples of ticker and company name
     request.session['first_login'] = False
     return render(request, 'profile.html', return_dict)
@@ -81,8 +65,8 @@ def login_query(request):
     request.session['username'] = user_obj.username
     request.session['email'] = user_obj.email
     request.session['gender'] = user_obj.gender
-    request.session['history'] = user_obj.history
-    request.session['favorites'] = user_obj.favorites
+    request.session['history'] = user_obj.get_history()
+    request.session['favorites'] = user_obj.get_favorite()
     request.session['first_login'] = True
     return redirect('profile')
 
@@ -154,38 +138,21 @@ def signup(request):
 
 def search(request):
     """
-    Query user input of ticker symbol to database, then uses API and scraper to fetch data.
     Renders search page from template, filled with fetched data.
-    If symbol doesn't match in database, render page notifying user no result found.
+    If no match is found in search, render page notifying user no result found.
     :param request: request from user
     :return: rendered html
     """
     if request.session.get("user_id") is None:
         return redirect('login')
     user_id = request.session.get('user_id', '')
-    user_obj = User.objects.get(userid=user_id)
+    user_obj = SearchUtility.objects.get(userid=user_id)
     ticker = request.POST.get('search_key', '')
     ticker = ticker.capitalize()
-    # get companyID by ticker
-    try:
-        company_obj = NasdaqCompanies.objects.get(symbol=ticker)
-    except NasdaqCompanies.DoesNotExist:
+    return_dict, company_id = user_obj.nasdaq_search(ticker)
+    if return_dict is None:
         return render(request, "search.html", {"msg": "No Matching Result."})
-    # update search history
-    user_obj.update_history(company_obj.companyid)
-    # If company is in database, start scraper
-    news_list, company_desc, company_name = nasdaq_scraper.scrape(ticker)
-    # use ticker symbol to get info when API gets done
-    url = "http://prodigal-ml.us-east-2.elasticbeanstalk.com/stocks/" + ticker + "/?ordering=-date&format=json"
-    response = requests.get(url)
-    if response.status_code == 404:  # company not found in api
-        return_dict = dict(newslist=news_list, desc=company_desc, name=company_name)
-    else:
-        company_json = response.json()[0]  # company_json now holds dictionary created by json data
-        return_dict = dict(newslist=news_list, desc=company_desc, name=company_name, high=company_json["high"],
-                           low=company_json["low"], opening=company_json["opening"], closing=company_json["closing"],
-                           volume=company_json["volume"])
-    request.session['last_search'] = company_obj.companyid  # For use in favorites
+    request.session['last_search'] = company_id  # For use in favorites
     return render(request, "search.html", return_dict)
 
 
