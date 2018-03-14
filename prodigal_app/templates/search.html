@@ -15,17 +15,13 @@
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
-        var decoded = ('{{ chart_json }} ').replace(/&#39;/g,'\"')
-
-        console.log(decoded);
+        var decoded = ('{{ chart_json }} ').replace(/&#39;/g,'\"');
 
         var chart_json = JSON.parse( decoded );
-
 
         var data = new google.visualization.DataTable();
         data.addColumn('date', 'Date');
         data.addColumn('number', 'Closing price');
-
 
         var numRows = chart_json.length;
 
@@ -42,8 +38,7 @@
         }
 
         var options = {
-          title: 'Company Performance',
-          chartArea:{width:"90%",height:"80%"},
+          chartArea:{width:"90%",height:"90%"},
           curveType: 'function',
           legend: { position: 'bottom' }
         };
@@ -51,14 +46,7 @@
         var chart = new google.visualization.LineChart(document.getElementById('stock_chart'));
 
         chart.draw(data, options);
-
-
       }
-    </script>
-    <script>
-    function myFunction() {
-        document.getElementById("stock_chart").style.visibility = "visible";
-    }
     </script>
     </head>
     <body>
@@ -85,18 +73,18 @@
         {% else %}
         <div id="search-container" style="margin: 80px 2% 0 2%; min-height:100vh">
             <div id="result">
-                <div id="company_name" style="display: inline-block;" >
-                    <h1>{{ name }}</h1>
+                <div id="search_top_container">
+                    <div id="company_name" style="display: inline-block;">
+                        <h1>{{ name }}</h1>
+                    </div>
+                    <iframe src="favorite" width="250px" height="74px" style="border:none; display:inline-block; vertical-align: middle; margin-left: 10px"></iframe>
                 </div>
-                <iframe src="favorite" width="200px" height="50px" style="border:none; display:inline-block;"></iframe>
-                <div id="stock_chart" style="width: 728px; height: 450px;>
-                    <h2>Projections</h2>
-                    <ul id="chart">
-                    </ul>
+                <h2>Projection</h2>
+                <div id="stock_chart" style="width: 728px; height: 450px; margin-bottom:20px">
+                    <!-- Div for chart -->
                 </div>
                 {% if high %}
-
-                <div id="company_basic_stock" style="display: inline-block;\">
+                <div id="company_basic_stock" style="display: inline-block;">
                     <h2>Latest Data</h2>
                     <table>
                         <tr>
@@ -124,15 +112,14 @@
                 </div>
                 {% endif %}
                 {% if desc %}
-
-                <div id="company_description">
+                <div id="company_description" style="margin: 10px 0">
                     <h2>Company Description</h2>
                     {% for p in desc %}
                         <p> {{ p }} </p>
                     {% endfor %}
                 </div>
                 {% endif %}
-                <div id="news">
+                <div id="news" style="margin: 10px 0">
                     <h2>News</h2>
                     <ul id="news_list">
                         {% for news, link in newslist %}

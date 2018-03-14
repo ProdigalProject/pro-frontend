@@ -200,4 +200,4 @@ class SearchUtility(User):
             return_dict = dict(newslist=news_list, desc=company_desc, name=company_name, high=company_json["high"],
                                low=company_json["low"], opening=company_json["opening"],
                                closing=company_json["closing"], volume=company_json["volume"], chart_json=chart_json)
-        return return_dict, company_obj.companyid
+        return return_dict, company_obj.symbol
