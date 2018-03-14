@@ -98,6 +98,31 @@ class User(models.Model):
                 favorite_arr.append((ticker, company_name))
             return favorite_arr
 
+    def add_favorite(self, ticker):
+        """
+        Adds given company into favorites list.
+        :param ticker: Ticker symbol of company passed in from view
+        :return: no return value.
+        """
+        company_obj = NasdaqCompanies.objects.get(symbol=ticker)
+        if self.favorites is None:
+            self.favorites = str(company_obj.companyid)
+        else:
+            self.favorites = self.favorites + ',' + str(company_obj.companyid)
+        self.save()
+
+    def remove_favorite(self, ticker):
+        """
+        Removes company from favorites list.
+        :param ticker: Ticker symbol of company passed in from view
+        :return: no return value.
+        """
+        company_obj = NasdaqCompanies.objects.get(symbol=ticker)
+        fav_list = self.favorites.split(',')
+        fav_list.remove(str(company_obj.companyid))
+        self.favorites = ','.join(fav_list)
+        self.save()
+
     def get_history(self):
         """
         Returns list of search history to view.
@@ -159,7 +184,7 @@ class SearchUtility(User):
         try:
             company_obj = NasdaqCompanies.objects.get(symbol=ticker)
         except NasdaqCompanies.DoesNotExist:  # ticker not in company list
-            return None
+            return None, None
         # update search history
         self.update_history(company_obj.companyid)
         # start scraper
@@ -174,4 +199,4 @@ class SearchUtility(User):
             return_dict = dict(newslist=news_list, desc=company_desc, name=company_name, high=company_json["high"],
                                low=company_json["low"], opening=company_json["opening"],
                                closing=company_json["closing"], volume=company_json["volume"])
-        return return_dict, company_obj.companyid
+        return return_dict, company_obj.symbol

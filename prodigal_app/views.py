@@ -149,10 +149,10 @@ def search(request):
     user_obj = SearchUtility.objects.get(userid=user_id)
     ticker = request.POST.get('search_key', '')
     ticker = ticker.capitalize()
-    return_dict, company_id = user_obj.nasdaq_search(ticker)
+    return_dict, company_sym = user_obj.nasdaq_search(ticker)
     if return_dict is None:
         return render(request, "search.html", {"msg": "No Matching Result."})
-    request.session['last_search'] = company_id  # For use in favorites
+    request.session['last_search'] = company_sym  # For use in favorites
     return render(request, "search.html", return_dict)
 
 
@@ -167,22 +167,22 @@ def receive_token(request):
 
 def favorite(request):
     """
-    Only called when first displaying the favorite button. Checks if currently displaying company is in favorite
+    Only called when first displaying the search page. Checks if currently displaying company is in favorite
     list and display favorite button or unfavorite button.
     :param request: request from user
     :return: rendered html
     """
     favorite_list = request.session.get('favorites')
-    print(favorite_list)
     if favorite_list is None:
         return render(request, "favorite_btn.html", {'favorited': False})
-    favorite_list = favorite_list.split(',')
     last_search = request.session.get('last_search')
     return_dict = {}
-    if last_search in favorite_list:
-        return_dict['favorited'] = True
-    else:
-        return_dict['favorited'] = False
+    for (sym, name) in favorite_list:
+        if sym == last_search:
+            return_dict['favorited'] = True
+            return render(request, "favorite_btn.html", return_dict)
+    # Not in favorites list
+    return_dict['favorited'] = False
     return render(request, "favorite_btn.html", return_dict)
 
 
@@ -193,16 +193,10 @@ def add_favorite(request):
     :return: rendered html
     """
     user_id = request.session.get('user_id')
-    company_id = request.session.get('last_search')
-    favorite_list = request.session.get('favorites')
-    if favorite_list is None:
-        favorite_list = str(company_id)
-    else:
-        favorite_list = favorite_list + ',' + company_id
-    print(favorite_list)
-    request.session['favorites'] = favorite_list
-    cursor = connection.cursor()
-    cursor.execute("UPDATE User SET favorites = %s WHERE userID = %s", [favorite_list, user_id])
+    user_obj = User.objects.get(userid=user_id)
+    company_sym = request.session.get('last_search')
+    user_obj.add_favorite(company_sym)
+    request.session['favorites'] = user_obj.get_favorite()
     return render(request, "favorite_btn.html", {'favorited': True})
 
 
@@ -213,14 +207,8 @@ def remove_favorite(request):
     :return: rendered html
     """
     user_id = request.session.get('user_id')
-    company_id = request.session.get('last_search')
-    favorite_list = request.session.get('favorites')
-    if favorite_list is None:
-        return render(request, "favorite_btn.html")
-    else:
-        favorite_list.replace(',' + str(company_id), '')
-    print(favorite_list)
-    request.session['favorites'] = favorite_list
-    cursor = connection.cursor()
-    cursor.execute("UPDATE User SET favorites = %s WHERE userID = %s", [favorite_list, user_id])
+    user_obj = User.objects.get(userid=user_id)
+    company_sym = request.session.get('last_search')
+    user_obj.remove_favorite(company_sym)
+    request.session['favorites'] = user_obj.get_favorite()
     return render(request, "favorite_btn.html", {'favorited': False})
