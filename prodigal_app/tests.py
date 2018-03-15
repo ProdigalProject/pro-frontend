@@ -40,8 +40,8 @@ class TestSignup(unittest.TestCase):
         elem = self.driver.find_element_by_id('submit')
         elem.click() 
         
-        elem = self.driver.find_element_by_id('profile_username')
-        assert elem.text == 'test'
+        elem = self.driver.find_element_by_id('profile_email')
+        assert elem.text == 'tester@prodigal.com'
         
     def test_login_epic_fail(self):
         elem = self.driver.find_element_by_id('navbar_login')
