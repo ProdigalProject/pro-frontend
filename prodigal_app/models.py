@@ -120,7 +120,10 @@ class User(models.Model):
         company_obj = NasdaqCompanies.objects.get(symbol=ticker)
         fav_list = self.favorites.split(',')
         fav_list.remove(str(company_obj.companyid))
-        self.favorites = ','.join(fav_list)
+        if len(fav_list) == 0:
+            self.favorites = None
+        else:
+            self.favorites = ','.join(fav_list)
         self.save()
 
     def get_history(self):
