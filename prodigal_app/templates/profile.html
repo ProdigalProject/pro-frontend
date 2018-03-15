@@ -65,7 +65,7 @@
                         {% for ticker, name in favorites %}
                             <tr>
                                 <td>
-                                    <button class="w3-button" type="submit" name="search_key" value="{{ ticker }}" form="hisfav_search">
+                                    <button id="fav_{{ ticker }}" class="w3-button" type="submit" name="search_key" value="{{ ticker }}" form="hisfav_search">
                                         {{ ticker }} - {{ name }}
                                     </button>
                                 </td>
