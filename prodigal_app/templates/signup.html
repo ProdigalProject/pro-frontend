@@ -17,10 +17,45 @@
                 <a href="login" id="navbar_login" class="w3-button w3-bar-item w3-large w3-right">Log In</a>
             </nav>
         </div>
-        Only chickens here!
-        <div style="height:1440px">
-            Placeholder div
+        <div style="background-image: url(../static/images/city.jpeg); background-size: cover; height:120vh">
+            <div id="form" style="width: 500px; margin:0 auto 80px auto; padding-top:200px">
+                <div class="w3-card-4" style="max-width:2000px;">
+                    <form class="w3-white" id="form_id" method="post" name="myform" action="create_user">
+                        <div id="top_form" style="padding: 16px">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <h2 id="signup_fail_msg" align="center" class="w3-margin-bottom"> <b>{{ message }}</b> </h2>
+                                {% endfor %}
+                            {% else %}
+                                <h2 align="center" class="w3-margin-bottom"> <b>Join Prodigal</b> </h2>
+                            {% endif %}
+                            <div class="w3-margin-bottom">
+                                <label><b>Gender</b></label><br>
+                                <span style="white-space:nowrap;margin-right:16px">
+                                    <input type="radio" id="male" name="gender" value="Male" checked>
+                                    <label> Male </label>
+                                </span>
+                                <span style="white-space:nowrap;">
+                                    <input type="radio" id="female" name="gender" value="Female">
+                                    <label> Female </label>
+                                </span>
+                            </div>
+                            {% csrf_token %}
+                            <label><b>User Name</b></label>
+                            <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="username" required>
+                            <label><b>Email Address</b></label>
+                            <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter email address" name="email" required>
+                            <label><b>Password</b></label>
+                            <input class="w3-input w3-border w3-margin-bottom" type="password" placeholder="Enter Password" name="password" required>
+                        </div>
+                        <div class="w3-bar w3-border-top w3-padding-16 w3-light-grey" id="bottom_form">
+                            <button class="w3-button w3-block w3-red w3-section w3-padding" type="submit" id="submit" style="width:120px;margin: 0 auto 0 auto">Sign Up!</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
+
         <!-- Footer -->
         <footer id="Home" class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
             <a href="#"><i class="fa fa-facebook-official"></i></a>
@@ -32,4 +67,19 @@
             </p>
         </footer>
     </body>
+
+    <script type="text/javascript">
+        function alternate(){
+            if(this.checked)
+                this.checked = false;
+            else
+                this.checked = true;
+        }
+        function change_avatar(){
+            male_avatar = document.getElementById('male_avatar');
+            female_avatar = document.getElementById('female_avatar');
+            male_avatar.style.display = "block";
+            female_avatar.style.display = "none";
+        }
+    </script>
 </html>

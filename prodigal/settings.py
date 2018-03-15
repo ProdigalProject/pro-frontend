@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'prodigal_app',
 ]
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -79,8 +81,12 @@ WSGI_APPLICATION = 'prodigal.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'webappdb',
+        'USER': 'prodigal',
+        'PASSWORD': 'DarkoMarinov1',
+        'HOST': 'prodigal-mysql-db.cwrjwojncyjz.us-east-2.rds.amazonaws.com',
+        'PORT': '3306',
     }
 }
 

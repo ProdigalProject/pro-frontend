@@ -8,6 +8,46 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}"/>
         <title>Prodigal - Search</title>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var decoded = ('{{ chart_json }} ').replace(/&#39;/g,'\"');
+
+        var chart_json = JSON.parse( decoded );
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'Date');
+        data.addColumn('number', 'Closing price');
+
+        var numRows = chart_json.length;
+
+        for (var i = 0; i < numRows; i++){
+
+            var a = chart_json[i].date
+            var res = a.split("-");
+
+            var d = new Date(res[0],res[1]-1,res[2]);
+
+            var myrow = new Array(d, chart_json[i].closing);
+
+            data.addRow(myrow);
+        }
+
+        var options = {
+          chartArea:{width:"90%",height:"90%"},
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('stock_chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
     </head>
     <body>
         <!-- Navigation -->
@@ -26,17 +66,26 @@
         </div>
         <!-- No matching search results -->
         {% if msg %}
-        <div id="search-container" style="margin: 80px 2% 0 2%; height: 1000px">
-            <h1> {{ msg }} </h1>
+        <div id="search-container" style="margin: 80px 2% 0 2%; min-height:100vh">
+            <h1 id="fail"> {{ msg }} </h1>
         </div>
         <!-- Search Results -->
         {% else %}
-        <div id="search-container" style="margin: 80px 2% 0 2%">
+        <div id="search-container" style="margin: 80px 2% 0 2%; min-height:100vh">
             <div id="result">
-                <div id="company_name">
-                    <h1>{{ name }}</h1>
+                <div id="search_top_container">
+                    <div id="company_name" style="display: inline-block;">
+                        <h1>{{ name }}</h1>
+                    </div>
+                    <iframe src="favorite" width="250px" height="74px" style="border:none; display:inline-block; vertical-align: middle; margin-left: 10px"></iframe>
                 </div>
-                <div id="company_basic_stock">
+                <h2>Projection</h2>
+                <div id="stock_chart" style="width: 728px; height: 450px; margin-bottom:20px">
+                    <!-- Div for chart -->
+                </div>
+                {% if high %}
+                <div id="company_basic_stock" style="display: inline-block;">
+                    <h2>Latest Data</h2>
                     <table>
                         <tr>
                             <th>High:</th>
@@ -54,18 +103,23 @@
                             <th>Closing:</th>
                             <td>{{ closing }}</td>
                         </tr>
+                        <tr>
+                            <th>Volume:</th>
+                            <td>{{ volume }}</td>
+                        </tr>
                     </table>
                     <br>
                 </div>
+                {% endif %}
                 {% if desc %}
-                <div id="company_description">
+                <div id="company_description" style="margin: 10px 0">
                     <h2>Company Description</h2>
                     {% for p in desc %}
                         <p> {{ p }} </p>
                     {% endfor %}
                 </div>
                 {% endif %}
-                <div id="news">
+                <div id="news" style="margin: 10px 0">
                     <h2>News</h2>
                     <ul id="news_list">
                         {% for news, link in newslist %}

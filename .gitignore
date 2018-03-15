@@ -4,3 +4,4 @@ geckodriver.log
 subl
 __pycache__
 env
+venv

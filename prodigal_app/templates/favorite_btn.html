@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/3/w3.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+</head>
+<body>
+    {% if favorited == True %}
+            <a class="w3-btn w3-yellow" href="remove_favorite" style="border-radius:10px;font-size:16px;text-align: center; margin:10px">
+                <b><span class="glyphicon glyphicon-star"></span>&nbsp;Unfavorite</b>
+            </a>
+
+    {% else %}
+            <a class="w3-btn w3-yellow" href="add_favorite" style="border-radius:10px;font-size:16px;text-align: center; margin:10px">
+                <b><span class="glyphicon glyphicon-star"></span>&nbsp;Add to Favorite</b>
+            </a>
+    {% endif %}
+</body>
+</html>

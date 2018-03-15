@@ -31,21 +31,114 @@ class TestSignup(unittest.TestCase):
         elem.click()
         assert "Welcome to Prodigal!" in self.driver.title
     
-    def test_search_bar(self):
-        elem = self.driver.find_element_by_xpath("//a[contains(text(),'Secret backdoor to profile page')]")
+    def test_login_success(self):
+        elem = self.driver.find_element_by_id('navbar_login')
+        #elem = self.driver.find_element_by_xpath("//a[contains(text(),'Secret backdoor to profile page')]")
         elem.click()
+        elem = self.driver.find_element_by_id('usr')
+        elem.send_keys('test')
+
+        elem = self.driver.find_element_by_id('pass')
+        elem.send_keys('pw')
+        
+        elem = self.driver.find_element_by_id('submit')
+        elem.click() 
+        
+        elem = self.driver.find_element_by_id('profile_username')
+        assert elem.text == 'test'
+        
+    def test_login_epic_fail(self):
+        elem = self.driver.find_element_by_id('navbar_login')
+        #elem = self.driver.find_element_by_xpath("//a[contains(text(),'Secret backdoor to profile page')]")
+        elem.click()
+        elem = self.driver.find_element_by_id('usr')
+        elem.send_keys('test')
+
+        elem = self.driver.find_element_by_id('pass')
+        elem.send_keys('pwd')
+        
+        elem = self.driver.find_element_by_id('submit')
+        elem.click() 
+        
+        elem = self.driver.find_element_by_id('login_fail_msg')
+        assert elem.text == 'Login Failed!'    
+    
+    def test_search_bar_on_success(self):
+        elem = self.driver.find_element_by_id('navbar_login')
+        #elem = self.driver.find_element_by_xpath("//a[contains(text(),'Secret backdoor to profile page')]")
+        elem.click()
+        elem = self.driver.find_element_by_id('usr')
+        elem.send_keys('test')
+
+        elem = self.driver.find_element_by_id('pass')
+        elem.send_keys('pw')
+        
+        elem = self.driver.find_element_by_id('submit')
+        elem.click() 
+        
         elem = self.driver.find_element_by_id('navbar_searchbox')
         elem.send_keys('aapl')
-        elem.submit() 
+        elem.submit()
+        
+        
         elem = self.driver.find_element_by_id('company_name')
         assert elem.text == 'Apple Inc.'
         elem = self.driver.find_element_by_id('company_description')
         assert elem.text
         elem = self.driver.find_element_by_id('news')
         assert elem.text
+        
+        
         # test exception handle
 
         # test api status
+    
+    def test_search_bar_on_epic_fail(self):
+        elem = self.driver.find_element_by_id('navbar_login')
+        #elem = self.driver.find_element_by_xpath("//a[contains(text(),'Secret backdoor to profile page')]")
+        elem.click()
+        elem = self.driver.find_element_by_id('usr')
+        elem.send_keys('test')
+
+        elem = self.driver.find_element_by_id('pass')
+        elem.send_keys('pw')
+        
+        elem = self.driver.find_element_by_id('submit')
+        elem.click() 
+        
+        elem = self.driver.find_element_by_id('navbar_searchbox')
+        elem.send_keys('xyz')
+        elem.submit()
+
+        elem = self.driver.find_element_by_id('fail')
+        assert elem.text == 'No Matching Result.'
+
+    def test_profile_page_history(self):
+        elem = self.driver.find_element_by_id('navbar_login')
+        # elem = self.driver.find_element_by_xpath("//a[contains(text(),'Secret backdoor to profile page')]")
+        elem.click()
+        elem = self.driver.find_element_by_id('usr')
+        elem.send_keys('test')
+
+        elem = self.driver.find_element_by_id('pass')
+        elem.send_keys('pw')
+
+        elem = self.driver.find_element_by_id('submit')
+        elem.click()
+
+        elem = self.driver.find_element_by_id('navbar_searchbox')
+        elem.send_keys('ADBE')
+        elem.submit()
+
+        elem = self.driver.find_element_by_id('navbar_profile')
+        elem.click()
+
+        elem = self.driver.find_element_by_id('ADBE')
+        assert elem.value_of_css_property() == 'ADBE'
+
+
+
+
 
     def tearDown(self):
         self.driver.quit
