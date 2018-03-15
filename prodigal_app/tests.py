@@ -9,17 +9,14 @@ from selenium.webdriver.chrome.options import Options
 class TestSignup(unittest.TestCase):
 
     def setUp(self):
-          chrome_opts = Options()
-          chrome_opts.add_argument("--disable-extensions")
-          chrome_opts.add_argument("--headless")
-          chrome_opts.add_argument("--no-sandbox")
-          chrome_opts.add_argument("--disable-gpu")
-        # firefox_capabilities = DesiredCapabilities.FIREFOX
-        # firefox_capabilities['marionette'] = True
-        # firefox_capabilities['binary'] = '/usr/bin/firefox'
-          self.driver = webdriver.Chrome(options=chrome_opts)
-          self.driver.get("https://prodigal-gamma.azurewebsites.net/")
-          #self.driver.get("http://0.0.0.0:8000/")
+        chrome_opts = Options()
+        chrome_opts.add_argument("--disable-extensions")
+        chrome_opts.add_argument("--headless")
+        chrome_opts.add_argument("--no-sandbox")
+        chrome_opts.add_argument("--disable-gpu")
+        self.driver = webdriver.Chrome(options=chrome_opts)
+        self.driver.get("https://prodigal-gamma.azurewebsites.net/")
+        # self.driver.get("http://0.0.0.0:8000/")
 
     def test_homepage_rendering(self):
         assert "Welcome to Prodigal!" in self.driver.title
@@ -33,7 +30,6 @@ class TestSignup(unittest.TestCase):
     
     def test_login_success(self):
         elem = self.driver.find_element_by_id('navbar_login')
-        #elem = self.driver.find_element_by_xpath("//a[contains(text(),'Secret backdoor to profile page')]")
         elem.click()
         elem = self.driver.find_element_by_id('usr')
         elem.send_keys('test')
@@ -49,7 +45,6 @@ class TestSignup(unittest.TestCase):
         
     def test_login_epic_fail(self):
         elem = self.driver.find_element_by_id('navbar_login')
-        #elem = self.driver.find_element_by_xpath("//a[contains(text(),'Secret backdoor to profile page')]")
         elem.click()
         elem = self.driver.find_element_by_id('usr')
         elem.send_keys('test')
@@ -65,7 +60,6 @@ class TestSignup(unittest.TestCase):
     
     def test_search_bar_on_success(self):
         elem = self.driver.find_element_by_id('navbar_login')
-        #elem = self.driver.find_element_by_xpath("//a[contains(text(),'Secret backdoor to profile page')]")
         elem.click()
         elem = self.driver.find_element_by_id('usr')
         elem.send_keys('test')
@@ -80,22 +74,15 @@ class TestSignup(unittest.TestCase):
         elem.send_keys('aapl')
         elem.submit()
         
-        
         elem = self.driver.find_element_by_id('company_name')
         assert elem.text == 'Apple Inc.'
         elem = self.driver.find_element_by_id('company_description')
         assert elem.text
         elem = self.driver.find_element_by_id('news')
         assert elem.text
-        
-        
-        # test exception handle
 
-        # test api status
-    
     def test_search_bar_on_epic_fail(self):
         elem = self.driver.find_element_by_id('navbar_login')
-        #elem = self.driver.find_element_by_xpath("//a[contains(text(),'Secret backdoor to profile page')]")
         elem.click()
         elem = self.driver.find_element_by_id('usr')
         elem.send_keys('test')
@@ -115,7 +102,6 @@ class TestSignup(unittest.TestCase):
 
     def test_profile_page_history(self):
         elem = self.driver.find_element_by_id('navbar_login')
-        # elem = self.driver.find_element_by_xpath("//a[contains(text(),'Secret backdoor to profile page')]")
         elem.click()
         elem = self.driver.find_element_by_id('usr')
         elem.send_keys('test')
@@ -134,11 +120,7 @@ class TestSignup(unittest.TestCase):
         elem.click()
 
         elem = self.driver.find_element_by_id('ADBE')
-        assert elem.value_of_css_property() == 'ADBE'
-
-
-
-
+        assert elem.get_attribute("value") == 'ADBE'
 
     def tearDown(self):
         self.driver.quit
