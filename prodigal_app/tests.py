@@ -35,10 +35,10 @@ class TestSignup(unittest.TestCase):
         elem = self.driver.find_element_by_id('navbar_login')
         #elem = self.driver.find_element_by_xpath("//a[contains(text(),'Secret backdoor to profile page')]")
         elem.click()
-        elem = self.driver.find_element_by_class_name('w3-input w3-border w3-margin-bottom')
+        elem = self.driver.find_element_by_id('usr')
         elem.send_keys('test')
-        
-        elem = self.driver.find_element_by_class_name('w3-input w3-border')
+
+        elem = self.driver.find_element_by_id('pass')
         elem.send_keys('pw')
         
         elem = self.driver.find_element_by_id('submit')
@@ -51,10 +51,10 @@ class TestSignup(unittest.TestCase):
         elem = self.driver.find_element_by_id('navbar_login')
         #elem = self.driver.find_element_by_xpath("//a[contains(text(),'Secret backdoor to profile page')]")
         elem.click()
-        elem = self.driver.find_element_by_class_name('w3-input w3-border w3-margin-bottom')
+        elem = self.driver.find_element_by_id('usr')
         elem.send_keys('test')
-        
-        elem = self.driver.find_element_by_class_name('w3-input w3-border')
+
+        elem = self.driver.find_element_by_id('pass')
         elem.send_keys('pwd')
         
         elem = self.driver.find_element_by_id('submit')
@@ -67,10 +67,10 @@ class TestSignup(unittest.TestCase):
         elem = self.driver.find_element_by_id('navbar_login')
         #elem = self.driver.find_element_by_xpath("//a[contains(text(),'Secret backdoor to profile page')]")
         elem.click()
-        elem = self.driver.find_element_by_class_name('w3-input w3-border w3-margin-bottom')
+        elem = self.driver.find_element_by_id('usr')
         elem.send_keys('test')
-        
-        elem = self.driver.find_element_by_class_name('w3-input w3-border')
+
+        elem = self.driver.find_element_by_id('pass')
         elem.send_keys('pw')
         
         elem = self.driver.find_element_by_id('submit')
@@ -97,10 +97,10 @@ class TestSignup(unittest.TestCase):
         elem = self.driver.find_element_by_id('navbar_login')
         #elem = self.driver.find_element_by_xpath("//a[contains(text(),'Secret backdoor to profile page')]")
         elem.click()
-        elem = self.driver.find_element_by_class_name('w3-input w3-border w3-margin-bottom')
+        elem = self.driver.find_element_by_id('usr')
         elem.send_keys('test')
-        
-        elem = self.driver.find_element_by_class_name('w3-input w3-border')
+
+        elem = self.driver.find_element_by_id('pass')
         elem.send_keys('pw')
         
         elem = self.driver.find_element_by_id('submit')
@@ -109,9 +109,8 @@ class TestSignup(unittest.TestCase):
         elem = self.driver.find_element_by_id('navbar_searchbox')
         elem.send_keys('xyz')
         elem.submit()
-        
-        
-        elem = self.driver.find_element_by_xpath("//a[contains(text(),'No Matching Result.')]")
+
+        elem = self.driver.find_element_by_id('fail')
         assert elem.text == 'No Matching Result.'
 
     def tearDown(self):

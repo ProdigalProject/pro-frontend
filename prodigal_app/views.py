@@ -1,9 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
-from django.db import connection
-import requests
-from . import nasdaq_scraper
 from prodigal_app.models import *
 
 
