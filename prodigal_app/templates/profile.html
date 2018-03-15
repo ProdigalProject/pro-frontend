@@ -45,7 +45,7 @@
                         {% for ticker, name in history %}
                             <tr>
                                 <td>
-                                    <button class="w3-button" type="submit" name="search_key" value="{{ ticker }}" form="hisfav_search">
+                                    <button id="{{ ticker }}" class="w3-button" type="submit" name="search_key" value="{{ ticker }}" form="hisfav_search">
                                         {{ ticker }} - {{ name }}
                                     </button>
                                 </td>
