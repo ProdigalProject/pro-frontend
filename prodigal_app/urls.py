@@ -14,5 +14,6 @@ urlpatterns = [
     path('tokensignin', views.receive_token, name='tokensignin'),
     path('add_favorite', views.add_favorite, name='add_favorite'),
     path('remove_favorite', views.remove_favorite, name='remove_favorite'),
-    path('favorite', views.favorite, name='favorite')
+    path('favorite', views.favorite, name='favorite'),
+    path('sector', views.sector, name='sector')
 ]

@@ -206,3 +206,19 @@ class SearchUtility(User):
                                low=company_json["low"], opening=company_json["opening"],
                                closing=company_json["closing"], volume=company_json["volume"], chart_json=chart_json)
         return return_dict, company_obj.symbol
+
+
+    def search_by_sector(self, sector_symbol):
+        try:
+            company_list = NasdaqCompanies.objects.filter(sector=sector_symbol)
+            print(company_list)
+        except NasdaqCompanies.DoesNotExist:  # sector not in company list
+            return None
+        # return tuple list (name, ticker)
+        return_list = []
+        for company in company_list:
+            company_name = company.name
+            compnay_sym = company.symbol
+            temp = (company_name, compnay_sym)
+            return_list.append(temp)
+        return return_list

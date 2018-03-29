@@ -146,18 +146,31 @@ def search(request):
     user_id = request.session.get('user_id', '')
     user_obj = SearchUtility.objects.get(userid=user_id)
     ticker = request.POST.get('search_key', '')
-    ticker = ticker.capitalize()
+    # ticker = ticker.capitalize()
     mode = request.POST.get('mode', '')
-    print(mode)
-    if mode != 'comparison':
-        return_dict, company_sym = user_obj.nasdaq_search(ticker)
-        if return_dict is None:
-            return render(request, "search.html", {"msg": "No Matching Result."})
-        request.session['last_search'] = company_sym  # For use in favorites
-        return render(request, "search.html", return_dict)
+    # search by sector
+    if 'sector:' in ticker:
+        sector_symbol = ticker.lstrip("sector:")
+        result_list = user_obj.search_by_sector(sector_symbol)
+        if result_list is None:
+            return render(request, "sector.html", {"msg": "Sector didn't find."})
+        return_dict = {}
+        return_dict["list"] = result_list
+        return_dict["sector"] = sector_symbol
+        return render(request, "sector.html", return_dict)
+    # search/compare by ticker/company name
     else:
-        # TODO: add comparison mode
-        return render(request, "search.html")
+        # search for new company
+        if mode != 'comparison':
+            return_dict, company_sym = user_obj.nasdaq_search(ticker)
+            if return_dict is None:
+                return render(request, "search.html", {"msg": "No Matching Result."})
+            request.session['last_search'] = company_sym  # For use in favorites
+            return render(request, "search.html", return_dict)
+        # compare companies
+        else:
+            # TODO: add comparison mode
+            return render(request, "search.html")
 
 def receive_token(request):
     """
@@ -215,3 +228,6 @@ def remove_favorite(request):
     user_obj.remove_favorite(company_sym)
     request.session['favorites'] = user_obj.get_favorite()
     return render(request, "favorite_btn.html", {'favorited': False})
+
+def sector(request):
+    return render(request, "sector.html")
