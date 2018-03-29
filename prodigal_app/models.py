@@ -23,7 +23,7 @@ class NasdaqCompanies(models.Model):
     sector = models.CharField(db_column='Sector', max_length=50)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'Nasdaq_Companies'
 
 
