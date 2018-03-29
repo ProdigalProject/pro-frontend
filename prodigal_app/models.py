@@ -59,6 +59,8 @@ class User(models.Model):
         salt = b64encode(urandom(48)).decode()
         hashed_pw = hashlib.sha256((salt + pw).encode()).hexdigest()
         user_obj = User(username=username, email=email, gender=gender, password=hashed_pw, salt=salt)
+        # TODO: email verification require
+
         user_obj.save()
         return 0
 
@@ -157,12 +159,12 @@ class User(models.Model):
             # history search less than 5
             if len(h) < 5:
                 # compare the most recent one with search result this term
-                if h[0] != company_id:
+                if int(h[0]) != company_id:
                     history = str(company_id) + ',' + history
             # more than 5 history
             else:
                 # compare the most recent one with search result this term
-                if h[0] != company_id:
+                if int(h[0]) != company_id:
                     history = str(company_id) + ',' + h[0] + ',' + h[1] + ',' + h[2] + ',' + h[3]
         self.history = history
         self.save()

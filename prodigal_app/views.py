@@ -142,16 +142,22 @@ def search(request):
     """
     if request.session.get("user_id") is None:
         return redirect('login')
+
     user_id = request.session.get('user_id', '')
     user_obj = SearchUtility.objects.get(userid=user_id)
     ticker = request.POST.get('search_key', '')
     ticker = ticker.capitalize()
-    return_dict, company_sym = user_obj.nasdaq_search(ticker)
-    if return_dict is None:
-        return render(request, "search.html", {"msg": "No Matching Result."})
-    request.session['last_search'] = company_sym  # For use in favorites
-    return render(request, "search.html", return_dict)
-
+    mode = request.POST.get('mode', '')
+    print(mode)
+    if mode != 'comparison':
+        return_dict, company_sym = user_obj.nasdaq_search(ticker)
+        if return_dict is None:
+            return render(request, "search.html", {"msg": "No Matching Result."})
+        request.session['last_search'] = company_sym  # For use in favorites
+        return render(request, "search.html", return_dict)
+    else:
+        # TODO: add comparison mode
+        return render(request, "search.html")
 
 def receive_token(request):
     """
