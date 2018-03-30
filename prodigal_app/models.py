@@ -195,6 +195,7 @@ class SearchUtility(User):
         # start scraper
         news_list, company_desc = nasdaq_scraper.scrape(ticker)
         # use ticker symbol to get info from API
+        # TODO: duplicate data
         url = "http://prodigal-ml.us-east-2.elasticbeanstalk.com/stocks/" + ticker + "/?ordering=-date&format=json"
         response = requests.get(url)
         if response.status_code == 404:  # company not found in api
@@ -209,9 +210,14 @@ class SearchUtility(User):
 
 
     def search_by_sector(self, sector_symbol):
+        """
+        Query user input of sector to database.
+        Search history is also updated if click the button in the return list.
+        :param ticker: sector passed in from view.
+        :return: None if no match, list of required data if match is found
+        """
         try:
             company_list = NasdaqCompanies.objects.filter(sector=sector_symbol)
-            print(company_list)
         except NasdaqCompanies.DoesNotExist:  # sector not in company list
             return None
         # return tuple list (name, ticker)

@@ -170,7 +170,17 @@ def search(request):
         # compare companies
         else:
             # TODO: add comparison mode
-            return render(request, "search.html")
+            # just come up with a method that compare two companies
+            first_dict, company_sym_first= user_obj.nasdaq_search(request.session.get('last_search'))
+            if first_dict is None:
+                return render(request, "search.html", {"msg": "No Comparison Object."})
+            second_dict, company_sym_second = user_obj.nasdaq_search(ticker)
+            if second_dict is None:
+                return render(request, "search.html", first_dict)
+            return_dict = first_dict.copy()
+            return_dict["name_second"] = second_dict["name"]
+            return_dict["chart_json_second"] = second_dict["chart_json"]
+            return render(request, "search.html", return_dict)
 
 def receive_token(request):
     """
@@ -230,4 +240,9 @@ def remove_favorite(request):
     return render(request, "favorite_btn.html", {'favorited': False})
 
 def sector(request):
+    """
+    Go to sector.html. This function only render the sector html page.
+    :param request: request from user
+    :return: rendered html
+    """
     return render(request, "sector.html")

@@ -15,26 +15,52 @@
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
-        var decoded = ('{{ chart_json }} ').replace(/&#39;/g,'\"');
+        var decoded_first = ('{{ chart_json }} ').replace(/&#39;/g,'\"');
+        if(('{{ chart_json_second }} ') != " "){
+            var decoded_second = ('{{ chart_json_second }} ').replace(/&#39;/g,'\"');
+            var chart_json_first = JSON.parse( decoded_first );
+            var chart_json_second = JSON.parse( decoded_second );
 
-        var chart_json = JSON.parse( decoded );
+            var data = new google.visualization.DataTable();
+            data.addColumn('date', 'Date');
+            data.addColumn('number', '{{ name }} ' + 'Closing');
+            data.addColumn('number', '{{ name_second }} ' + 'Closing');
 
-        var data = new google.visualization.DataTable();
-        data.addColumn('date', 'Date');
-        data.addColumn('number', 'Closing price');
+            var numRows = chart_json_first.length < chart_json_second.length ? chart_json_first.length : chart_json_second.length;
+            
+            for (var i = 0; i < numRows; i++){
 
-        var numRows = chart_json.length;
+                var a = chart_json_first[i].date;
+                var res = a.split("-");
 
-        for (var i = 0; i < numRows; i++){
+                var d = new Date(res[0],res[1]-1,res[2]);
 
-            var a = chart_json[i].date
-            var res = a.split("-");
+                var myrow = new Array(d, chart_json_first[i].closing, chart_json_second[i].closing);
 
-            var d = new Date(res[0],res[1]-1,res[2]);
+                data.addRow(myrow);
+            }
+        }
+        else{
+            var chart_json_first = JSON.parse( decoded_first );
 
-            var myrow = new Array(d, chart_json[i].closing);
+            var data = new google.visualization.DataTable();
+            data.addColumn('date', 'Date');
+            data.addColumn('number', '{{ name }} ' + 'Closing');
 
-            data.addRow(myrow);
+            var numRows = chart_json_first.length;
+
+            for (var i = 0; i < numRows; i++){
+
+                var a = chart_json_first[i].date;
+                var res = a.split("-");
+
+                var d = new Date(res[0],res[1]-1,res[2]);
+
+                var myrow = new Array(d, chart_json_first[i].closing);
+
+                data.addRow(myrow);
+            
+            }
         }
 
         var options = {
