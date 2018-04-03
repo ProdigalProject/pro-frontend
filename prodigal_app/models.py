@@ -208,7 +208,6 @@ class SearchUtility(User):
                                closing=company_json["closing"], volume=company_json["volume"], chart_json=chart_json)
         return return_dict, company_obj.symbol
 
-
     def search_by_sector(self, sector_symbol):
         """
         Query user input of sector to database.
