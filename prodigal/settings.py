@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'prodigal_app',
 ]
 
+'''
 # Use nose to run all tests
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
@@ -52,8 +53,9 @@ NOSE_ARGS = [
     '--with-coverage',
     '--cover-html',
     '--cover-package=prodigal_app',
+    '--cover-erase',
 ]
-
+'''
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
 MIDDLEWARE = [

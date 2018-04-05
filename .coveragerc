@@ -1,0 +1,19 @@
+# .coveragerc to control coverage.py
+[run]
+branch = True
+omit =
+    manage.py
+    backend/*
+    cover/*
+    prodigal/*
+    venv/*
+    prodigal_app/migrations/*
+    prodigal_app/__init__.py
+    prodigal_app/admin.py
+    prodigal_app/apps.py
+    prodigal_app/test*.py
+    prodigal_app/views.py
+    prodigal_app/urls.py
+
+[html]
+directory = cover
