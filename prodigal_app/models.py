@@ -208,7 +208,6 @@ class SearchUtility(User):
                                closing=latest_data["closing"], volume=latest_data["volume"], latest_date=latest_data["date"],chart_json=chart_json)
         return return_dict, company_obj.symbol
 
-
     def search_by_sector(self, sector_symbol):
         """
         Query user input of sector to database.
@@ -228,6 +227,7 @@ class SearchUtility(User):
             temp = (company_name, compnay_sym)
             return_list.append(temp)
         return return_list
+<<<<<<< HEAD
 
 
     def pridict(self, ticker):
@@ -243,3 +243,5 @@ class SearchUtility(User):
         else:
             pridiction = response.json()
             return pridiction
+=======
+>>>>>>> fb2f5b4b4e2b93487a219e54c6c85079150fa12f
