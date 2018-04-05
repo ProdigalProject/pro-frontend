@@ -160,26 +160,42 @@ def search(request):
         return render(request, "sector.html", return_dict)
     # search/compare by ticker/company name
     else:
+        
         # search for new company
         if mode != 'comparison':
+            # get pridiction for further use
+            pridiction = user_obj.pridict(ticker)
             return_dict, company_sym = user_obj.nasdaq_search(ticker)
             if return_dict is None:
                 return render(request, "search.html", {"msg": "No Matching Result."})
-            request.session['last_search'] = company_sym  # For use in favorites
+            request.session["last_search"] = company_sym  # For use in favorites
+            if pridiction is not None:
+                return_dict["pridiction"] = pridiction
             return render(request, "search.html", return_dict)
         # compare companies
         else:
-            # TODO: add comparison mode
+            # TODO: add comparison for more than two factors
             # just come up with a method that compare two companies
-            first_dict, company_sym_first= user_obj.nasdaq_search(request.session.get('last_search'))
-            if first_dict is None:
+            # get first company (base company) data
+            first_dict, company_sym_first = user_obj.nasdaq_search(request.session.get('last_search'))
+            # get pridiction for further use
+            pridiction = user_obj.pridict(request.session.get('last_search'))
+            if first_dict is None: # no first company match
                 return render(request, "search.html", {"msg": "No Comparison Object."})
+            # get second compant data
+            pridiction_second = user_obj.pridict(ticker)
             second_dict, company_sym_second = user_obj.nasdaq_search(ticker)
-            if second_dict is None:
+            if second_dict is None: # no second compant match
+                if pridiction is not None:
+                    first_dict["pridiction"] = pridiction
                 return render(request, "search.html", first_dict)
             return_dict = first_dict.copy()
             return_dict["name_second"] = second_dict["name"]
             return_dict["chart_json_second"] = second_dict["chart_json"]
+            if pridiction is not None:
+                return_dict["pridiction"] = pridiction
+            if pridiction_second is not None:
+                return_dict["pridiction_second"] = pridiction_second
             return render(request, "search.html", return_dict)
 
 def receive_token(request):

@@ -196,23 +196,23 @@ class SearchUtility(User):
         news_list, company_desc = nasdaq_scraper.scrape(ticker)
         # use ticker symbol to get info from API
         # TODO: duplicate data
-        url = "http://prodigal-ml.us-east-2.elasticbeanstalk.com/stocks/" + ticker + "/?ordering=-date&format=json"
+        url = "https://prodigal-ml.azurewebsites.net/stocks/" + ticker + "/?ordering=-date&format=json"
         response = requests.get(url)
         if response.status_code == 404:  # company not found in api
             return_dict = dict(newslist=news_list, desc=company_desc, name=company_obj.name)
         else:
-            company_json = response.json()[0]  # company_json now holds dictionary created by json data
             chart_json = response.json()
-            return_dict = dict(newslist=news_list, desc=company_desc, name=company_obj.name, high=company_json["high"],
-                               low=company_json["low"], opening=company_json["opening"],
-                               closing=company_json["closing"], volume=company_json["volume"], chart_json=chart_json)
+            latest_data = chart_json[0] # latest data
+            return_dict = dict(newslist=news_list, desc=company_desc, name=company_obj.name, high=latest_data["high"],
+                               low=latest_data["low"], opening=latest_data["opening"],
+                               closing=latest_data["closing"], volume=latest_data["volume"], latest_date=latest_data["date"],chart_json=chart_json)
         return return_dict, company_obj.symbol
 
     def search_by_sector(self, sector_symbol):
         """
         Query user input of sector to database.
         Search history is also updated if click the button in the return list.
-        :param ticker: sector passed in from view.
+        :param sector_symbol: sector passed in from view.
         :return: None if no match, list of required data if match is found
         """
         try:
@@ -227,3 +227,18 @@ class SearchUtility(User):
             temp = (company_name, compnay_sym)
             return_list.append(temp)
         return return_list
+
+
+    def pridict(self, ticker):
+        """
+        Query pridiction data from api service by ticker.
+        :param ticker: ticker symbol passed in from view.
+        :return: None if no data proviede, list of following five days closing price if found
+        """
+        url = "https://prodigal-ml.azurewebsites.net/stocks/" + ticker + "/runexpr"
+        response = requests.get(url)
+        if response.status_code == 404:  # company not found in api
+            return None
+        else:
+            pridiction = response.json()
+            return pridiction
