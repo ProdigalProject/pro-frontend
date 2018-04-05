@@ -2,7 +2,8 @@ Selenium_Test:
   script:
     - az login --msi
     - az webapp deployment source sync -n prodigal-gamma -g prodigal
-    - python3 /home/gitlab-runner/builds/b74f8bb5/0/prodigal/pro-frontend/prodigal_app/tests.py
+#    - python3 /home/gitlab-runner/builds/b74f8bb5/0/prodigal/pro-frontend/prodigal_app/tests.py
+    -python3 /home/gitlab-runner/builds/b74f8bb5/0/prodigal/pro-frontend/prodigal_app/tests.py
   stage: test
   only:
     - master
