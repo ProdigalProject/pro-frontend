@@ -227,7 +227,6 @@ class SearchUtility(User):
             temp = (company_name, compnay_sym)
             return_list.append(temp)
         return return_list
-<<<<<<< HEAD
 
 
     def pridict(self, ticker):
@@ -243,5 +242,3 @@ class SearchUtility(User):
         else:
             pridiction = response.json()
             return pridiction
-=======
->>>>>>> fb2f5b4b4e2b93487a219e54c6c85079150fa12f

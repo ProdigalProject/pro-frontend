@@ -78,7 +78,7 @@
 
             var numRows = chart_json_first.length < chart_json_second.length ? chart_json_first.length : chart_json_second.length;
             
-            for (var i = 0; i < numRows - 5; i++){
+            for (var i = 0; i < numRows; i++){
                 var a = chart_json_first[i].date;
                 var res = a.split("-");
                 var d = new Date(res[0],res[1]-1,res[2]);
@@ -103,6 +103,9 @@
             var lastest_year = parseInt(date[0]);
             var lastest_month = parseInt(date[1]) - 1;
             var lastest_day = parseInt(date[2]);
+
+            myrow = new Array(new Date(lastest_year, lastest_month, lastest_day), null, null, chart_json_first[0].closing, chart_json_second[0].closing);
+            data.addRow(myrow);
 
             for (var i = 0; i < 5; i++){
                 var date_array = getNextdate(lastest_year, lastest_month, lastest_day);
@@ -150,6 +153,10 @@
             var lastest_year = parseInt(date[0]);
             var lastest_month = parseInt(date[1]) - 1;
             var lastest_day = parseInt(date[2]);
+
+            // for continuous reason
+            myrow = new Array(new Date(lastest_year, lastest_month, lastest_day), null, chart_json_first[0].closing);
+            data.addRow(myrow);
 
             for (var i = 0; i < 5; i++){
                 var date_array = getNextdate(lastest_year, lastest_month, lastest_day);
