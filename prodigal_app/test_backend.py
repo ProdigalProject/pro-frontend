@@ -7,7 +7,6 @@ from prodigal_app.nasdaq_scraper import  *
 
 class NasdaqScraperTestCase(TestCase):
     def test_sreaper(self):
-        django.setup()
         news,data = scrape("AAPL")
         assert 0 < len(news) <= 5
         assert news is not None
