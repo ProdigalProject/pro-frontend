@@ -1,3 +1,4 @@
+#!/home/gitlab-runner/builds/b74f8bb5/0/prodigal/pro-frontend/venv/bin/python3
 from django.test import TestCase
 from prodigal_app.models import NasdaqCompanies, User, SearchUtility
 from prodigal_app.nasdaq_scraper import  *
