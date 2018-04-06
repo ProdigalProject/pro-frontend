@@ -6,7 +6,8 @@ def scrape(ticker):
     """
     Scrapes recent news and company description from nasdaq.com
     :param ticker: Ticker Symbol entered by user.
-    :return: List of tuples (news_text, news_link), list of company description paragraph and string of company name.
+    :return: List of tuples (news_text, news_link),
+    list of company description paragraph and string of company name.
     """
     # send request to nasdaq.com
     url = "https://www.nasdaq.com/symbol/"

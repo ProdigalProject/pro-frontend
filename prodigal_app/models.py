@@ -3,8 +3,10 @@
 #   * Rearrange models' order
 #   * Make sure each model has one field with primary_key=True
 #   * Make sure each ForeignKey has `on_delete` set to the desired behavior.
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
+#   * Remove `managed = False` lines if you wish to allow Django to create,
+#   * modify, and delete the table
+# Feel free to rename the models,
+# but don't rename db_table values or field names.
 from django.db import models
 from os import urandom
 from base64 import b64encode
@@ -17,10 +19,14 @@ class NasdaqCompanies(models.Model):
     """
     Model for companies listed in Nasdaq market.
     """
-    companyid = models.AutoField(db_column='companyID', primary_key=True)  # Field name made lowercase.
-    symbol = models.CharField(db_column='Symbol', max_length=5)  # Field name made lowercase.
-    name = models.CharField(db_column='Name', max_length=75)  # Field name made lowercase.
-    sector = models.CharField(db_column='Sector', max_length=50)  # Field name made lowercase.
+    # Field name made lowercase.
+    companyid = models.AutoField(db_column='companyID', primary_key=True)
+    # Field name made lowercase.
+    symbol = models.CharField(db_column='Symbol', max_length=5)
+    # Field name made lowercase.
+    name = models.CharField(db_column='Name', max_length=75)
+    # Field name made lowercase.
+    sector = models.CharField(db_column='Sector', max_length=50)
 
     class Meta:
         managed = True
@@ -31,7 +37,8 @@ class User(models.Model):
     """
     Model for user. All user related actions will be taken care by this class.
     """
-    userid = models.AutoField(db_column='userID', primary_key=True)  # Field name made lowercase.
+    # Field name made lowercase.
+    userid = models.AutoField(db_column='userID', primary_key=True)
     username = models.CharField(max_length=50)
     email = models.CharField(max_length=50)
     gender = models.CharField(max_length=6)
@@ -46,7 +53,8 @@ class User(models.Model):
     @staticmethod
     def create_user(username, email, gender, pw):
         """
-        Creates new user from input. Class doesn't need to be instantiated before calling this function.
+        Creates new user from input.
+        Class doesn't need to be instantiated before calling this function.
         :param username: username of new user
         :param email: email address of new user
         :param gender: gender of new user (Male, Female, Other)
@@ -54,11 +62,13 @@ class User(models.Model):
         :return: 0 on success, 1 on fail
         """
         # Check if username / email already used
-        if User.objects.filter(username=username) or User.objects.filter(email=email):
+        if User.objects.filter(username=username)
+        or User.objects.filter(email=email):
             return 1
         salt = b64encode(urandom(48)).decode()
         hashed_pw = hashlib.sha256((salt + pw).encode()).hexdigest()
-        user_obj = User(username=username, email=email, gender=gender, password=hashed_pw, salt=salt)
+        user_obj = User(username=username, email=email,
+                        gender=gender, password=hashed_pw, salt=salt)
         # TODO: email verification require
 
         user_obj.save()
@@ -67,7 +77,8 @@ class User(models.Model):
     @staticmethod
     def verify_login(username, pw):
         """
-        Verifies given login credentials. Class doesn't need to be instantiated before calling this function.
+        Verifies given login credentials.
+        Class doesn't need to be instantiated before calling this function.
         :param username: username input from view
         :param pw: password input from view
         :return: User object on success, None on fail
@@ -165,14 +176,17 @@ class User(models.Model):
             else:
                 # compare the most recent one with search result this term
                 if int(h[0]) != company_id:
-                    history = str(company_id) + ',' + h[0] + ',' + h[1] + ',' + h[2] + ',' + h[3]
+                    history = str(company_id) + ',' + h[0] + ','
+                    + h[1] + ',' + h[2] + ',' + h[3]
         self.history = history
         self.save()
 
 
 class SearchUtility(User):
     """
-    Class to handle searches. Since search function doesn't need its own table and updates history field of User,
+    Class to handle searches.
+    Since search function doesn't need its own table
+    and updates history field of User.
     it is made a proxy class of User class.
     """
     class Meta:
@@ -180,10 +194,12 @@ class SearchUtility(User):
 
     def nasdaq_search(self, ticker):
         """
-        Query user input of ticker symbol to database, then uses API and scraper to fetch data.
+        Query user input of ticker symbol to database,
+        then uses API and scraper to fetch data.
         Search history is also updated.
         :param ticker: ticker symbol passed in from view.
-        :return: None if no match, dictionary of required data if match is found
+        :return: None if no match,
+        dictionary of required data if match is found
         """
         # get companyID by symbol
         try:
@@ -196,16 +212,23 @@ class SearchUtility(User):
         news_list, company_desc = nasdaq_scraper.scrape(ticker)
         # use ticker symbol to get info from API
         # TODO: duplicate data
-        url = "https://prodigal-ml.azurewebsites.net/stocks/" + ticker + "/?ordering=-date&format=json"
+        url = "https://prodigal-ml.azurewebsites.net/stocks/"
+        + ticker + "/?ordering=-date&format=json"
         response = requests.get(url)
         if response.status_code == 404:  # company not found in api
-            return_dict = dict(newslist=news_list, desc=company_desc, name=company_obj.name)
+            return_dict = dict(newslist=news_list,
+                               desc=company_desc, name=company_obj.name)
         else:
             chart_json = response.json()
-            latest_data = chart_json[0] # latest data
-            return_dict = dict(newslist=news_list, desc=company_desc, name=company_obj.name, high=latest_data["high"],
-                               low=latest_data["low"], opening=latest_data["opening"],
-                               closing=latest_data["closing"], volume=latest_data["volume"], latest_date=latest_data["date"],chart_json=chart_json)
+            latest_data = chart_json[0]  # latest data
+            return_dict = dict(newslist=news_list, desc=company_desc,
+                               name=company_obj.name, high=latest_data["high"],
+                               low=latest_data["low"],
+                               opening=latest_data["opening"],
+                               closing=latest_data["closing"],
+                               volume=latest_data["volume"],
+                               latest_date=latest_data["date"],
+                               chart_json=chart_json)
         return return_dict, company_obj.symbol
 
     def search_by_sector(self, sector_symbol):
@@ -228,14 +251,15 @@ class SearchUtility(User):
             return_list.append(temp)
         return return_list
 
-
     def pridict(self, ticker):
         """
         Query pridiction data from api service by ticker.
         :param ticker: ticker symbol passed in from view.
-        :return: None if no data proviede, list of following five days closing price if found
+        :return: None if no data proviede,
+        list of following five days closing price if found
         """
-        url = "https://prodigal-ml.azurewebsites.net/stocks/" + ticker + "/runexpr"
+        url = "https://prodigal-ml.azurewebsites.net/stocks/"
+        + ticker + "/runexpr"
         response = requests.get(url)
         if response.status_code == 404:  # company not found in api
             return None
