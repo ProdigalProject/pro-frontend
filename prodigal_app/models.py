@@ -177,7 +177,7 @@ class User(models.Model):
                 # compare the most recent one with search result this term
                 if int(h[0]) != company_id:
                     history = str(company_id) + ',' + h[0] + ','\
-                    + h[1] + ',' + h[2] + ',' + h[3]
+                              + h[1] + ',' + h[2] + ',' + h[3]
         self.history = history
         self.save()
 
