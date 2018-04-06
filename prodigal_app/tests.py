@@ -41,7 +41,7 @@ class TestSignup(unittest.TestCase):
         elem.click() 
         
         elem = self.driver.find_element_by_id('profile_email')
-        assert elem.text == 'tester@prodigal.com'
+        assert elem.text == 'test@gmail.com'
         
     def test_login_epic_fail(self):
         elem = self.driver.find_element_by_id('navbar_login')
@@ -98,7 +98,7 @@ class TestSignup(unittest.TestCase):
         elem.submit()
 
         elem = self.driver.find_element_by_id('fail')
-        assert elem.text == 'No Matching Result.'
+        assert elem.text == 'Search by company name, please.'
 
     def test_profile_page_history(self):
         elem = self.driver.find_element_by_id('navbar_login')
@@ -116,11 +116,11 @@ class TestSignup(unittest.TestCase):
         elem.send_keys('Adobe Systems Incorporated')
         elem.submit()
 
-        elem = self.driver.find_element_by_id('navbar_profile')
+        elem = self.driver.find_element_by_id('navbar_logo')
         elem.click()
 
         elem = self.driver.find_element_by_id('ADBE')
-        assert elem.get_attribute("value") == 'ADBE'
+        assert elem.get_attribute("value") == 'Adobe Systems Incorporated'
 
     def tearDown(self):
         self.driver.quit
