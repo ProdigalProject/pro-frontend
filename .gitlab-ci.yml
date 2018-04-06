@@ -2,8 +2,12 @@ Selenium_Test:
   script:
     - az login --msi
     - az webapp deployment source sync -n prodigal-gamma -g prodigal
+<<<<<<< HEAD
+    -python3 /home/gitlab-runner/builds/b74f8bb5/0/prodigal/pro-frontend/prodigal_app/tests_backend.py
+=======
     - coverage run manage.py test prodigal_app && coverage html && coverage report
     - python3 /home/gitlab-runner/builds/b74f8bb5/0/prodigal/pro-frontend/prodigal_app/tests.py
+>>>>>>> 4a6e3c208566c874e718c9e8f4b02ab2e5815afc
   stage: test
   only:
     - master
