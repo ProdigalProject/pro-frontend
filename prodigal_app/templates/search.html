@@ -317,7 +317,7 @@
     <body>
         <!-- Navigation -->
         <div class="w3-top">
-            <nav class="w3-bar w3-black w3-padding-16">
+            <nav class="w3-bar w3-black w3-padding-32">
                 <a href="/prodigal_app" id="navbar_logo" class="w3-bar-item"><img src="{% static "images/navbar_logo.png" %}" alt="prodigal_logo_horizontal"></a>
                 <div class="searchbar-container w3-large">
 				<div class="autoComplete">
@@ -333,8 +333,7 @@
                     </form>
 				</div>
 				<script>
-				 var stocks = ["Apple", "Facebook", "Amazon", "JP Morgan", "Goldman Sachs", "Twitter", "Twilio", "Ford", "General Motors"];
-				 //var stocks = NasdaqCompanies.objects();
+				 var stocks = JSON.parse(('{{ company_list }}').replace(/&#39;/g,'\"'));
 				 var searchBox = document.getElementById("navbar_searchbox");
 				 searchBox.autocomplete = 'off';
 				 autocomplete(searchBox, stocks);

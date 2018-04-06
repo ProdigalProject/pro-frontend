@@ -148,6 +148,10 @@ def search(request):
     ticker = request.POST.get('search_key', '')
     # ticker = ticker.capitalize()
     mode = request.POST.get('mode', '')
+    
+    # get company list for further use
+    company_list = user_obj.getCompaniesName()
+
     # search by sector
     if 'sector:' in ticker:
         sector_symbol = ticker.lstrip("sector:")
@@ -160,7 +164,6 @@ def search(request):
         return render(request, "sector.html", return_dict)
     # search/compare by ticker/company name
     else:
-        
         # search for new company
         if mode != 'comparison':
             # get pridiction for further use
@@ -171,6 +174,7 @@ def search(request):
             request.session["last_search"] = company_sym  # For use in favorites
             if pridiction is not None:
                 return_dict["pridiction"] = pridiction
+            return_dict["company_list"] = company_list
             return render(request, "search.html", return_dict)
         # compare companies
         else:
@@ -188,6 +192,7 @@ def search(request):
             if second_dict is None: # no second compant match
                 if pridiction is not None:
                     first_dict["pridiction"] = pridiction
+                    first_dict["company_list"] = company_list
                 return render(request, "search.html", first_dict)
             return_dict = first_dict.copy()
             return_dict["name_second"] = second_dict["name"]
@@ -196,6 +201,7 @@ def search(request):
                 return_dict["pridiction"] = pridiction
             if pridiction_second is not None:
                 return_dict["pridiction_second"] = pridiction_second
+            return_dict["company_list"] = company_list
             return render(request, "search.html", return_dict)
 
 def receive_token(request):

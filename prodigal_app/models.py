@@ -246,8 +246,8 @@ class SearchUtility(User):
         return_list = []
         for company in company_list:
             company_name = company.name
-            compnay_sym = company.symbol
-            temp = (company_name, compnay_sym)
+            company_sym = company.symbol
+            temp = (company_name, company_sym)
             return_list.append(temp)
         return return_list
 
@@ -266,3 +266,18 @@ class SearchUtility(User):
         else:
             pridiction = response.json()
             return pridiction
+
+    def getCompaniesName(self):
+        """
+        Query all company names from database.
+        :param ticker: None
+        :return: None if no data proviede,
+        list of company name
+        """
+        # list for all companies name
+        company_list = []
+        company_obj_all = NasdaqCompanies.objects.values_list('name', flat=True)
+        company_obj_all = company_obj_all.distinct()  # get all tickers
+        for company in company_obj_all:
+            company_list.append(company)
+        return company_list
