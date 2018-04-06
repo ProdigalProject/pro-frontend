@@ -176,7 +176,7 @@ class User(models.Model):
             else:
                 # compare the most recent one with search result this term
                 if int(h[0]) != company_id:
-                    history = str(company_id) + ',' + h[0] + ','
+                    history = str(company_id) + ',' + h[0] + ','\
                     + h[1] + ',' + h[2] + ',' + h[3]
         self.history = history
         self.save()
@@ -212,8 +212,8 @@ class SearchUtility(User):
         news_list, company_desc = nasdaq_scraper.scrape(ticker)
         # use ticker symbol to get info from API
         # TODO: duplicate data
-        url = "https://prodigal-ml.azurewebs" \
-              "ites.net/stocks/" + ticker + "/?ordering=-date&format=json"
+        url = "https://prodigal-ml.azurewebsites.net" \
+              "/stocks/" + ticker + "/?ordering=-date&format=json"
         response = requests.get(url)
         if response.status_code == 404:  # company not found in api
             return_dict = dict(newslist=news_list,
@@ -270,7 +270,7 @@ class SearchUtility(User):
     def getCompaniesName(self):
         """
         Query all company names from database.
-        :param ticker: None
+        :param None
         :return: None if no data proviede,
         list of company name
         """
@@ -281,3 +281,17 @@ class SearchUtility(User):
         for company in company_obj_all:
             company_list.append(company)
         return company_list
+
+    def getTickerByName(self, search_name):
+        """
+        Query company ticker from database by name.
+        :param search_name: key name
+        :return: None if no data proviede,
+        company ticker
+        """
+        print(search_name)
+        try:
+            company_ticker = NasdaqCompanies.objects.get(name=search_name).symbol
+        except NasdaqCompanies.DoesNotExist:  # ticker not in company list
+            return None
+        return company_ticker

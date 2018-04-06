@@ -26,6 +26,11 @@ def profile(request):
     if user_id is None:  # If user_id not present in session, it is an invalid access.
         request.session.flush()  # Clear all session data
         return redirect('login')
+
+    # get company list for further use
+    user_obj = SearchUtility.objects.get(userid=user_id)
+    company_list = user_obj.getCompaniesName()
+
     return_dict = {}
     # Update history, favorites to reflect changes real time
     if request.session.get('first_login'):  # First visiting profile
@@ -40,6 +45,7 @@ def profile(request):
         favorite_arr = user_obj.get_favorite()
         return_dict['favorites'] = favorite_arr  # List of tuples of ticker and company name
     request.session['first_login'] = False
+    return_dict["company_list"] = company_list
     return render(request, 'profile.html', return_dict)
 
 
@@ -145,7 +151,10 @@ def search(request):
 
     user_id = request.session.get('user_id', '')
     user_obj = SearchUtility.objects.get(userid=user_id)
-    ticker = request.POST.get('search_key', '')
+    company_search = request.POST.get('search_key', '')
+    ticker = user_obj.getTickerByName(company_search)
+    if ticker is None:
+        return render(request, "search.html", {"msg": "Search by company name, please."})
     # ticker = ticker.capitalize()
     mode = request.POST.get('mode', '')
     
@@ -153,8 +162,8 @@ def search(request):
     company_list = user_obj.getCompaniesName()
 
     # search by sector
-    if 'sector:' in ticker:
-        sector_symbol = ticker.lstrip("sector:")
+    if 'sector:' in company_search:
+        sector_symbol = company_search.lstrip("sector:")
         result_list = user_obj.search_by_sector(sector_symbol)
         if result_list is None:
             return render(request, "sector.html", {"msg": "Sector didn't find."})
