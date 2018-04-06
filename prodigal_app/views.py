@@ -26,6 +26,11 @@ def profile(request):
     if user_id is None:  # If user_id not present in session, it is an invalid access.
         request.session.flush()  # Clear all session data
         return redirect('login')
+
+    # get company list for further use
+    user_obj = SearchUtility.objects.get(userid=user_id)
+    company_list = user_obj.getCompaniesName()
+
     return_dict = {}
     # Update history, favorites to reflect changes real time
     if request.session.get('first_login'):  # First visiting profile
@@ -40,6 +45,7 @@ def profile(request):
         favorite_arr = user_obj.get_favorite()
         return_dict['favorites'] = favorite_arr  # List of tuples of ticker and company name
     request.session['first_login'] = False
+    return_dict["company_list"] = company_list
     return render(request, 'profile.html', return_dict)
 
 
@@ -142,16 +148,70 @@ def search(request):
     """
     if request.session.get("user_id") is None:
         return redirect('login')
+
     user_id = request.session.get('user_id', '')
     user_obj = SearchUtility.objects.get(userid=user_id)
-    ticker = request.POST.get('search_key', '')
-    ticker = ticker.capitalize()
-    return_dict, company_sym = user_obj.nasdaq_search(ticker)
-    if return_dict is None:
-        return render(request, "search.html", {"msg": "No Matching Result."})
-    request.session['last_search'] = company_sym  # For use in favorites
-    return render(request, "search.html", return_dict)
+    company_search = request.POST.get('search_key', '')
+    ticker = user_obj.getTickerByName(company_search)
+    if ticker is None:
+        return render(request, "search.html", {"msg": "Search by company name, please."})
+    # ticker = ticker.capitalize()
+    mode = request.POST.get('mode', '')
+    
+    # get company list for further use
+    company_list = user_obj.getCompaniesName()
 
+    # search by sector
+    if 'sector:' in company_search:
+        sector_symbol = company_search.lstrip("sector:")
+        result_list = user_obj.search_by_sector(sector_symbol)
+        if result_list is None:
+            return render(request, "sector.html", {"msg": "Sector didn't find."})
+        return_dict = {}
+        return_dict["list"] = result_list
+        return_dict["sector"] = sector_symbol
+        return render(request, "sector.html", return_dict)
+    # search/compare by ticker/company name
+    else:
+        # search for new company
+        if mode != 'comparison':
+            # get pridiction for further use
+            pridiction = user_obj.pridict(ticker)
+            return_dict, company_sym = user_obj.nasdaq_search(ticker)
+            if return_dict is None:
+                return render(request, "search.html", {"msg": "No Matching Result."})
+            request.session["last_search"] = company_sym  # For use in favorites
+            if pridiction is not None:
+                return_dict["pridiction"] = pridiction
+            return_dict["company_list"] = company_list
+            return render(request, "search.html", return_dict)
+        # compare companies
+        else:
+            # TODO: add comparison for more than two factors
+            # just come up with a method that compare two companies
+            # get first company (base company) data
+            first_dict, company_sym_first = user_obj.nasdaq_search(request.session.get('last_search'))
+            # get pridiction for further use
+            pridiction = user_obj.pridict(request.session.get('last_search'))
+            if first_dict is None: # no first company match
+                return render(request, "search.html", {"msg": "No Comparison Object."})
+            # get second compant data
+            pridiction_second = user_obj.pridict(ticker)
+            second_dict, company_sym_second = user_obj.nasdaq_search(ticker)
+            if second_dict is None: # no second compant match
+                if pridiction is not None:
+                    first_dict["pridiction"] = pridiction
+                    first_dict["company_list"] = company_list
+                return render(request, "search.html", first_dict)
+            return_dict = first_dict.copy()
+            return_dict["name_second"] = second_dict["name"]
+            return_dict["chart_json_second"] = second_dict["chart_json"]
+            if pridiction is not None:
+                return_dict["pridiction"] = pridiction
+            if pridiction_second is not None:
+                return_dict["pridiction_second"] = pridiction_second
+            return_dict["company_list"] = company_list
+            return render(request, "search.html", return_dict)
 
 def receive_token(request):
     """
@@ -209,3 +269,11 @@ def remove_favorite(request):
     user_obj.remove_favorite(company_sym)
     request.session['favorites'] = user_obj.get_favorite()
     return render(request, "favorite_btn.html", {'favorited': False})
+
+def sector(request):
+    """
+    Go to sector.html. This function only render the sector html page.
+    :param request: request from user
+    :return: rendered html
+    """
+    return render(request, "sector.html")

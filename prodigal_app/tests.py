@@ -75,7 +75,7 @@ class TestSignup(unittest.TestCase):
         elem.submit()
         
         elem = self.driver.find_element_by_id('company_name')
-        assert elem.text == 'Apple Inc.'
+        assert 'Apple' in elem.text
         elem = self.driver.find_element_by_id('company_description')
         assert elem.text
         elem = self.driver.find_element_by_id('news')

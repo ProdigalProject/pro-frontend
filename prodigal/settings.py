@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    'django_nose',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -43,6 +44,18 @@ INSTALLED_APPS = [
     'prodigal_app',
 ]
 
+'''
+# Use nose to run all tests
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+# Tell nose to measure coverage on the 'foo' and 'bar' apps
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-html',
+    '--cover-package=prodigal_app',
+    '--cover-erase',
+]
+'''
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
 MIDDLEWARE = [
@@ -83,9 +96,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'webappdb',
-        'USER': 'prodigal',
+        'USER': 'prodigaluser@prodigal',
         'PASSWORD': 'DarkoMarinov1',
-        'HOST': 'prodigal-mysql-db.cwrjwojncyjz.us-east-2.rds.amazonaws.com',
+        'HOST': 'prodigal.mysql.database.azure.com',
         'PORT': '3306',
     }
 }

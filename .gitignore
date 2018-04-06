@@ -5,3 +5,7 @@ subl
 __pycache__
 env
 venv
+.coverage
+cover/
+htmlcov/
+
