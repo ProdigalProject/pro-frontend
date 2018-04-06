@@ -71,7 +71,7 @@ class TestSignup(unittest.TestCase):
         elem.click() 
         
         elem = self.driver.find_element_by_id('navbar_searchbox')
-        elem.send_keys('aapl')
+        elem.send_keys('Apple Inc.')
         elem.submit()
         
         elem = self.driver.find_element_by_id('company_name')
@@ -113,7 +113,7 @@ class TestSignup(unittest.TestCase):
         elem.click()
 
         elem = self.driver.find_element_by_id('navbar_searchbox')
-        elem.send_keys('ADBE')
+        elem.send_keys('Adobe Systems Incorporated')
         elem.submit()
 
         elem = self.driver.find_element_by_id('navbar_profile')

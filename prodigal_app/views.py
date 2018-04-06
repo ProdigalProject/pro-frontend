@@ -7,7 +7,8 @@ from prodigal_app.models import *
 # Create your views here.
 def index(request):
     """
-    Renders index page from template. If session is remained, redirect to profile.
+    Renders index page from template.
+    If session is remained, redirect to profile.
     :param request: request from user
     :return: rendered html
     """
@@ -18,12 +19,14 @@ def index(request):
 
 def profile(request):
     """
-    Renders profile page from template. Profile page is only accessible if authenticated.
+    Renders profile page from template.
+    Profile page is only accessible if authenticated.
     :param request: request from user
     :return: rendered html
     """
     user_id = request.session.get('user_id')
-    if user_id is None:  # If user_id not present in session, it is an invalid access.
+    # If user_id not present in session, it is an invalid access.
+    if user_id is None:
         request.session.flush()  # Clear all session data
         return redirect('login')
 
@@ -38,12 +41,15 @@ def profile(request):
         return_dict['history'] = history_arr
         favorite_arr = request.session.get('favorites')
         return_dict['favorites'] = favorite_arr
-    else:  # Not first visiting profile; history/favorite in session might be old
+    # Not first visiting profile; history/favorite in session might be old
+    else:
         user_obj = User.objects.get(userid=user_id)
         history_arr = user_obj.get_history()
-        return_dict['history'] = history_arr  # List of tuples of ticker and company name
+        # List of tuples of ticker and company name
+        return_dict['history'] = history_arr
         favorite_arr = user_obj.get_favorite()
-        return_dict['favorites'] = favorite_arr  # List of tuples of ticker and company name
+        # List of tuples of ticker and company name
+        return_dict['favorites'] = favorite_arr
     request.session['first_login'] = False
     return_dict["company_list"] = company_list
     return render(request, 'profile.html', return_dict)
@@ -51,7 +57,8 @@ def profile(request):
 
 def login_query(request):
     """
-    Queries username and password to database and redirect to profile if match found, alert and return to login page
+    Queries username and password to database and redirect to profile
+    if match found, alert and return to login page
     when match is not found.
     :param request: request from user
     :return: calls profile if match, login if mismatch
@@ -76,7 +83,8 @@ def login_query(request):
 
 def login(request):
     """
-    Renders login page from template. Login page will only accept 3rd-party auth.
+    Renders login page from template.
+    Login page will only accept 3rd-party auth.
     :param request: request from user
     :return: rendered html
     """
@@ -97,10 +105,12 @@ def signout(request):
 
 def create_user(request):
     """
-    Create a user with given username, email address and password. 
-    Signup fail if customer leave any line blank or have same username with others.
+    Create a user with given username, email address and password.
+    Signup fail if customer leave any line blank
+    or have same username with others.
     :param request: request from user
-    :return: profile page if signup succeed and automatically login, stay signup and show error message if fail
+    :return: profile page if signup succeed and automatically login,
+    stay signup and show error message if fail
     """
     username = request.POST.get('username', '')
     email = request.POST.get('email', '')
@@ -152,12 +162,7 @@ def search(request):
     user_id = request.session.get('user_id', '')
     user_obj = SearchUtility.objects.get(userid=user_id)
     company_search = request.POST.get('search_key', '')
-    ticker = user_obj.getTickerByName(company_search)
-    if ticker is None:
-        return render(request, "search.html", {"msg": "Search by company name, please."})
-    # ticker = ticker.capitalize()
     mode = request.POST.get('mode', '')
-    
     # get company list for further use
     company_list = user_obj.getCompaniesName()
 
@@ -166,20 +171,24 @@ def search(request):
         sector_symbol = company_search.lstrip("sector:")
         result_list = user_obj.search_by_sector(sector_symbol)
         if result_list is None:
-            return render(request, "sector.html", {"msg": "Sector didn't find."})
+            return render(request, "sector.html", {"msg": "Sector didn't find.", "company_list": company_list})
         return_dict = {}
         return_dict["list"] = result_list
         return_dict["sector"] = sector_symbol
+        return_dict["company_list"] = company_list
         return render(request, "sector.html", return_dict)
     # search/compare by ticker/company name
     else:
+        ticker = user_obj.getTickerByName(company_search)
+        if ticker is None:
+            return render(request, "search.html", {"msg": "Search by company name, please.", "company_list": company_list})
         # search for new company
         if mode != 'comparison':
             # get pridiction for further use
             pridiction = user_obj.pridict(ticker)
             return_dict, company_sym = user_obj.nasdaq_search(ticker)
             if return_dict is None:
-                return render(request, "search.html", {"msg": "No Matching Result."})
+                return render(request, "search.html", {"msg": "No Matching Result.", "company_list": company_list})
             request.session["last_search"] = company_sym  # For use in favorites
             if pridiction is not None:
                 return_dict["pridiction"] = pridiction
@@ -193,12 +202,12 @@ def search(request):
             first_dict, company_sym_first = user_obj.nasdaq_search(request.session.get('last_search'))
             # get pridiction for further use
             pridiction = user_obj.pridict(request.session.get('last_search'))
-            if first_dict is None: # no first company match
-                return render(request, "search.html", {"msg": "No Comparison Object."})
+            if first_dict is None:  # no first company match
+                return render(request, "search.html", {"msg": "No Comparison Object.", "company_list": company_list})
             # get second compant data
             pridiction_second = user_obj.pridict(ticker)
             second_dict, company_sym_second = user_obj.nasdaq_search(ticker)
-            if second_dict is None: # no second compant match
+            if second_dict is None:  # no second compant match
                 if pridiction is not None:
                     first_dict["pridiction"] = pridiction
                     first_dict["company_list"] = company_list
@@ -212,6 +221,7 @@ def search(request):
                 return_dict["pridiction_second"] = pridiction_second
             return_dict["company_list"] = company_list
             return render(request, "search.html", return_dict)
+
 
 def receive_token(request):
     """
@@ -269,6 +279,7 @@ def remove_favorite(request):
     user_obj.remove_favorite(company_sym)
     request.session['favorites'] = user_obj.get_favorite()
     return render(request, "favorite_btn.html", {'favorited': False})
+
 
 def sector(request):
     """
