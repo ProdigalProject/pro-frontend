@@ -1,3 +1,11 @@
+.autocomplete-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: DodgerBlue;
+  color: #ffffff;
+  width: 262px;
+  background-clip: padding-box;
+}
+
 div.paragraphs{
     margin: 0 2% 0 2%
 }
