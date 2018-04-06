@@ -20,6 +20,7 @@
               a.setAttribute("id", this.id + "autocomplete-list");
               a.setAttribute("class", "autocomplete-items");
               this.parentNode.appendChild(a);
+              x = 0;
               for (i = 0; i < arr.length; i++) {
                 if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
                   b = document.createElement("DIV");
@@ -31,6 +32,11 @@
                       closeAllLists();
                   });
                   a.appendChild(b);
+                  x++;
+                }
+                if (x > 5) {
+                    x = 0;
+                    break;
                 }
               }
             });
