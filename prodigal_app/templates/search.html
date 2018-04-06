@@ -11,9 +11,71 @@
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
+      function autocomplete(inp, arr) {
+      var currentFocus;
+      inp.addEventListener("input", function(e) {
+      var a, b, i, val = this.value;
+      closeAllLists();
+      if (!val) { return false;}
+      currentFocus = -1;
+      a = document.createElement("DIV");
+      a.setAttribute("id", this.id + "autocomplete-list");
+      a.setAttribute("class", "autocomplete-items");
+      this.parentNode.appendChild(a);
+      for (i = 0; i < arr.length; i++) {
+        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          b = document.createElement("DIV");
+          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+          b.innerHTML += arr[i].substr(val.length);
+          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+              b.addEventListener("click", function(e) {
+              inp.value = this.getElementsByTagName("input")[0].value;
+              closeAllLists();
+          });
+          a.appendChild(b);
+        }
+      }
+    });
+    inp.addEventListener("keydown", function(e) {
+      var x = document.getElementById(this.id + "autocomplete-list");
+      if (x) x = x.getElementsByTagName("div");
+      if (e.keyCode == 40) {
+        currentFocus++;
+        addActive(x);
+      } else if (e.keyCode == 38) { //up
+        currentFocus--;
+        addActive(x);
+      } else if (e.keyCode == 13) {
+        e.preventDefault();
+        if (currentFocus > -1) {
+          if (x) x[currentFocus].click();
+        }
+      }
+    });
+    function addActive(x) {
+    if (!x) return false;
+    removeActive(x);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1);
+    x[currentFocus].classList.add("autocomplete-active");
+    }
+    function removeActive(x) {
+    for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+    }
+    function closeAllLists(elmnt) {
+    var x = document.getElementsByClassName("autocomplete-items");
+    for (var i = 0; i < x.length; i++) {
+      if (elmnt != x[i] && elmnt != inp) {
+      x[i].parentNode.removeChild(x[i]);
+    }
+    }
+    }
+    }       
+    
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
-
       function drawChart() {
         var decoded = ('{{ chart_json }} ').replace(/&#39;/g,'\"');
 
@@ -54,13 +116,19 @@
         <div class="w3-top">
             <nav class="w3-bar w3-black w3-padding-16">
                 <a href="/prodigal_app" id="navbar_logo" class="w3-bar-item"><img src="{% static "images/navbar_logo.png" %}" alt="prodigal_logo_horizontal"></a>
-                <div class="searchbar-container w3-large">
-                    <form id="search" method="POST" name="search_form" action="search">
-                        {% csrf_token %}
-                        <input type="search" id="navbar_searchbox" name="search_key" class="search-bar" placeholder="Search by ticker symbol...">
-                        <button id="navbar_search_submit" type="submit" class="search-submit w3-button w3-blue w3-large"><i class="fa fa-search"></i></button>
-                    </form>
-                </div>
+                  <div class = "autoComplete">
+                   <form id="search" method="POST" name="search_form" action="search">
+                   <input id="navbar_searchbox" type="search" name="search_key" placeholder="Search by ticker symbol...">
+                   <button id="navbar_search_submit" type="submit" class="search-submit w3-button w3-blue w3-large"><i class="fa fa-search"></i></button>
+                   </form>
+                  </div>
+                  <script>
+                    var stocks = ["Apple", "Facebook", "Amazon", "JP Morgan", "Goldman Sachs", "Twitter", "Twilio", "Ford", "General Motors"];
+                    //var stocks = NasdaqCompanies.objects();
+                    var searchBox = document.getElementById("navbar_searchbox");
+                    searchBox.autocomplete = 'off';
+                    autocomplete(searchBox, stocks);
+                   </script>
                 <a href="profile" id="navbar_profile" class="w3-button w3-bar-item w3-large w3-right">Profile</a>
             </nav>
         </div>
