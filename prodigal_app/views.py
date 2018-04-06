@@ -184,9 +184,10 @@ def search(request):
             return render(request, "search.html", {"msg": "Search by company name, please.", "company_list": company_list})
         # search for new company
         if mode != 'comparison':
+            # search first and create a record endpoint
+            return_dict, company_sym = user_obj.nasdaq_search(ticker)
             # get pridiction for further use
             pridiction = user_obj.pridict(ticker)
-            return_dict, company_sym = user_obj.nasdaq_search(ticker)
             if return_dict is None:
                 return render(request, "search.html", {"msg": "No Matching Result.", "company_list": company_list})
             request.session["last_search"] = company_sym  # For use in favorites
@@ -205,8 +206,8 @@ def search(request):
             if first_dict is None:  # no first company match
                 return render(request, "search.html", {"msg": "No Comparison Object.", "company_list": company_list})
             # get second compant data
-            pridiction_second = user_obj.pridict(ticker)
             second_dict, company_sym_second = user_obj.nasdaq_search(ticker)
+            pridiction_second = user_obj.pridict(ticker)
             if second_dict is None:  # no second compant match
                 if pridiction is not None:
                     first_dict["pridiction"] = pridiction

@@ -213,8 +213,10 @@ class SearchUtility(User):
         # use ticker symbol to get info from API
         # TODO: duplicate data
         url = "https://prodigal-ml.azurewebsites.net" \
-              "/stocks/" + ticker + "/?ordering=-date&format=json"
-        response = requests.get(url)
+              "/stocks/" + ticker
+        headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)' \
+        'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.90 Safari/537.36'}
+        response = requests.get(url, headers=headers)
         if response.status_code == 404:  # company not found in api
             return_dict = dict(newslist=news_list,
                                desc=company_desc, name=company_obj.name)
@@ -289,9 +291,9 @@ class SearchUtility(User):
         :return: None if no data proviede,
         company ticker
         """
-        print(search_name)
-        try:
-            company_ticker = NasdaqCompanies.objects.get(name=search_name).symbol
-        except NasdaqCompanies.DoesNotExist:  # ticker not in company list
+        companies = NasdaqCompanies.objects.filter(name=search_name)
+        if not companies: # name not in company list
             return None
+        else:
+            company_ticker = companies[0].symbol
         return company_ticker
