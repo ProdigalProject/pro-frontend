@@ -62,8 +62,8 @@ class User(models.Model):
         :return: 0 on success, 1 on fail
         """
         # Check if username / email already used
-        if User.objects.filter(username=username)
-        or User.objects.filter(email=email):
+        if User.objects.filter(username=username) or User.objects.filter(
+                email=email):
             return 1
         salt = b64encode(urandom(48)).decode()
         hashed_pw = hashlib.sha256((salt + pw).encode()).hexdigest()
@@ -212,8 +212,8 @@ class SearchUtility(User):
         news_list, company_desc = nasdaq_scraper.scrape(ticker)
         # use ticker symbol to get info from API
         # TODO: duplicate data
-        url = "https://prodigal-ml.azurewebsites.net/stocks/"
-        + ticker + "/?ordering=-date&format=json"
+        url = "https://prodigal-ml.azurewebs" \
+              "ites.net/stocks/" + ticker + "/?ordering=-date&format=json"
         response = requests.get(url)
         if response.status_code == 404:  # company not found in api
             return_dict = dict(newslist=news_list,
@@ -258,8 +258,8 @@ class SearchUtility(User):
         :return: None if no data proviede,
         list of following five days closing price if found
         """
-        url = "https://prodigal-ml.azurewebsites.net/stocks/"
-        + ticker + "/runexpr"
+        url = "https://prodigal-ml.a" \
+              "zurewebsites.net/stocks/" + ticker + "/runexpr"
         response = requests.get(url)
         if response.status_code == 404:  # company not found in api
             return None
