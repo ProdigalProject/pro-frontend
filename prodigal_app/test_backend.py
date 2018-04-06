@@ -1,11 +1,13 @@
 #!/home/gitlab-runner/builds/b74f8bb5/0/prodigal/pro-frontend/venv/bin/python3
 from django.test import TestCase
+import django
 from prodigal_app.models import NasdaqCompanies, User, SearchUtility
 from prodigal_app.nasdaq_scraper import  *
 
 
 class NasdaqScraperTestCase(TestCase):
     def test_sreaper(self):
+        django.setup()
         news,data = scrape("AAPL")
         assert 0 < len(news) <= 5
         assert news is not None
