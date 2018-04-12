@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
 from prodigal_app.models import *
+import datetime
 
 
 # Create your views here.
@@ -65,11 +66,15 @@ def login_query(request):
     """
     username = request.POST.get('username')
     password = request.POST.get('password')
+    remember = request.POST.get('remember')
     # Try login
     user_obj = User.verify_login(username, password)
     if user_obj is None:  # login failed
         messages.add_message(request, messages.INFO, 'Login Failed!')
         return redirect('login')
+    # If 'Remember Me' is checked, keep session cookies for a week
+    if remember is not None:
+        request.session.set_expiry(604800)
     # Update session to pass to profile
     request.session['user_id'] = int(user_obj.userid)
     request.session['username'] = user_obj.username
