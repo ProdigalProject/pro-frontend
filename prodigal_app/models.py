@@ -15,6 +15,9 @@ import hashlib
 import requests
 
 
+api_key = 'cHJvZGlnYWxfYXBwX2FwaV9rZXk='
+
+
 class NasdaqCompanies(models.Model):
     """
     Model for companies listed in Nasdaq market.
@@ -213,7 +216,7 @@ class SearchUtility(User):
         # use ticker symbol to get info from API
         # TODO: duplicate data
         url = "https://prodigal-ml.azurewebsites.net" \
-              "/stocks/" + ticker
+              "/stocks/" + ticker + "?" + api_key
         headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)' \
         'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.90 Safari/537.36'}
         response = requests.get(url, headers=headers)
@@ -260,8 +263,8 @@ class SearchUtility(User):
         :return: None if no data proviede,
         list of following five days closing price if found
         """
-        url = "https://prodigal-ml.a" \
-              "zurewebsites.net/stocks/" + ticker + "/runexpr"
+        url = "https://prodigal-ml.azurewebsites.net/stocks/" + ticker + \
+              "/runexpr" + "?" + api_key
         response = requests.get(url)
         if response.status_code == 404:  # company not found in api
             return None
