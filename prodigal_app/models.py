@@ -167,17 +167,20 @@ class User(models.Model):
         else:
             history = self.history
             h = history.split(',')
-            # history search less than 5
-            if len(h) < 5:
-                # compare the most recent one with search result this term
-                if int(h[0]) != company_id:
+            modify = 0  # flag for modify the history
+            # compare the histroy with search result this term
+            for entry in h:
+                if int(entry) == company_id:
+                    modify = 1
+                    break
+            if modify == 0:
+                # history search less than 5
+                if len(h) < 5:
                     history = str(company_id) + ',' + history
-            # more than 5 history
-            else:
-                # compare the most recent one with search result this term
-                if int(h[0]) != company_id:
+                # more than 5 history
+                else:
                     history = str(company_id) + ',' + h[0] + ','\
-                              + h[1] + ',' + h[2] + ',' + h[3]
+                          + h[1] + ',' + h[2] + ',' + h[3]
         self.history = history
         self.save()
 

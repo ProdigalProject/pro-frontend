@@ -181,7 +181,7 @@ def search(request):
     else:
         ticker = user_obj.getTickerByName(company_search)
         if ticker is None:
-            return render(request, "search.html", {"msg": "Search by company name, please.", "company_list": company_list})
+            return render(request, "search.html", {"msg": "No Matching Result.", "company_list": company_list})
         # search for new company
         if mode != 'comparison':
             # search first and create a record endpoint
