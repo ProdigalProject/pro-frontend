@@ -4,7 +4,10 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/3/w3.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}"/>
         <!-- google login api -->
@@ -13,55 +16,87 @@
         <script src="https://apis.google.com/js/platform.js" async defer></script>
         <title>Prodigal - Login</title>
     </head>
+    <style>
+        .navbar-black {
+            background-color: black;
+            padding: 16px 10px 16px 5px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 36px 0 36px 0;
+            background-color: black;
+        }
+
+        .footer-item {
+            color: white;
+            font-size:24px;
+        }
+    </style>
     <body>
         <!-- Navigation -->
-        <div class="w3-top">
-            <nav class="w3-bar w3-black w3-padding-16">
-                <a href="/prodigal_app" id="navbar_logo" class="w3-bar-item"><img src="{% static "images/navbar_logo.png" %}" alt="prodigal_logo_horizontal"></a>
-                <a href="signup" id="navbar_signup" class="w3-button w3-bar-item w3-large w3-right">Sign Up</a>
-            </nav>
-        </div>
+        <nav class="navbar navbar-expand-lg navbar-black navbar-dark fixed-top">
+            <a href="/prodigal_app" id="navbar_logo" class="navbar-brand"><img src="{% static "images/navbar_logo.png" %}" alt="prodigal_logo_horizontal"></a>
+            <ul class="nav navbar-nav ml-auto justify-content-end">
+                <li class="nav-item">
+                    <a href="signup" id="navbar_login" class="nav-link" style="font-size: 20px">Signup</a>
+                </li>
+            </ul>
+        </nav>
         <!-- login Form -->
         <div style="background-image: url(../static/images/city.jpeg); background-size: cover; height:120vh">
-            <div id="form" style="width: 500px; margin:0 auto 80px auto; padding-top:200px">
-                <div class="w3-card-4" style="max-width:2000px;">
-                    <form class="w3-container w3-white" id="form_id" method="post" name="myform" action="login_query" style="padding:16px 16px 16px 16px">
-                    {% csrf_token %}
-                    {% if messages %}
-                        {% for message in messages %}
-                            <h2 id="login_fail_msg" align="center"> <b>{{ message }}</b> </h2>
-                        {% endfor %}
-                    {% else %}
-                        <h2 align="center"><b>Welcome to Prodigal!</b></h2>
-                    {% endif %}
-                    <label class="w3-margin-top"><b>Username</b></label>
-                    <input id="usr" class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username" name="username" required>
-                    <label><b>Password</b></label>
-                    <input id="pass" class="w3-input w3-border" type="password" placeholder="Enter Password" name="password" required>
-                    <button class="w3-button w3-block w3-black w3-section w3-padding" type="submit" id="submit">Login</button>
-                    <input id="remember" class="w3-check w3-margin-top" type="checkbox" name="remember"> Remember me
-                    </form>
-                    <div class="w3-bar w3-border-top w3-padding-16 w3-light-grey">
-                        <div style="width:120px; margin: 0 auto 16px auto">
-                            <a href="signup" class="w3-button w3-red w3-block">Sign Up</a>
+            <div id="form" style="width: 100%; max-width: 500px; margin:0 auto 80px auto; padding-top:200px">
+                <div class="card" style="max-width:2000px;">
+                    <div class="card-header" style="padding: 24px 0 24px 0">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <h2 id="login_fail_msg" align="center"> <b>{{ message }}</b> </h2>
+                            {% endfor %}
+                        {% else %}
+                            <h2 align="center"><b>Welcome to Prodigal!</b></h2>
+                        {% endif %}
+                    </div>
+                    <form class="card-body" id="form_id" method="post" name="myform" action="login_query" style="padding:16px 16px 16px 16px">
+                        {% csrf_token %}
+                        <div id="input_list">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <label><b>Username</b></label><br>
+                                    <input class="w-100" id="usr" type="text" placeholder="Enter Username" name="username" required>
+                                </li>
+                                <li class="list-group-item">
+                                    <label><b>Password</b></label><br>
+                                    <input class="w-100" id="pass" type="password" placeholder="Enter Password" name="password" required>
+                                </li>
+                                <li class="list-group-item text-center">
+                                    <button class="btn btn-primary w-50" type="submit" id="submit">Login</button><br>
+                                    <input id="remember" style="margin-top: 8px" type="checkbox" name="remember"> Remember me
+                                </li>
+                            </ul>
                         </div>
+                    </form>
+                    <div class="card-footer text-center">
+                        <a href="signup" class="btn btn-danger w-50" style="margin-top: 12px">Sign Up</a><br>
+                        <!-- google api login
                         <div class="w3-center">
                             <a id="login" class="g-signin2 w3-button" data-onsuccess="onSignIn" data-theme="dark"></a>
                         </div>
                         <a id="signout" class="w3-button w3-bar-item w3-red" style="margin-left:40%;display:none;" onclick="signOut()" data-theme="dark">Sign Out</a>
-                        <span class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span><br>
+                        -->
+                        <a href="#" class="btn btn-warning w-50" style="margin: 16px 0 16px 0">Forgot password?</a><br>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Footer -->
-        <footer id="Home" class="w3-container w3-padding-32 w3-center w3-black w3-xlarge">
-            <a href="#"><i class="fa fa-facebook-official"></i></a>
-            <a href="#"><i class="fa fa-google"></i></a>
-            <a href="#"><i class="fa fa-twitter"></i></a>
-            <a href="#"><i class="fa fa-flickr"></i></a>
-            <a href="#"><i class="fa fa-linkedin"></i></a>
-            <p class="w3-medium"> Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+        <footer id="Home" class="footer">
+            <a class="footer-item" href="#"><i class="fa fa-facebook-official"></i></a>&nbsp;
+            <a class="footer-item" href="#"><i class="fa fa-twitter"></i></a>&nbsp;
+            <a class="footer-item" href="#"><i class="fa fa-flickr"></i></a>&nbsp;
+            <a class="footer-item" href="#"><i class="fa fa-linkedin"></i></a>
+            <p style="font-size:16px; color: white">
+                Powered by <a href="https://getbootstrap.com/" target="_blank">BootStrap</a>
+            </p>
         </footer>
         <script>
             function onSignIn(googleUser) {

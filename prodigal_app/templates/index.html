@@ -4,22 +4,46 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {% load static %}
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/3/w3.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'slick/slick.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'slick/slick-theme.css' %}"/>
         <title>Welcome to Prodigal!</title>
     </head>
+    <style>
+        .navbar-black {
+            background-color: black;
+            padding: 16px 10px 16px 5px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 36px 0 36px 0;
+            background-color: black;
+        }
+
+        .footer-item {
+            color: white;
+            font-size:24px;
+        }
+    </style>
     <body>
         <!-- Navigation -->
-        <div class="w3-top">
-            <nav class="w3-bar w3-black w3-padding-16">
-                <a href="/prodigal_app" id="navbar_logo" class="w3-bar-item"><img src="{% static "images/navbar_logo.png" %}" alt="prodigal_logo_horizontal"></a>
-                <a href="login" id="navbar_login" class="w3-button w3-bar-item w3-large w3-right">Log In</a>
-                <a href="signup" id="navbar_signup" class="w3-button w3-bar-item w3-large w3-right">Sign Up</a>
-            </nav>
-        </div>
+        <nav class="navbar navbar-expand-lg navbar-black navbar-dark fixed-top">
+            <a href="/prodigal_app" id="navbar_logo" class="navbar-brand"><img src="{% static "images/navbar_logo.png" %}" alt="prodigal_logo_horizontal"></a>
+            <ul class="nav navbar-nav ml-auto justify-content-end">
+                <li class="nav-item">
+                    <a href="login" id="navbar_login" class="nav-link" style="font-size: 20px">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a href="signup" id="navbar_signup" class="nav-link" style="font-size: 20px">Signup</a>
+                </li>
+            </ul>
+        </nav>
         <!-- Sliding Images -->
         <div id="image_carousel" class="slick-container" style="margin-top:80px">
             <img src="{% static 'images/index_slick_image1.jpeg' %}" alt="slick_carousel_image1">
@@ -58,13 +82,13 @@
         <br>
         <br>
         <!-- Footer -->
-        <footer id="Home" class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
-            <a href="#"><i class="fa fa-facebook-official"></i></a>
-            <a href="#"><i class="fa fa-twitter"></i></a>
-            <a href="#"><i class="fa fa-flickr"></i></a>
-            <a href="#"><i class="fa fa-linkedin"></i></a>
-            <p class="w3-medium">
-                Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a>
+        <footer id="Home" class="footer">
+            <a class="footer-item" href="#"><i class="fa fa-facebook-official"></i></a>&nbsp;
+            <a class="footer-item" href="#"><i class="fa fa-twitter"></i></a>&nbsp;
+            <a class="footer-item" href="#"><i class="fa fa-flickr"></i></a>&nbsp;
+            <a class="footer-item" href="#"><i class="fa fa-linkedin"></i></a>
+            <p style="font-size:16px; color: white">
+                Powered by <a href="https://getbootstrap.com/" target="_blank">BootStrap</a>
             </p>
         </footer>
     </body>
