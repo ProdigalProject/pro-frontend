@@ -1,320 +1,294 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+    <head>
         {% load static %}
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/3/w3.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}"/>
+        <script src={% static "js/autocomplete.js" %}></script>
         <title>Prodigal - Search</title>
 
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-	function autocomplete(inp, arr) {
-          var currentFocus;
-          inp.addEventListener("input", function(e) {
-          var a, b, i, val = this.value;
-          closeAllLists();
-          if (!val) { return false;}
-          currentFocus = -1;
-          a = document.createElement("DIV");
-          a.setAttribute("id", this.id + "autocomplete-list");
-          a.setAttribute("class", "autocomplete-items");
-          this.parentNode.appendChild(a);
-          x = 0;
-          for (i = 0; i < arr.length; i++) {
-            if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-              b = document.createElement("DIV");
-              b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-              b.innerHTML += arr[i].substr(val.length);
-              b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-                  b.addEventListener("click", function(e) {
-                  inp.value = this.getElementsByTagName("input")[0].value;
-                  closeAllLists();
-              });
-              a.appendChild(b);
-              x++;
-            }
-            if (x > 5) {
-                x = 0;
-                break;
-            }
-          }
-        });
-        inp.addEventListener("keydown", function(e) {
-          var x = document.getElementById(this.id + "autocomplete-list");
-          if (x) x = x.getElementsByTagName("div");
-          if (e.keyCode == 40) {
-            currentFocus++;
-            addActive(x);
-          } else if (e.keyCode == 38) { //up
-            currentFocus--;
-            addActive(x);
-          } else if (e.keyCode == 13) {
-            e.preventDefault();
-            if (currentFocus > -1) {
-              if (x) x[currentFocus].click();
-            }
-          }
-        });
-        function addActive(x) {
-            if (!x) return false;
-            removeActive(x);
-            if (currentFocus >= x.length) currentFocus = 0;
-            if (currentFocus < 0) currentFocus = (x.length - 1);
-            x[currentFocus].classList.add("autocomplete-active");
-        }
-        function removeActive(x) {
-            for (var i = 0; i < x.length; i++) {
-              x[i].classList.remove("autocomplete-active");
-            }
-        }
-        function closeAllLists(elmnt) {
-            var x = document.getElementsByClassName("autocomplete-items");
-            for (var i = 0; i < x.length; i++) {
-              if (elmnt != x[i] && elmnt != inp) {
-                x[i].parentNode.removeChild(x[i]);
-              }
-            }
-        }
-    }       
-	
-      function getNextdate(lastest_year, lastest_month, lastest_day){
-        var sp = 0;
-        if((lastest_year % 4 == 0 && lastest_year % 100 != 0) || (lastest_year % 400 == 0))
-            sp = 1;
-        if(lastest_day >= 28){
-            if(lastest_month == 2 && sp == 1 && lastest_day == 28)
-                lastest_day += 1;
-            else if(lastest_month == 1 || lastest_month == 3 || lastest_month == 5 || lastest_month == 7 || lastest_month == 8 || lastest_month == 10){
-                if(lastest_day == 31){
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+          function getNextdate(lastest_year, lastest_month, lastest_day){
+            var sp = 0;
+            if((lastest_year % 4 == 0 && lastest_year % 100 != 0) || (lastest_year % 400 == 0))
+                sp = 1;
+            if(lastest_day >= 28){
+                if(lastest_month == 2 && sp == 1 && lastest_day == 28)
+                    lastest_day += 1;
+                else if(lastest_month == 1 || lastest_month == 3 || lastest_month == 5 || lastest_month == 7 || lastest_month == 8 || lastest_month == 10){
+                    if(lastest_day == 31){
+                        lastest_month += 1;
+                        lastest_day = 1;
+                    }
+                    else
+                        lastest_day += 1;
+                }
+                else if(lastest_month == 4 || lastest_month == 6 || lastest_month == 9 || lastest_month == 11){
+                    if(lastest_day == 30){
+                        lastest_month += 1;
+                        lastest_day = 1;
+                    }
+                    else
+                        lastest_day += 1;
+                }
+                else if(lastest_month == 12){
+                    if(lastest_day == 31){
+                        lastest_year += 1;
+                        lastest_month = 1;
+                        lastest_day = 1;
+                    }
+                    else
+                        lastest_day += 1;
+                }
+                else{
                     lastest_month += 1;
                     lastest_day = 1;
                 }
-                else
-                    lastest_day += 1;
-            }
-            else if(lastest_month == 4 || lastest_month == 6 || lastest_month == 9 || lastest_month == 11){
-                if(lastest_day == 30){
-                    lastest_month += 1;
-                    lastest_day = 1;
-                }
-                else
-                    lastest_day += 1;
-            }
-            else if(lastest_month == 12){
-                if(lastest_day == 31){
-                    lastest_year += 1;
-                    lastest_month = 1;
-                    lastest_day = 1;
-                }
-                else
-                    lastest_day += 1;
             }
             else{
-                lastest_month += 1;
-                lastest_day = 1;
+                lastest_day += 1;
             }
-        }
-        else{
-            lastest_day += 1;
-        }
-        var d = new Date(lastest_year, lastest_month, lastest_day); 
-        var return_array = new Array(d, lastest_year, lastest_month, lastest_day);
-        return return_array;
-      }
+            var d = new Date(lastest_year, lastest_month, lastest_day);
+            var return_array = new Array(d, lastest_year, lastest_month, lastest_day);
+            return return_array;
+          }
 
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
+          google.charts.load('current', {'packages':['corechart']});
+          google.charts.setOnLoadCallback(drawChart);
 
-      function drawChart() {
-        var pridiction_first_on = 0;
-        var pridiction_second_on = 0;
-        var pridiction_json_first;
-        var pridiction_json_second;
+          function drawChart() {
+            var pridiction_first_on = 0;
+            var pridiction_second_on = 0;
+            var pridiction_json_first;
+            var pridiction_json_second;
 
-        var decoded_first = ('{{ chart_json }}').replace(/&#39;/g,'\"');
-        if(('{{ chart_json_second }}') != ""){
-            // need to skip weekend
-            var decoded_second = ('{{ chart_json_second }}').replace(/&#39;/g,'\"');
-            var chart_json_first = JSON.parse( decoded_first );
-            var chart_json_second = JSON.parse( decoded_second );
+            var decoded_first = ('{{ chart_json }}').replace(/&#39;/g,'\"');
+            if(('{{ chart_json_second }}') != ""){
+                // need to skip weekend
+                var decoded_second = ('{{ chart_json_second }}').replace(/&#39;/g,'\"');
+                var chart_json_first = JSON.parse( decoded_first );
+                var chart_json_second = JSON.parse( decoded_second );
 
-            var data = new google.visualization.DataTable();
+                var data = new google.visualization.DataTable();
 
 
-            var numRows = chart_json_first.length < chart_json_second.length ? chart_json_first.length : chart_json_second.length;
-	        console.log('{{mode}}');
-	        if ('{{ mode }}' == "comparison_absolute"){
-	            data.addColumn('date', 'Date');
+                var numRows = chart_json_first.length < chart_json_second.length ? chart_json_first.length : chart_json_second.length;
+                console.log('{{mode}}');
+                if ('{{ mode }}' == "comparison_absolute"){
+                    data.addColumn('date', 'Date');
+                    data.addColumn('number', '{{ name }}' + 'Closing');
+                    data.addColumn('number', '{{ name_second }}' + 'Closing');
+                    console.log('{{mode}}');
+                    for (var i = 0; i < numRows; i++){
+                        var a = chart_json_first[i].date;
+                        var res = a.split("-");
+                        var d = new Date(res[0],res[1]-1,res[2]);
+                        var myrow = new Array(d, chart_json_first[i].closing, chart_json_second[i].closing);
+                        data.addRow(myrow);
+                    }
+
+                    if(('{{ pridiction }}') != ""){
+                        pridiction_first_on = 1;
+                        var decoded_pridiction_first = ('{{ pridiction }}').replace(/&#39;/g,'\"');
+                        pridiction_json_first = JSON.parse( decoded_pridiction_first );
+                        data.addColumn('number', '{{ name }}' + 'Prediction');
+                    }
+                    if(('{{ pridiction_second }}') != ""){
+                        pridiction_second_on = 1;
+                        var decoded_pridiction_second = ('{{ pridiction_second }}').replace(/&#39;/g,'\"');
+                        pridiction_json_second = JSON.parse( decoded_pridiction_second );
+                        data.addColumn('number', '{{ name_second }}' + 'Prediction');
+                    }
+
+                    var date = ('{{ latest_date }}').split("-");
+                    var lastest_year = parseInt(date[0]);
+                    var lastest_month = parseInt(date[1]) - 1;
+                    var lastest_day = parseInt(date[2]);
+
+                    myrow = new Array(new Date(lastest_year, lastest_month, lastest_day), null, null, chart_json_first[0].closing, chart_json_second[0].closing);
+                    data.addRow(myrow);
+
+                    for (var i = 0; i < 5; i++){
+                        var date_array = getNextdate(lastest_year, lastest_month, lastest_day);
+                        var d = date_array[0];
+                        lastest_year = date_array[1];
+                        lastest_month = date_array[2];
+                        lastest_day = date_array[3];
+                        var myrow;
+                        if (pridiction_first_on == 1 && pridiction_second_on == 1){
+                            myrow = new Array(d, null, null, pridiction_json_first[i].value, pridiction_json_second[i].value);
+                        }
+                        else if (pridiction_first_on == 0 && pridiction_second_on == 1)
+                            myrow = new Array(d, null, null, pridiction_json_second[i].value);
+                        else
+                            myrow = new Array(d, null, null, pridiction_json_first[i].value);
+                        data.addRow(myrow);
+                    }
+                }
+
+                if ('{{ mode }}' == "comparison_percentage"){
+                    data.addColumn('date', 'Date');
+                    data.addColumn('number', '{{ name }}' + 'Percentage Change');
+                    data.addColumn('number', '{{ name_second }}' + 'Percentage Change');
+                    console.log('{{mode}}');
+                    for (var i = 1; i < numRows; i++){
+                        var a = chart_json_first[i].date;
+                        var res = a.split("-");
+                        var d = new Date(res[0],res[1]-1,res[2]);
+                        var x = ((chart_json_first[i].closing - chart_json_first[i-1].closing)/chart_json_first[i-1].closing)*100
+                        var y = ((chart_json_second[i].closing - chart_json_second[i-1].closing)/chart_json_second[i-1].closing)*100
+                        var myrow = new Array(d, x, y);
+                        data.addRow(myrow);
+                    }
+
+
+                }
+
+                if ('{{ mode }}' == "comparison_tendency"){
+                    data.addColumn('date', 'Date');
+                    data.addColumn('number', '{{ name }}' + 'Tendency with respect to ' +'{{ name_second  }}');
+                    console.log('{{mode}}');
+                    for (var i = 1; i < numRows; i++){
+                        var a = chart_json_first[i].date;
+                        var res = a.split("-");
+                        var d = new Date(res[0],res[1]-1,res[2]);
+                        var x = ((chart_json_first[i].closing - chart_json_first[i-1].closing)/chart_json_first[i-1].closing)*100
+                        var y = ((chart_json_second[i].closing - chart_json_second[i-1].closing)/chart_json_second[i-1].closing)*100
+                        var myrow = new Array(d, x-y);
+                        data.addRow(myrow);
+                    }
+
+
+                }
+
+            }
+            else{
+                var chart_json_first = JSON.parse( decoded_first );
+
+                var data = new google.visualization.DataTable();
+                data.addColumn('date', 'Date');
                 data.addColumn('number', '{{ name }}' + 'Closing');
-                data.addColumn('number', '{{ name_second }}' + 'Closing');
-	        	console.log('{{mode}}');
-	            for (var i = 0; i < numRows; i++){
-	                var a = chart_json_first[i].date;
-	                var res = a.split("-");
-	                var d = new Date(res[0],res[1]-1,res[2]);
-	                var myrow = new Array(d, chart_json_first[i].closing, chart_json_second[i].closing);
-	                data.addRow(myrow);
-	            }
-
-	            if(('{{ pridiction }}') != ""){
-	                pridiction_first_on = 1;
-	                var decoded_pridiction_first = ('{{ pridiction }}').replace(/&#39;/g,'\"');
-	                pridiction_json_first = JSON.parse( decoded_pridiction_first );
-	                data.addColumn('number', '{{ name }}' + 'Prediction');
-	            }
-	            if(('{{ pridiction_second }}') != ""){
-	                pridiction_second_on = 1;
-	                var decoded_pridiction_second = ('{{ pridiction_second }}').replace(/&#39;/g,'\"');
-	                pridiction_json_second = JSON.parse( decoded_pridiction_second );
-	                data.addColumn('number', '{{ name_second }}' + 'Prediction');
-	            }
-
-	            var date = ('{{ latest_date }}').split("-");
-	            var lastest_year = parseInt(date[0]);
-	            var lastest_month = parseInt(date[1]) - 1;
-	            var lastest_day = parseInt(date[2]);
-
-	            myrow = new Array(new Date(lastest_year, lastest_month, lastest_day), null, null, chart_json_first[0].closing, chart_json_second[0].closing);
-	            data.addRow(myrow);
-
-	            for (var i = 0; i < 5; i++){
-	                var date_array = getNextdate(lastest_year, lastest_month, lastest_day);
-	                var d = date_array[0];
-	                lastest_year = date_array[1];
-	                lastest_month = date_array[2];
-	                lastest_day = date_array[3];
-	                var myrow;
-	                if (pridiction_first_on == 1 && pridiction_second_on == 1){
-	                    myrow = new Array(d, null, null, pridiction_json_first[i].value, pridiction_json_second[i].value);
-	                }
-	                else if (pridiction_first_on == 0 && pridiction_second_on == 1)
-	                    myrow = new Array(d, null, null, pridiction_json_second[i].value);
-	                else
-	                    myrow = new Array(d, null, null, pridiction_json_first[i].value);
-	                data.addRow(myrow);
-	            }
-	        }
-
-            if ('{{ mode }}' == "comparison_percentage"){
-                data.addColumn('date', 'Date');
-                data.addColumn('number', '{{ name }}' + 'Percentage Change');
-                data.addColumn('number', '{{ name_second }}' + 'Percentage Change');
-	        	console.log('{{mode}}');
-	            for (var i = 1; i < numRows; i++){
-	                var a = chart_json_first[i].date;
-	                var res = a.split("-");
-	                var d = new Date(res[0],res[1]-1,res[2]);
-	                var x = ((chart_json_first[i].closing - chart_json_first[i-1].closing)/chart_json_first[i-1].closing)*100
-                    var y = ((chart_json_second[i].closing - chart_json_second[i-1].closing)/chart_json_second[i-1].closing)*100
-	                var myrow = new Array(d, x, y);
-	                data.addRow(myrow);
-	            }
 
 
-	        }
+                var numRows = chart_json_first.length;
 
-            if ('{{ mode }}' == "comparison_tendency"){
-                data.addColumn('date', 'Date');
-                data.addColumn('number', '{{ name }}' + 'Tendency with respect to ' +'{{ name_second  }}');
-	        	console.log('{{mode}}');
-	            for (var i = 1; i < numRows; i++){
-	                var a = chart_json_first[i].date;
-	                var res = a.split("-");
-	                var d = new Date(res[0],res[1]-1,res[2]);
-	                var x = ((chart_json_first[i].closing - chart_json_first[i-1].closing)/chart_json_first[i-1].closing)*100
-                    var y = ((chart_json_second[i].closing - chart_json_second[i-1].closing)/chart_json_second[i-1].closing)*100
-	                var myrow = new Array(d, x-y);
-	                data.addRow(myrow);
-	            }
+                for (var i = 0; i < numRows; i++){
+                    var a = chart_json_first[i].date;
+                    var res = a.split("-");
+                    var d = new Date(res[0],res[1]-1,res[2]);
+                    var myrow = new Array(d, chart_json_first[i].closing);
+                    data.addRow(myrow);
+                }
 
+                if(('{{ pridiction }}') != ""){
+                    pridiction_first_on = 1;
+                    var decoded_pridiction_first = ('{{ pridiction }}').replace(/&#39;/g,'\"');
+                    pridiction_json_first = JSON.parse( decoded_pridiction_first );
+                    data.addColumn('number', '{{ name }}' + ' Prediction');
+                }
 
-	        }
+                var date = ('{{ latest_date }}').split("-");
+                var lastest_year = parseInt(date[0]);
+                var lastest_month = parseInt(date[1]) - 1;
+                var lastest_day = parseInt(date[2]);
 
-        }
-        else{
-            var chart_json_first = JSON.parse( decoded_first );
-
-            var data = new google.visualization.DataTable();
-            data.addColumn('date', 'Date');
-            data.addColumn('number', '{{ name }}' + 'Closing');
-            
-
-            var numRows = chart_json_first.length;
-
-            for (var i = 0; i < numRows; i++){
-                var a = chart_json_first[i].date;
-                var res = a.split("-");
-                var d = new Date(res[0],res[1]-1,res[2]);
-                var myrow = new Array(d, chart_json_first[i].closing);
-                data.addRow(myrow);            
-            }
-
-            if(('{{ pridiction }}') != ""){
-                pridiction_first_on = 1;
-                var decoded_pridiction_first = ('{{ pridiction }}').replace(/&#39;/g,'\"');
-                pridiction_json_first = JSON.parse( decoded_pridiction_first );
-                data.addColumn('number', '{{ name }}' + ' Prediction');
-            }
-
-            var date = ('{{ latest_date }}').split("-");
-            var lastest_year = parseInt(date[0]);
-            var lastest_month = parseInt(date[1]) - 1;
-            var lastest_day = parseInt(date[2]);
-
-            // for continuous reason
-            myrow = new Array(new Date(lastest_year, lastest_month, lastest_day), null, chart_json_first[0].closing);
-            data.addRow(myrow);
-
-            for (var i = 0; i < 5; i++){
-                var date_array = getNextdate(lastest_year, lastest_month, lastest_day);
-                var d = date_array[0];
-                lastest_year = date_array[1];
-                lastest_month = date_array[2];
-                lastest_day = date_array[3];
-                var myrow;
-                if(pridiction_first_on == 1)
-                    myrow = new Array(d, null, pridiction_json_first[i].value);
-
+                // for continuous reason
+                myrow = new Array(new Date(lastest_year, lastest_month, lastest_day), null, chart_json_first[0].closing);
                 data.addRow(myrow);
+
+                for (var i = 0; i < 5; i++){
+                    var date_array = getNextdate(lastest_year, lastest_month, lastest_day);
+                    var d = date_array[0];
+                    lastest_year = date_array[1];
+                    lastest_month = date_array[2];
+                    lastest_day = date_array[3];
+                    var myrow;
+                    if(pridiction_first_on == 1)
+                        myrow = new Array(d, null, pridiction_json_first[i].value);
+
+                    data.addRow(myrow);
+                }
             }
-        }
 
-        var options = {
-          chartArea:{width:"90%",height:"80%"},
-          curveType: 'function',
-          legend: { position: 'bottom' },
-        };
+            var options = {
+              chartArea:{width:"90%",height:"80%"},
+              curveType: 'function',
+              legend: { position: 'bottom' },
+            };
 
-        var chart = new google.visualization.LineChart(document.getElementById('stock_chart'));
+            var chart = new google.visualization.LineChart(document.getElementById('stock_chart'));
 
-        chart.draw(data, options);
-      }
+            chart.draw(data, options);
+          }
 
-      function alternate(){
-        if(this.checked){
-            this.checked = false;
-        }
-        else{
-            this.checked = true;
-        }
-      }
-    </script>
-    <style>
-        .autocomplete-items {
-          color: #ff0000;
-        }
-
-        .autocomplete {
-          color: #ff0000;
-        }
-    </style>
-
+          function alternate(){
+            if(this.checked){
+                this.checked = false;
+            }
+            else{
+                this.checked = true;
+            }
+          }
+        </script>
     </head>
     <body>
         <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-black navbar-dark fixed-top">
+            <a href="/prodigal_app" id="navbar_logo" class="navbar-brand"><img src="{% static "images/navbar_logo.png" %}" alt="prodigal_logo_horizontal" style="margin-bottom: 0"></a>
+            <div class="mx-auto">
+                <form class="form-inline" id="search" method="POST" name="search_form" action="search">
+                    {% csrf_token %}
+                    <input class="form-control" type="search" id="navbar_searchbox" name="search_key" style="width: 300px" placeholder="Enter Company Name..."/>
+                    <select class="custom-select" name="mode" style="width: 230px; font-size: 14px">
+                      <option value="">New Search</option>
+                      <option value="comparison_absolute">Compare Absolute Value</option>
+                      <option value="comparison_percentage">Compare Percentage Change</option>
+                      <option value="comparison_tendency">Compare Tendency</option>
+                    </select>
+                    <button id="navbar_search_submit" type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                </form>
+                <script>
+                 var stocks = JSON.parse(('{{ company_list }}').replace(/&#39;/g,'\"'));
+                 var searchBox = document.getElementById("navbar_searchbox");
+                 searchBox.autocomplete = 'off';
+                 autocomplete(searchBox, stocks);
+                </script>
+            </div>
+            <ul class="nav navbar-nav justify-content-end">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="sector_dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 20px">
+                        Sectors
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-lebelledby="sector_dropdown">
+                        <form method="post" id="sector_search" action="search">{% csrf_token %}</form>
+                        <a><button id="Basic Industries" class="dropdown-item" type="submit" name="search_key" value="sector = Basic Industries" form="sector_search">Basic Industries</button></a>
+                        <a><button id="Capital Goods" class="dropdown-item" type="submit" name="search_key" value="sector = Capital Goods" form="sector_search">Capital Goods</button></a>
+                        <a><button id="Consumer Durables" class="dropdown-item" type="submit" name="search_key" value="sector = Consumer Durables" form="sector_search">Consumer Durables</button></a>
+                        <a><button id="Consumer Non-Durables" class="dropdown-item" type="submit" name="search_key" value="sector = Consumer Non-Durables" form="sector_search">Consumer Non-Durables</button></a>
+                        <a><button id="Consumer Services" class="dropdown-item" type="submit" name="search_key" value="sector = Consumer Services" form="sector_search">Consumer Services</button></a>
+                        <a><button id="Energy" class="dropdown-item" type="submit" name="search_key" value="sector = Energy" form="sector_search">Energy</button></a>
+                        <a><button id="Finance" class="dropdown-item" type="submit" name="search_key" value="sector = Finance" form="sector_search">Finance</button></a>
+                        <a><button id="Health Care" class="dropdown-item" type="submit" name="search_key" value="sector = Health Care" form="sector_search">Health Care</button></a>
+                        <a><button id="Miscellaneous" class="dropdown-item" type="submit" name="search_key" value="sector = Miscellaneous" form="sector_search">Miscellaneous</button></a>
+                        <a><button id="Public Utilities" class="dropdown-item" type="submit" name="search_key" value="sector = Public Utilities" form="sector_search">Public Utilities</button></a>
+                        <a><button id="Technology" class="dropdown-item" type="submit" name="search_key" value="sector = Technology" form="sector_search">Technology</button></a>
+                        <a><button id="Transportation" class="dropdown-item" type="submit" name="search_key" value="sector = Transportation" form="sector_search">Transportation</button></a>
+                        <div class="dropdown-divider"></div>
+                        <a><button id="n/a" class="dropdown-item" type="submit" name="search_key" value="sector = n/a" form="sector_search">n/a</button></a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="signout" class="nav-link" style="font-size: 20px">Sign Out</a>
+                </li>
+            </ul>
+        </nav>
         <div class="w3-top">
             <nav class="w3-bar w3-black w3-padding-16">
                 <a href="/prodigal_app" id="navbar_logo" class="w3-bar-item"><img src="{% static "images/navbar_logo.png" %}" alt="prodigal_logo_horizontal"></a>
@@ -339,7 +313,6 @@
         				 autocomplete(searchBox, stocks);
     				</script>
                 </div>
-                <a href="profile" id="navbar_profile" class="w3-button w3-bar-item w3-large w3-right">Profile</a>
             </nav>
         </div>
         <!-- No matching search results -->
@@ -349,7 +322,7 @@
         </div>
         <!-- Search Results -->
         {% else %}
-        <div id="search-container" style="margin: 80px 2% 0 2%; min-height:100vh">
+        <div id="search-container" style="margin: 2% 2% 0 2%; min-height:100vh">
             <div id="result">
                 <div id="search_top_container">
                     <div id="company_name" style="display: inline-block;">
@@ -409,13 +382,13 @@
         </div>
         {% endif %}
         <!-- Footer -->
-        <footer id="Home" class="w3-container w3-padding-64 w3-center w3-black w3-xlarge">
-            <a href="#"><i class="fa fa-facebook-official"></i></a>
-            <a href="#"><i class="fa fa-twitter"></i></a>
-            <a href="#"><i class="fa fa-flickr"></i></a>
-            <a href="#"><i class="fa fa-linkedin"></i></a>
-            <p class="w3-medium">
-                Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a>
+        <footer id="Home" class="footer">
+            <a class="footer-item" href="#"><i class="fa fa-facebook-official"></i></a>&nbsp;
+            <a class="footer-item" href="#"><i class="fa fa-twitter"></i></a>&nbsp;
+            <a class="footer-item" href="#"><i class="fa fa-flickr"></i></a>&nbsp;
+            <a class="footer-item" href="#"><i class="fa fa-linkedin"></i></a>
+            <p style="font-size:16px; color: white">
+                Powered by <a href="https://getbootstrap.com/" target="_blank">BootStrap</a>
             </p>
         </footer>
     </body>
