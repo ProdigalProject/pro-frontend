@@ -221,6 +221,8 @@ def search(request):
             if pridiction_second is not None:
                 return_dict["pridiction_second"] = pridiction_second
             return_dict["company_list"] = company_list
+            print(mode)
+            return_dict["mode"] = mode
             return render(request, "search.html", return_dict)
 
 

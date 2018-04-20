@@ -134,72 +134,75 @@
         var pridiction_json_first;
         var pridiction_json_second;
 
-        var decoded_first = ('{{ chart_json }} ').replace(/&#39;/g,'\"');
-        if(('{{ chart_json_second }} ') != " "){
+        var decoded_first = ('{{ chart_json }}').replace(/&#39;/g,'\"');
+        if(('{{ chart_json_second }}') != ""){
             // need to skip weekend
-            var decoded_second = ('{{ chart_json_second }} ').replace(/&#39;/g,'\"');
+            var decoded_second = ('{{ chart_json_second }}').replace(/&#39;/g,'\"');
             var chart_json_first = JSON.parse( decoded_first );
             var chart_json_second = JSON.parse( decoded_second );
 
             var data = new google.visualization.DataTable();
             data.addColumn('date', 'Date');
-            data.addColumn('number', '{{ name }} ' + 'Closing');
-            data.addColumn('number', '{{ name_second }} ' + 'Closing');
+            data.addColumn('number', '{{ name }}' + 'Closing');
+            data.addColumn('number', '{{ name_second }}' + 'Closing');
 
             var numRows = chart_json_first.length < chart_json_second.length ? chart_json_first.length : chart_json_second.length;
-            
-            for (var i = 0; i < numRows; i++){
-                var a = chart_json_first[i].date;
-                var res = a.split("-");
-                var d = new Date(res[0],res[1]-1,res[2]);
-                var myrow = new Array(d, chart_json_first[i].closing, chart_json_second[i].closing);
-                data.addRow(myrow);
-            }
+	        console.log('{{mode}}');
+	        if ('{{ mode }}' == "comparison_absolute"){
+	        	console.log('{{mode}}');
+	            for (var i = 0; i < numRows; i++){
+	                var a = chart_json_first[i].date;
+	                var res = a.split("-");
+	                var d = new Date(res[0],res[1]-1,res[2]);
+	                var myrow = new Array(d, chart_json_first[i].closing, chart_json_second[i].closing);
+	                data.addRow(myrow);
+	            }
 
-            if(('{{ pridiction }} ') != " "){
-                pridiction_first_on = 1;
-                var decoded_pridiction_first = ('{{ pridiction }} ').replace(/&#39;/g,'\"');
-                pridiction_json_first = JSON.parse( decoded_pridiction_first );
-                data.addColumn('number', '{{ name }} ' + 'Prediction');
-            }
-            if(('{{ pridiction_second }} ') != " "){
-                pridiction_second_on = 1;
-                var decoded_pridiction_second = ('{{ pridiction_second }} ').replace(/&#39;/g,'\"');
-                pridiction_json_second = JSON.parse( decoded_pridiction_second );
-                data.addColumn('number', '{{ name_second }} ' + 'Prediction');
-            }
+	            if(('{{ pridiction }}') != ""){
+	                pridiction_first_on = 1;
+	                var decoded_pridiction_first = ('{{ pridiction }}').replace(/&#39;/g,'\"');
+	                pridiction_json_first = JSON.parse( decoded_pridiction_first );
+	                data.addColumn('number', '{{ name }}' + 'Prediction');
+	            }
+	            if(('{{ pridiction_second }}') != ""){
+	                pridiction_second_on = 1;
+	                var decoded_pridiction_second = ('{{ pridiction_second }}').replace(/&#39;/g,'\"');
+	                pridiction_json_second = JSON.parse( decoded_pridiction_second );
+	                data.addColumn('number', '{{ name_second }}' + 'Prediction');
+	            }
 
-            var date = ('{{ latest_date }} ').split("-");
-            var lastest_year = parseInt(date[0]);
-            var lastest_month = parseInt(date[1]) - 1;
-            var lastest_day = parseInt(date[2]);
+	            var date = ('{{ latest_date }}').split("-");
+	            var lastest_year = parseInt(date[0]);
+	            var lastest_month = parseInt(date[1]) - 1;
+	            var lastest_day = parseInt(date[2]);
 
-            myrow = new Array(new Date(lastest_year, lastest_month, lastest_day), null, null, chart_json_first[0].closing, chart_json_second[0].closing);
-            data.addRow(myrow);
+	            myrow = new Array(new Date(lastest_year, lastest_month, lastest_day), null, null, chart_json_first[0].closing, chart_json_second[0].closing);
+	            data.addRow(myrow);
 
-            for (var i = 0; i < 5; i++){
-                var date_array = getNextdate(lastest_year, lastest_month, lastest_day);
-                var d = date_array[0];
-                lastest_year = date_array[1];
-                lastest_month = date_array[2];
-                lastest_day = date_array[3];
-                var myrow;
-                if (pridiction_first_on == 1 && pridiction_second_on == 1){
-                    myrow = new Array(d, null, null, pridiction_json_first[i].value, pridiction_json_second[i].value);
-                }
-                else if (pridiction_first_on == 0 && pridiction_second_on == 1)
-                    myrow = new Array(d, null, null, pridiction_json_second[i].value);
-                else
-                    myrow = new Array(d, null, null, pridiction_json_first[i].value);
-                data.addRow(myrow);
-            }
+	            for (var i = 0; i < 5; i++){
+	                var date_array = getNextdate(lastest_year, lastest_month, lastest_day);
+	                var d = date_array[0];
+	                lastest_year = date_array[1];
+	                lastest_month = date_array[2];
+	                lastest_day = date_array[3];
+	                var myrow;
+	                if (pridiction_first_on == 1 && pridiction_second_on == 1){
+	                    myrow = new Array(d, null, null, pridiction_json_first[i].value, pridiction_json_second[i].value);
+	                }
+	                else if (pridiction_first_on == 0 && pridiction_second_on == 1)
+	                    myrow = new Array(d, null, null, pridiction_json_second[i].value);
+	                else
+	                    myrow = new Array(d, null, null, pridiction_json_first[i].value);
+	                data.addRow(myrow);
+	            }
+	        }
         }
         else{
             var chart_json_first = JSON.parse( decoded_first );
 
             var data = new google.visualization.DataTable();
             data.addColumn('date', 'Date');
-            data.addColumn('number', '{{ name }} ' + 'Closing');
+            data.addColumn('number', '{{ name }}' + 'Closing');
             
 
             var numRows = chart_json_first.length;
@@ -212,14 +215,14 @@
                 data.addRow(myrow);            
             }
 
-            if(('{{ pridiction }} ') != " "){
+            if(('{{ pridiction }}') != ""){
                 pridiction_first_on = 1;
-                var decoded_pridiction_first = ('{{ pridiction }} ').replace(/&#39;/g,'\"');
+                var decoded_pridiction_first = ('{{ pridiction }}').replace(/&#39;/g,'\"');
                 pridiction_json_first = JSON.parse( decoded_pridiction_first );
-                data.addColumn('number', '{{ name }} ' + 'Prediction');
+                data.addColumn('number', '{{ name }}' + ' Prediction');
             }
 
-            var date = ('{{ latest_date }} ').split("-");
+            var date = ('{{ latest_date }}').split("-");
             var lastest_year = parseInt(date[0]);
             var lastest_month = parseInt(date[1]) - 1;
             var lastest_day = parseInt(date[2]);
