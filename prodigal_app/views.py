@@ -111,7 +111,7 @@ def validateEmail(email):
     return False
     
 def verifyEmail(email):
-    send_mail('Welcome from Prodigal', 'It works!', 'prodigalapp@gmail.com', [email], fail_silently=False)
+    send_mail('Welcome from Prodigal', '- Balaji Pandurangan Baskaran, Gabrielle Chen, Htut Khine Win, Jamie Paterson, Sean Lin, Wonwoo Seo', 'prodigalapp@gmail.com', [email], fail_silently=False)
 
 def create_user(request):
     """
