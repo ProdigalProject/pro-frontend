@@ -103,6 +103,11 @@ def signout(request):
     return redirect('index')
 
 
+def validateEmail(email):
+    if re.match("[a-zA-Z0-9][a-zA-Z0-9.\-_]*@[a-zA-Z0-9]+[.][a-zA-Z]+\Z", email):
+        return True
+    return False
+
 def create_user(request):
     """
     Create a user with given username, email address and password.
@@ -122,6 +127,9 @@ def create_user(request):
         return render(request, "Signup.html")
     elif email == '':
         messages.add_message(request, messages.INFO, 'email is required')
+        return render(request, "Signup.html")
+    elif validateEmail(email) == False:
+        messages.add_message(request, messages.INFO, 'email is invalid')
         return render(request, "Signup.html")
     elif password == '':
         messages.add_message(request, messages.INFO, 'password is required')
