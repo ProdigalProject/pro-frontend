@@ -222,6 +222,9 @@ def search(request):
             # get second compant data
             second_dict, company_sym_second = user_obj.nasdaq_search(ticker)
             if company_sym_first == company_sym_second:  # don't allow comparing same company
+                print(1)
+                first_dict["pridiction"] = pridiction
+                first_dict["company_list"] = company_list
                 return render(request, "search.html", first_dict)
             pridiction_second = user_obj.pridict(ticker)
             if second_dict is None:  # no second compant match
