@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
 from prodigal_app.models import *
+import re
 
 
 # Create your views here.
@@ -107,6 +108,12 @@ def signout(request):
     return redirect('index')
 
 
+def validateEmail(email):
+    if re.match("[a-zA-Z0-9][a-zA-Z0-9.\-_]*@[a-zA-Z0-9]+[.][a-zA-Z]+\Z", email):
+        return True
+    return False
+
+
 def create_user(request):
     """
     Create a user with given username, email address and password.
@@ -126,6 +133,9 @@ def create_user(request):
         return render(request, "Signup.html")
     elif email == '':
         messages.add_message(request, messages.INFO, 'email is required')
+        return render(request, "Signup.html")
+    elif validateEmail(email) == False:
+        messages.add_message(request, messages.INFO, 'email is invalid')
         return render(request, "Signup.html")
     elif password == '':
         messages.add_message(request, messages.INFO, 'password is required')
@@ -171,8 +181,8 @@ def search(request):
     company_list = user_obj.getCompaniesName()
 
     # search by sector
-    if 'sector:' in company_search:
-        sector_symbol = company_search.lstrip("sector:")
+    if 'sector = ' in company_search:
+        sector_symbol = company_search.lstrip("sector = ")
         result_list = user_obj.search_by_sector(sector_symbol)
         if result_list is None:
             return render(request, "sector.html", {"msg": "Sector didn't find.", "company_list": company_list})
@@ -185,9 +195,9 @@ def search(request):
     else:
         ticker = user_obj.getTickerByName(company_search)
         if ticker is None:
-            return render(request, "search.html", {"msg": "Search by company name, please.", "company_list": company_list})
+            return render(request, "search.html", {"msg": "No Matching Result.", "company_list": company_list})
         # search for new company
-        if mode != 'comparison':
+        if 'comparison' not in mode:
             # search first and create a record endpoint
             return_dict, company_sym = user_obj.nasdaq_search(ticker)
             # get pridiction for further use
@@ -225,6 +235,8 @@ def search(request):
             if pridiction_second is not None:
                 return_dict["pridiction_second"] = pridiction_second
             return_dict["company_list"] = company_list
+            print(mode)
+            return_dict["mode"] = mode
             return render(request, "search.html", return_dict)
 
 
