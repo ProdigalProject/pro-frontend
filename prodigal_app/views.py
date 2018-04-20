@@ -212,7 +212,6 @@ def search(request):
         # compare companies
         else:
             # TODO: add comparison for more than two factors
-            # TODO: don't allow comparing same company
             # just come up with a method that compare two companies
             # get first company (base company) data
             first_dict, company_sym_first = user_obj.nasdaq_search(request.session.get('last_search'))
@@ -222,6 +221,11 @@ def search(request):
                 return render(request, "search.html", {"msg": "No Comparison Object.", "company_list": company_list})
             # get second compant data
             second_dict, company_sym_second = user_obj.nasdaq_search(ticker)
+            if company_sym_first == company_sym_second:  # don't allow comparing same company
+                print(1)
+                first_dict["pridiction"] = pridiction
+                first_dict["company_list"] = company_list
+                return render(request, "search.html", first_dict)
             pridiction_second = user_obj.pridict(ticker)
             if second_dict is None:  # no second compant match
                 if pridiction is not None:

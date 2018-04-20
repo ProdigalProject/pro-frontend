@@ -121,6 +121,15 @@
                         lastest_year = date_array[1];
                         lastest_month = date_array[2];
                         lastest_day = date_array[3];
+                        var ifweekend = (d.getDay() == 6) || (d.getDay() == 0);
+                        while(ifweekend){ // 6 = Saturday, 0 = Sunday
+                            date_array = getNextdate(lastest_year, lastest_month, lastest_day);
+                            d = date_array[0];
+                            lastest_year = date_array[1];
+                            lastest_month = date_array[2];
+                            lastest_day = date_array[3];
+                            ifweekend = (d.getDay() == 6) || (d.getDay() == 0);
+                        }
                         var myrow;
                         if (pridiction_first_on == 1 && pridiction_second_on == 1){
                             myrow = new Array(d, null, null, pridiction_json_first[i].value, pridiction_json_second[i].value);
@@ -147,8 +156,6 @@
                         var myrow = new Array(d, x, y);
                         data.addRow(myrow);
                     }
-
-
                 }
 
                 if ('{{ mode }}' == "comparison_tendency"){
@@ -164,10 +171,7 @@
                         var myrow = new Array(d, x-y);
                         data.addRow(myrow);
                     }
-
-
                 }
-
             }
             else{
                 var chart_json_first = JSON.parse( decoded_first );
@@ -203,19 +207,29 @@
                 myrow = new Array(new Date(lastest_year, lastest_month, lastest_day), null, chart_json_first[0].closing);
                 data.addRow(myrow);
 
+
                 for (var i = 0; i < 5; i++){
                     var date_array = getNextdate(lastest_year, lastest_month, lastest_day);
                     var d = date_array[0];
                     lastest_year = date_array[1];
                     lastest_month = date_array[2];
                     lastest_day = date_array[3];
+                    var ifweekend = (d.getDay() == 6) || (d.getDay() == 0);
+                    while(ifweekend){ // 6 = Saturday, 0 = Sunday
+                        date_array = getNextdate(lastest_year, lastest_month, lastest_day);
+                        d = date_array[0];
+                        lastest_year = date_array[1];
+                        lastest_month = date_array[2];
+                        lastest_day = date_array[3];
+                        ifweekend = (d.getDay() == 6) || (d.getDay() == 0);
+                    }
                     var myrow;
                     if(pridiction_first_on == 1)
                         myrow = new Array(d, null, pridiction_json_first[i].value);
-
                     data.addRow(myrow);
                 }
             }
+
 
             var options = {
               chartArea:{width:"90%",height:"80%"},
@@ -224,18 +238,8 @@
             };
 
             var chart = new google.visualization.LineChart(document.getElementById('stock_chart'));
-
             chart.draw(data, options);
-          }
-
-          function alternate(){
-            if(this.checked){
-                this.checked = false;
-            }
-            else{
-                this.checked = true;
-            }
-          }
+        }
         </script>
     </head>
     <body>
