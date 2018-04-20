@@ -41,7 +41,7 @@
         </nav>
         <div style="background-image: url(../static/images/city.jpeg); background-size: cover; height:120vh">
             <div id="form" style="width: 100%; max-width:500px; margin:0 auto 80px auto; padding-top:200px">
-                <div class="card" style="max-width:2000px;">
+                <div class="card shadow-lg" style="max-width:2000px;">
                     <div class="card-header" style="padding: 24px 0 24px 0">
                         {% if messages %}
                             {% for message in messages %}
@@ -68,15 +68,15 @@
                                 </li>
                                 <li class="list-group-item">
                                     <label><b>User Name</b></label><br>
-                                    <input class="w-100" type="text" placeholder="Enter Username" name="username" required>
+                                    <input class="w-100 form-control" type="text" placeholder="Enter Username" name="username" required>
                                 </li>
                                 <li class="list-group-item">
                                     <label><b>Email Address</b></label><br>
-                                    <input class="w-100" type="text" placeholder="Enter email address" name="email" required>
+                                    <input class="w-100 form-control" type="text" placeholder="Enter email address" name="email" required>
                                 </li>
                                 <li class="list-group-item">
                                     <label><b>Password</b></label><br>
-                                    <input class="w-100" type="password" placeholder="Enter Password" name="password" required>
+                                    <input class="w-100 form-control" type="password" placeholder="Enter Password" name="password" required>
                                 </li>
                             </ul>
                         </div>

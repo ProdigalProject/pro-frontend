@@ -46,7 +46,7 @@
         <!-- login Form -->
         <div style="background-image: url(../static/images/city.jpeg); background-size: cover; height:120vh">
             <div id="form" style="width: 100%; max-width: 500px; margin:0 auto 80px auto; padding-top:200px">
-                <div class="card" style="max-width:2000px;">
+                <div class="card shadow-lg" style="max-width:2000px;">
                     <div class="card-header" style="padding: 24px 0 24px 0">
                         {% if messages %}
                             {% for message in messages %}
@@ -62,15 +62,15 @@
                             <ul class="list-group">
                                 <li class="list-group-item">
                                     <label><b>Username</b></label><br>
-                                    <input class="w-100" id="usr" type="text" placeholder="Enter Username" name="username" required>
+                                    <input class="w-100 form-control" id="usr" type="text" placeholder="Enter Username" name="username" required>
                                 </li>
                                 <li class="list-group-item">
                                     <label><b>Password</b></label><br>
-                                    <input class="w-100" id="pass" type="password" placeholder="Enter Password" name="password" required>
+                                    <input class="w-100 form-control" id="pass" type="password" placeholder="Enter Password" name="password" required>
                                 </li>
-                                <li class="list-group-item text-center">
+                                <li class="list-group-item text-center" style="padding-top: 32px; padding-bottom: 24px">
                                     <button class="btn btn-primary w-50" type="submit" id="submit">Login</button><br>
-                                    <input id="remember" style="margin-top: 8px" type="checkbox" name="remember"> Remember me
+                                    <input id="remember" style="margin-top: 16px" type="checkbox" name="remember"> Remember me
                                 </li>
                             </ul>
                         </div>
