@@ -15,8 +15,8 @@ class TestSignup(unittest.TestCase):
         chrome_opts.add_argument("--no-sandbox")
         chrome_opts.add_argument("--disable-gpu")
         self.driver = webdriver.Chrome(options=chrome_opts)
-        # self.driver.get("https://prodigal-gamma.azurewebsites.net/")
-        self.driver.get("http://0.0.0.0:8000/")
+        self.driver.get("https://prodigal-gamma.azurewebsites.net/")
+        #  self.driver.get("http://0.0.0.0:8000/")
 
     def test_homepage_rendering(self):
         assert "Welcome to Prodigal!" in self.driver.title
