@@ -4,176 +4,22 @@
         {% load static %}
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/3/w3.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
         <link rel="stylesheet" href="{% static "css/styles.css" %}">
+        <script src={% static "js/autocomplete.js" %}></script>
         <title>Prodigal - Profile</title>
-        <script type="text/javascript">
-        function autocomplete(inp, arr) {
-              var currentFocus;
-              inp.addEventListener("input", function(e) {
-              var a, b, i, val = this.value;
-              closeAllLists();
-              if (!val) { return false;}
-              currentFocus = -1;
-              a = document.createElement("DIV");
-              a.setAttribute("id", this.id + "autocomplete-list");
-              a.setAttribute("class", "autocomplete-items position-absolute shadow-lg");
-              this.parentNode.appendChild(a);
-              x = 0;
-              for (i = 0; i < arr.length; i++) {
-                if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-                  b = document.createElement("DIV");
-                  b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-                  b.innerHTML += arr[i].substr(val.length);
-                  b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-                      b.addEventListener("click", function(e) {
-                      inp.value = this.getElementsByTagName("input")[0].value;
-                      closeAllLists();
-                      var form = document.getElementById("search");
-                      form.submit();
-                  });
-                  a.appendChild(b);
-                  x++;
-                }
-                /*if (x > 20) {
-                    x = 0;
-                    break;
-                }*/
-              }
-            });
-            inp.addEventListener("keydown", function(e) {
-              var x = document.getElementById(this.id + "autocomplete-list");
-              if (x) x = x.getElementsByTagName("div");
-              if (e.keyCode == 40) {
-                currentFocus++;
-                addActive(x);
-              } else if (e.keyCode == 38) { //up
-                currentFocus--;
-                addActive(x);
-              } else if (e.keyCode == 13) {
-                e.preventDefault();
-                if (currentFocus > -1) {
-                  if (x) x[currentFocus].click();
-                }
-              }
-            });
-            function addActive(x) {
-                if (!x) return false;
-                removeActive(x);
-                if (currentFocus >= x.length) currentFocus = 0;
-                if (currentFocus < 0) currentFocus = (x.length - 1);
-                x[currentFocus].classList.add("autocomplete-active");
-                x[currentFocus].scrollIntoView(false);
-            }
-            function removeActive(x) {
-                for (var i = 0; i < x.length; i++) {
-                  x[i].classList.remove("autocomplete-active");
-                }
-            }
-            function closeAllLists(elmnt) {
-                var x = document.getElementsByClassName("autocomplete-items");
-                for (var i = 0; i < x.length; i++) {
-                  if (elmnt != x[i] && elmnt != inp) {
-                    x[i].parentNode.removeChild(x[i]);
-                  }
-                }
-            }
-        }       
-        </script>
-        <style type="text/css">
-        .autocomplete-active {
-            /*when navigating through the items using the arrow keys:*/
-            background-color: DodgerBlue;
-            color: #ffffff;
-            width: 262px;
-            background-clip: padding-box;
-        }
-
-        .autocomplete-items {
-            position: fixed;
-            top: 80%;
-            padding: 5px 0 0 10px;
-            z-index: 1000;
-            overflow-y: scroll;
-            width: 300px;
-            height: 200px;
-            background-color: white;
-            border: solid 1px;
-        }
-
-        .autocomplete {
-          color: #ff0000;
-        }
-
-        .navbar-black {
-            background-color: black;
-            padding: 16px 10px 16px 5px;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 36px 0 36px 0;
-            background-color: black;
-        }
-
-        .footer-item {
-            color: white;
-            font-size:24px;
-        }
-
-        .dropbtn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 16px;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-
-        .dropdown-content a:hover {background-color: #f1f1f1}
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .dropdown:hover .dropbtn {
-            background-color: #3e8e41;
-        }
-        </style>
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-black navbar-dark fixed-top">
-            <a href="/prodigal_app" id="navbar_logo" class="navbar-brand"><img src="{% static "images/navbar_logo.png" %}" alt="prodigal_logo_horizontal"></a>
+            <a href="/prodigal_app" id="navbar_logo" class="navbar-brand"><img src="{% static "images/navbar_logo.png" %}" alt="prodigal_logo_horizontal" style="margin-bottom: 0"></a>
             <div class="mx-auto">
                 <form class="form-inline" id="search" method="POST" name="search_form" action="search">
                     {% csrf_token %}
-                    <input class="form-control" type="search" id="navbar_searchbox" name="search_key" style="width: 300px" placeholder="Search by ticker symbol..."/>
+                    <input class="form-control" type="search" id="navbar_searchbox" name="search_key" style="width: 300px" placeholder="Enter Company Name..."/>
                     <button id="navbar_search_submit" type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </form>
                 <script>
@@ -183,28 +29,29 @@
                  autocomplete(searchBox, stocks);
                 </script>
             </div>
-            <form method="post" id="sector_search" action="search">{% csrf_token %}</form>
-                <!-- change below items to dropdown -->
-                <div class="dropdown" style="width:100px;height:100px;overflow:auto;">
-                  <button class="dropbtn">Sector</button>
-                  <div class="dropdown-content">
-                    <a><button id="Basic Industries" class="w3-button" type="submit" name="search_key" value="sector = Basic Industries" form="sector_search">Basic Industries</button></a>
-                    <a><button id="Capital Goods" class="w3-button" type="submit" name="search_key" value="sector = Capital Goods" form="sector_search">Capital Goods</button></a>
-                    <a><button id="Consumer Durables" class="w3-button" type="submit" name="search_key" value="sector = Consumer Durables" form="sector_search">Consumer Durables</button></a>
-                    <a><button id="Consumer Non-Durables" class="w3-button" type="submit" name="search_key" value="sector = Consumer Non-Durables" form="sector_search">Consumer Non-Durables</button></a>
-                    <a><button id="Consumer Services" class="w3-button" type="submit" name="ssearch_key value="sector = Consumer Services" form="sector_search">Consumer Services</button></a>
-                    <a><button id="Energy" class="w3-button" type="submit" name="search_key" value="sector = Energy" form="sector_search">Energy</button></a>
-                    <a><button id="Finance" class="w3-button" type="submit" name="search_key" value="sector = Finance" form="sector_search">Finance</button></a>
-                    <a><button id="Health Care" class="w3-button" type="submit" name="search_key" value="sector = Health Care" form="sector_search">Health Care</button></a>
-                    <a><button id="Miscellaneous" class="w3-button" type="submit" name="search_key" value="sector = Miscellaneous" form="sector_search">Miscellaneous</button></a>
-                    <a><button id="Public Utilities" class="w3-button" type="submit" name="search_key" value="sector = Public Utilities" form="sector_search">Public Utilities</button></a>
-                    <a><button id="Technology" class="w3-button" type="submit" name="search_key" value="sector = Technology" form="sector_search">Technology</button></a>
-                    <a><button id="Transportation" class="w3-button" type="submit" name="search_key" value="sector = Transportation" form="sector_search">Transportation</button></a>
-                    <a><button id="n/a" class="w3-button" type="submit" name="search_key" value="sector = n/a" form="sector_search">n/a</button></a>
-                  </div>
-                </div>
-            </div>
-            <ul class="nav navbar-nav ml-auto justify-content-end">
+            <ul class="nav navbar-nav justify-content-end">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="sector_dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 20px">
+                        Sectors
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-lebelledby="sector_dropdown">
+                        <form method="post" id="sector_search" action="search">{% csrf_token %}</form>
+                        <a><button id="Basic Industries" class="dropdown-item" type="submit" name="search_key" value="sector = Basic Industries" form="sector_search">Basic Industries</button></a>
+                        <a><button id="Capital Goods" class="dropdown-item" type="submit" name="search_key" value="sector = Capital Goods" form="sector_search">Capital Goods</button></a>
+                        <a><button id="Consumer Durables" class="dropdown-item" type="submit" name="search_key" value="sector = Consumer Durables" form="sector_search">Consumer Durables</button></a>
+                        <a><button id="Consumer Non-Durables" class="dropdown-item" type="submit" name="search_key" value="sector = Consumer Non-Durables" form="sector_search">Consumer Non-Durables</button></a>
+                        <a><button id="Consumer Services" class="dropdown-item" type="submit" name="search_key" value="sector = Consumer Services" form="sector_search">Consumer Services</button></a>
+                        <a><button id="Energy" class="dropdown-item" type="submit" name="search_key" value="sector = Energy" form="sector_search">Energy</button></a>
+                        <a><button id="Finance" class="dropdown-item" type="submit" name="search_key" value="sector = Finance" form="sector_search">Finance</button></a>
+                        <a><button id="Health Care" class="dropdown-item" type="submit" name="search_key" value="sector = Health Care" form="sector_search">Health Care</button></a>
+                        <a><button id="Miscellaneous" class="dropdown-item" type="submit" name="search_key" value="sector = Miscellaneous" form="sector_search">Miscellaneous</button></a>
+                        <a><button id="Public Utilities" class="dropdown-item" type="submit" name="search_key" value="sector = Public Utilities" form="sector_search">Public Utilities</button></a>
+                        <a><button id="Technology" class="dropdown-item" type="submit" name="search_key" value="sector = Technology" form="sector_search">Technology</button></a>
+                        <a><button id="Transportation" class="dropdown-item" type="submit" name="search_key" value="sector = Transportation" form="sector_search">Transportation</button></a>
+                        <div class="dropdown-divider"></div>
+                        <a><button id="n/a" class="dropdown-item" type="submit" name="search_key" value="sector = n/a" form="sector_search">n/a</button></a>
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a href="signout" class="nav-link" style="font-size: 20px">Sign Out</a>
                 </li>
@@ -213,7 +60,7 @@
         <!-- Page body -->
         <div id="profile_container" style="background-image: url(../static/images/profile_bg.jpg); background-size: cover; min-height: 100vh; padding-bottom: 50px">
             <br>
-            <div class="card shadow-lg" style="width: 100%; max-width: 70%; margin: 100px auto 0 auto">
+            <div class="card shadow-lg" style="width: 100%; max-width: 70%; margin: 10vh auto 0 auto">
                 <div id="user_container" class="d-lg-flex flex-row" style="margin: 16px 0 16px 0">
                     <div id="avatar">
                         {% if request.session.gender == 'Male' %}
@@ -255,7 +102,7 @@
                 <div class="card-header">
                     <h2>Favorites</h2>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="max-height: 350px; overflow-y: scroll; margin: 8px 0 8px 0">
                     <ul class="list-group" id="favorite_list">
                         {% if favorites %}
                         {% for ticker, name in favorites %}
