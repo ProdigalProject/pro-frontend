@@ -167,8 +167,8 @@ def search(request):
     company_list = user_obj.getCompaniesName()
 
     # search by sector
-    if 'sector:' in company_search:
-        sector_symbol = company_search.lstrip("sector:")
+    if 'sector = ' in company_search:
+        sector_symbol = company_search.lstrip("sector = ")
         result_list = user_obj.search_by_sector(sector_symbol)
         if result_list is None:
             return render(request, "sector.html", {"msg": "Sector didn't find.", "company_list": company_list})
@@ -183,7 +183,7 @@ def search(request):
         if ticker is None:
             return render(request, "search.html", {"msg": "No Matching Result.", "company_list": company_list})
         # search for new company
-        if mode != 'comparison':
+        if 'comparison' not in mode:
             # search first and create a record endpoint
             return_dict, company_sym = user_obj.nasdaq_search(ticker)
             # get pridiction for further use
