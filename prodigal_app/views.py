@@ -212,6 +212,7 @@ def search(request):
         # compare companies
         else:
             # TODO: add comparison for more than two factors
+            # TODO: don't allow comparing same company
             # just come up with a method that compare two companies
             # get first company (base company) data
             first_dict, company_sym_first = user_obj.nasdaq_search(request.session.get('last_search'))

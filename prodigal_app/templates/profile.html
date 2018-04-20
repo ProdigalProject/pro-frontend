@@ -184,6 +184,7 @@
                 </script>
             </div>
             <form method="post" id="sector_search" action="search">{% csrf_token %}</form>
+                <!-- change below items to dropdown -->
                 <div class="dropdown" style="width:100px;height:100px;overflow:auto;">
                   <button class="dropbtn">Sector</button>
                   <div class="dropdown-content">
@@ -209,30 +210,6 @@
                 </li>
             </ul>
         </nav>
-        <!-- Navigation
-        <div class="w3-top">
-            <nav class="w3-bar w3-black w3-padding-16">
-                <a href="/prodigal_app" id="navbar_logo" class="w3-bar-item"><img src="{% static "images/navbar_logo.png" %}" alt="prodigal_logo_horizontal"></a>
-                <div class="searchbar-container w3-large">
-                    <div class="autoComplete">
-                        <form id="search" method="POST" name="search_form" action="search">
-                            {% csrf_token %}
-                            <input type="search" id="navbar_searchbox" name="search_key" class="search-bar" placeholder="Search by ticker symbol...">
-                            <button id="navbar_search_submit" type="submit" class="search-submit w3-button w3-blue w3-large"><i class="fa fa-search"></i></button>
-                        </form>
-
-                    </div>
-                    <script>
-                     var stocks = JSON.parse(('{{ company_list }}').replace(/&#39;/g,'\"').replace(/&amp;/g, "&").replace(/&quot;/g,''));
-                     var searchBox = document.getElementById("navbar_searchbox");
-                     searchBox.autocomplete = 'off';
-                     autocomplete(searchBox, stocks);
-                    </script>
-                </div>
-                <a href="signout" class="w3-bar-item w3-button w3-large w3-right">Sign Out</a>
-            </nav>
-        </div>
-        -->
         <!-- Page body -->
         <div id="profile_container" style="background-image: url(../static/images/profile_bg.jpg); background-size: cover; min-height: 100vh; padding-bottom: 50px">
             <br>
