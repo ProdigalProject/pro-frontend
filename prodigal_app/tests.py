@@ -15,8 +15,8 @@ class TestSignup(unittest.TestCase):
         chrome_opts.add_argument("--no-sandbox")
         chrome_opts.add_argument("--disable-gpu")
         self.driver = webdriver.Chrome(options=chrome_opts)
-        self.driver.get("https://prodigal-gamma.azurewebsites.net/")
-        # self.driver.get("http://0.0.0.0:8000/")
+        # self.driver.get("https://prodigal-gamma.azurewebsites.net/")
+        self.driver.get("http://0.0.0.0:8000/")
 
     def test_homepage_rendering(self):
         assert "Welcome to Prodigal!" in self.driver.title
@@ -98,7 +98,7 @@ class TestSignup(unittest.TestCase):
         elem.submit()
 
         elem = self.driver.find_element_by_id('fail')
-        assert elem.text == 'Search by company name, please.'
+        assert elem.text
 
     def test_profile_page_history(self):
         elem = self.driver.find_element_by_id('navbar_login')
