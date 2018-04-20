@@ -142,13 +142,14 @@
             var chart_json_second = JSON.parse( decoded_second );
 
             var data = new google.visualization.DataTable();
-            data.addColumn('date', 'Date');
-            data.addColumn('number', '{{ name }}' + 'Closing');
-            data.addColumn('number', '{{ name_second }}' + 'Closing');
+
 
             var numRows = chart_json_first.length < chart_json_second.length ? chart_json_first.length : chart_json_second.length;
 	        console.log('{{mode}}');
 	        if ('{{ mode }}' == "comparison_absolute"){
+	            data.addColumn('date', 'Date');
+                data.addColumn('number', '{{ name }}' + 'Closing');
+                data.addColumn('number', '{{ name_second }}' + 'Closing');
 	        	console.log('{{mode}}');
 	            for (var i = 0; i < numRows; i++){
 	                var a = chart_json_first[i].date;
@@ -196,6 +197,42 @@
 	                data.addRow(myrow);
 	            }
 	        }
+
+            if ('{{ mode }}' == "comparison_percentage"){
+                data.addColumn('date', 'Date');
+                data.addColumn('number', '{{ name }}' + 'Percentage Change');
+                data.addColumn('number', '{{ name_second }}' + 'Percentage Change');
+	        	console.log('{{mode}}');
+	            for (var i = 1; i < numRows; i++){
+	                var a = chart_json_first[i].date;
+	                var res = a.split("-");
+	                var d = new Date(res[0],res[1]-1,res[2]);
+	                var x = ((chart_json_first[i].closing - chart_json_first[i-1].closing)/chart_json_first[i-1].closing)*100
+                    var y = ((chart_json_second[i].closing - chart_json_second[i-1].closing)/chart_json_second[i-1].closing)*100
+	                var myrow = new Array(d, x, y);
+	                data.addRow(myrow);
+	            }
+
+
+	        }
+
+            if ('{{ mode }}' == "comparison_tendency"){
+                data.addColumn('date', 'Date');
+                data.addColumn('number', '{{ name }}' + 'Tendency with respect to ' +'{{ name_second  }}');
+	        	console.log('{{mode}}');
+	            for (var i = 1; i < numRows; i++){
+	                var a = chart_json_first[i].date;
+	                var res = a.split("-");
+	                var d = new Date(res[0],res[1]-1,res[2]);
+	                var x = ((chart_json_first[i].closing - chart_json_first[i-1].closing)/chart_json_first[i-1].closing)*100
+                    var y = ((chart_json_second[i].closing - chart_json_second[i-1].closing)/chart_json_second[i-1].closing)*100
+	                var myrow = new Array(d, x-y);
+	                data.addRow(myrow);
+	            }
+
+
+	        }
+
         }
         else{
             var chart_json_first = JSON.parse( decoded_first );
