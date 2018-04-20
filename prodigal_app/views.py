@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.core.mail import send_mail
 from prodigal_app.models import *
 import re
 
@@ -108,6 +109,9 @@ def validateEmail(email):
     if re.match("[a-zA-Z0-9][a-zA-Z0-9.\-_]*@[a-zA-Z0-9]+[.][a-zA-Z]+\Z", email):
         return True
     return False
+    
+def verifyEmail(email):
+    send_mail('Welcome from Prodigal', 'It works!', 'no-reply@prodigal.com', [email], fail_silently=False)
 
 def create_user(request):
     """
@@ -144,6 +148,7 @@ def create_user(request):
     else:
         # Redirect to login page
         messages.add_message(request, messages.INFO, 'Account created!')
+        verifyEmail(email)
         return redirect('login')
 
 
