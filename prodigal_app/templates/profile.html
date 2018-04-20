@@ -22,7 +22,7 @@
               currentFocus = -1;
               a = document.createElement("DIV");
               a.setAttribute("id", this.id + "autocomplete-list");
-              a.setAttribute("class", "autocomplete-items");
+              a.setAttribute("class", "autocomplete-items position-absolute shadow-lg");
               this.parentNode.appendChild(a);
               x = 0;
               for (i = 0; i < arr.length; i++) {
@@ -34,14 +34,16 @@
                       b.addEventListener("click", function(e) {
                       inp.value = this.getElementsByTagName("input")[0].value;
                       closeAllLists();
+                      var form = document.getElementById("search");
+                      form.submit();
                   });
                   a.appendChild(b);
                   x++;
                 }
-                if (x > 5) {
+                /*if (x > 20) {
                     x = 0;
                     break;
-                }
+                }*/
               }
             });
             inp.addEventListener("keydown", function(e) {
@@ -66,6 +68,7 @@
                 if (currentFocus >= x.length) currentFocus = 0;
                 if (currentFocus < 0) currentFocus = (x.length - 1);
                 x[currentFocus].classList.add("autocomplete-active");
+                x[currentFocus].scrollIntoView(false);
             }
             function removeActive(x) {
                 for (var i = 0; i < x.length; i++) {
@@ -92,7 +95,15 @@
         }
 
         .autocomplete-items {
-          color: #ff0000;
+            position: fixed;
+            top: 80%;
+            padding: 5px 0 0 10px;
+            z-index: 1000;
+            overflow-y: scroll;
+            width: 300px;
+            height: 200px;
+            background-color: white;
+            border: solid 1px;
         }
 
         .autocomplete {
@@ -121,19 +132,19 @@
         <nav class="navbar navbar-expand-lg navbar-black navbar-dark fixed-top">
             <a href="/prodigal_app" id="navbar_logo" class="navbar-brand"><img src="{% static "images/navbar_logo.png" %}" alt="prodigal_logo_horizontal"></a>
             <div class="mx-auto">
-                <div class="autoComplete">
-                    <form class="form-inline" id="search" method="POST" name="search_form" action="search">
-                        {% csrf_token %}
-                        <input class="form-control" type="search" id="navbar_searchbox" name="search_key" style="width: 300px" placeholder="Search by ticker symbol...">
-                        <button id="navbar_search_submit" type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                    </form>
-                </div>
+                <form class="form-inline" id="search" method="POST" name="search_form" action="search">
+                    {% csrf_token %}
+                    <input class="form-control" type="search" id="navbar_searchbox" name="search_key" style="width: 300px" placeholder="Search by ticker symbol..."/>
+                    <button id="navbar_search_submit" type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                </form>
                 <script>
                  var stocks = JSON.parse(('{{ company_list }}').replace(/&#39;/g,'\"'));
                  var searchBox = document.getElementById("navbar_searchbox");
                  searchBox.autocomplete = 'off';
                  autocomplete(searchBox, stocks);
                 </script>
+            </div>
+
             </div>
             <ul class="nav navbar-nav ml-auto justify-content-end">
                 <li class="nav-item">
