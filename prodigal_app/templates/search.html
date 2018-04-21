@@ -297,8 +297,10 @@
         <div id="sector_list_container" style="background-image: url(../static/images/profile_bg.jpg); background-size: cover; min-height: 100vh; padding-bottom: 50px">
         <br>
         {% if msg %}
-        <div id="search-container" style="margin: 80px 2% 0 2%; min-height:100vh">
-            <h1 id="fail"> {{ msg }} </h1>
+        <div class="card shadow-lg" style="width: 100%; max-width: 70%; margin: 100px auto 0 auto">
+            <div class="card-body">
+                <h1 id="fail">{{ msg }}</h1>
+            </div>
         </div>
         <!-- Search Results -->
         {% else %}
@@ -358,8 +360,8 @@
                 </ul>
             </div>
         </div>
-        </div>
         {% endif %}
+        </div>
         <!-- Footer -->
         <footer id="Home" class="footer">
             <a class="footer-item" href="#"><i class="fa fa-facebook-official"></i></a>&nbsp;
