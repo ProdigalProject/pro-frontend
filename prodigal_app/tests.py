@@ -1,6 +1,5 @@
 from django.test import TestCase
-
-# Create your tests here.
+import pycodestyle
 import unittest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -123,7 +122,20 @@ class TestSignup(unittest.TestCase):
         assert elem.get_attribute("value") == 'Adobe Systems Incorporated'
 
     def tearDown(self):
-        self.driver.quit
+        self.driver.quit()
+
+
+class CodeStyleTestCase(TestCase):
+
+    def test_pep8(self):
+        # ignore trailing whitespace warning
+        pep = pycodestyle.StyleGuide()
+        test_files = ['prodigal_app/views.py', 'prodigal_app/models.py',
+                      'prodigal_app/tests.py', 'prodigal_app/test_backend.py',
+                      'prodigal_app/urls.py', 'prodigal_app/nasdaq_scraper.py',
+                      ]
+        result = pep.check_files(test_files)
+        self.assertEqual(result.total_errors, 0)
 
 
 if __name__ == '__main__':
