@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.core.mail import send_mail
 from prodigal_app.models import *
+import re
 
 
 # Create your views here.
@@ -103,6 +105,14 @@ def signout(request):
     return redirect('index')
 
 
+def validateEmail(email):
+    if re.match("[a-zA-Z0-9][a-zA-Z0-9.\-_]*@[a-zA-Z0-9]+[.][a-zA-Z]+\Z", email):
+        return True
+    return False
+    
+def verifyEmail(email):
+    send_mail('Welcome from Prodigal', '- Balaji Pandurangan Baskaran, Gabrielle Chen, Htut Khine Win, Jamie Paterson, Sean Lin, Wonwoo Seo', 'prodigalapp@gmail.com', [email], fail_silently=False)
+
 def create_user(request):
     """
     Create a user with given username, email address and password.
@@ -123,6 +133,9 @@ def create_user(request):
     elif email == '':
         messages.add_message(request, messages.INFO, 'email is required')
         return render(request, "Signup.html")
+    elif validateEmail(email) == False:
+        messages.add_message(request, messages.INFO, 'email is invalid')
+        return render(request, "Signup.html")
     elif password == '':
         messages.add_message(request, messages.INFO, 'password is required')
         return render(request, "Signup.html")
@@ -135,6 +148,7 @@ def create_user(request):
     else:
         # Redirect to login page
         messages.add_message(request, messages.INFO, 'Account created!')
+        verifyEmail(email)
         return redirect('login')
 
 
