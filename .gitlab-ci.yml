@@ -1,18 +1,26 @@
-Selenium_Test:
-  script:
-    - az login --msi
-    - az webapp deployment source sync -n prodigal-gamma -g prodigal
-    - cd /home/gitlab-runner/builds/b74f8bb5/0/prodigal/pro-frontend/
-    - python3 prodigal_app/tests.py
+image: python:3.6
 
-  stage: test
-  only:
-    - master
+stages: 
+    - test
+    - deploy 
 
-Azure_Deploy:
-  script:
-    - az webapp deployment source sync -n Prodigal-beta -g Prodigal-beta
-    - az logout
-  stage: deploy
-  only:
-    - master
+before_script: 
+    - apt update -qq && apt install libmysqlclient-dev
+    - pip install -r requirements.txt
+
+test: 
+    stage: test
+    only: ci_test
+    script: 
+        - az login --msi
+        - az webapp deployment source sync -n prodigal-gamma -g prodigal
+        - python prodigal_app/tests.py
+
+deploy: 
+    stage: deploy
+    script: 
+        - pip install azure-cli 
+        - az login --msi
+        - az webapp deployment source sync -n Prodigal-beta -g Prodigal-beta
+        - az logout
+        - echo "[INFO] Currently testing out with docker deploy."
