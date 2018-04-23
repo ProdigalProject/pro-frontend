@@ -248,7 +248,7 @@ class SearchUtility(User):
         news_list, company_desc = nasdaq_scraper.scrape(ticker)
         # use ticker symbol to get info from API
         url = "https://prodigal-ml.azurewebsites.net" \
-              "/stocks/" + ticker
+              "/stocks/" + ticker + "?apikey=cHJvZGlnYWxfYXBwX2FwaV9rZXk="
         headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)'
                                  'AppleWebKit/537.36 (KHTML, like Gecko) \
                    Chrome/54.0.2840.90 Safari/537.36'}
@@ -297,7 +297,8 @@ class SearchUtility(User):
         list of following five days closing price if found
         """
         url = "https://prodigal-ml.a" \
-              "zurewebsites.net/stocks/" + ticker + "/runexpr"
+              "zurewebsites.net/stocks/" + ticker + "/runexpr" + \
+              "?apikey=cHJvZGlnYWxfYXBwX2FwaV9rZXk="
         response = requests.get(url)
         if response.status_code == 404:  # company not found in api
             return None
