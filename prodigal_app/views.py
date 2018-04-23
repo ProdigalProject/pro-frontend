@@ -111,6 +111,9 @@ def validateEmail(email):
         return True
     return False
     
+def unsubscribe():
+    return 0    
+    
 def verifyEmail(email, username):
     msg = EmailMessage(
     'Welcome to Prodigal',
@@ -291,7 +294,7 @@ def add_favorite(request):
     
     msg = EmailMessage(
         ' ' + company_sym + ' has been added to your favorites',
-        ' ',
+        '<img src="https://prodigal-beta.azurewebsites.net/static/images/main_logo.png">',
         'prodigalapp@gmail.com',
         [request.session.get('email')],
         )
@@ -315,7 +318,7 @@ def remove_favorite(request):
     
     msg = EmailMessage(
         ' ' + company_sym + ' has been removed from your favorites',
-        ' ',
+        '<img src="https://prodigal-beta.azurewebsites.net/static/images/main_logo.png">',
         'prodigalapp@gmail.com',
         [request.session.get('email')],
         )
