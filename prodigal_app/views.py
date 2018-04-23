@@ -288,6 +288,16 @@ def add_favorite(request):
     company_sym = request.session.get('last_search')
     user_obj.add_favorite(company_sym)
     request.session['favorites'] = user_obj.get_favorite()
+    
+    msg = EmailMessage(
+        ' ' + company_sym + ' has been added to your favorites',
+        ' ',
+        'prodigalapp@gmail.com',
+        [request.session.get('email')],
+        )
+    msg.content_subtype = "html"
+    msg.send(fail_silently=True)
+        
     return render(request, "favorite_btn.html", {'favorited': True})
 
 
@@ -302,8 +312,18 @@ def remove_favorite(request):
     company_sym = request.session.get('last_search')
     user_obj.remove_favorite(company_sym)
     request.session['favorites'] = user_obj.get_favorite()
+    
+    msg = EmailMessage(
+        ' ' + company_sym + ' has been removed from your favorites',
+        ' ',
+        'prodigalapp@gmail.com',
+        [request.session.get('email')],
+        )
+    msg.content_subtype = "html"
+    msg.send(fail_silently=True)
+        
+    
     return render(request, "favorite_btn.html", {'favorited': False})
-
 
 def sector(request):
     """
