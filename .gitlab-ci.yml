@@ -8,8 +8,8 @@ Selenium_Test:
     - coverage report
 
   stage: test
-  #only:
-  #  - master
+  only:
+    - master
 
 Azure_Deploy:
   script:
