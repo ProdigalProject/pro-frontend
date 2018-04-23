@@ -13,7 +13,7 @@ test:
     only: 
         - ci_test
     script: 
-        - python prodigal_app/tests.py
+        - python manage.py test
 
 deploy: 
     stage: deploy
