@@ -15,9 +15,6 @@ import hashlib
 import requests
 
 
-api_key = 'cHJvZGlnYWxfYXBwX2FwaV9rZXk='
-
-
 class NasdaqCompanies(models.Model):
     """
     Model for companies listed in Nasdaq market.
@@ -170,20 +167,17 @@ class User(models.Model):
         else:
             history = self.history
             h = history.split(',')
-            modify = 0  # flag for modify the history
-            # compare the histroy with search result this term
-            for entry in h:
-                if int(entry) == company_id:
-                    modify = 1
-                    break
-            if modify == 0:
-                # history search less than 5
-                if len(h) < 5:
+            # history search less than 5
+            if len(h) < 5:
+                # compare the most recent one with search result this term
+                if int(h[0]) != company_id:
                     history = str(company_id) + ',' + history
-                # more than 5 history
-                else:
+            # more than 5 history
+            else:
+                # compare the most recent one with search result this term
+                if int(h[0]) != company_id:
                     history = str(company_id) + ',' + h[0] + ','\
-                          + h[1] + ',' + h[2] + ',' + h[3]
+                              + h[1] + ',' + h[2] + ',' + h[3]
         self.history = history
         self.save()
 
@@ -219,9 +213,10 @@ class SearchUtility(User):
         # use ticker symbol to get info from API
         # TODO: duplicate data
         url = "https://prodigal-ml.azurewebsites.net" \
-              "/stocks/" + ticker + "?" + api_key
-        headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)' \
-        'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.90 Safari/537.36'}
+              "/stocks/" + ticker
+        headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)'
+                                 'AppleWebKit/537.36 (KHTML, like Gecko) \
+                   Chrome/54.0.2840.90 Safari/537.36'}
         response = requests.get(url, headers=headers)
         if response.status_code == 404:  # company not found in api
             return_dict = dict(newslist=news_list,
@@ -266,8 +261,8 @@ class SearchUtility(User):
         :return: None if no data proviede,
         list of following five days closing price if found
         """
-        url = "https://prodigal-ml.azurewebsites.net/stocks/" + ticker + \
-              "/runexpr" + "?" + api_key
+        url = "https://prodigal-ml.a" \
+              "zurewebsites.net/stocks/" + ticker + "/runexpr"
         response = requests.get(url)
         if response.status_code == 404:  # company not found in api
             return None
@@ -284,7 +279,8 @@ class SearchUtility(User):
         """
         # list for all companies name
         company_list = []
-        company_obj_all = NasdaqCompanies.objects.values_list('name', flat=True)
+        company_obj_all = NasdaqCompanies.objects.values_list('name',
+                                                              flat=True)
         company_obj_all = company_obj_all.distinct()  # get all tickers
         for company in company_obj_all:
             company_list.append(company)
@@ -298,7 +294,7 @@ class SearchUtility(User):
         company ticker
         """
         companies = NasdaqCompanies.objects.filter(name=search_name)
-        if not companies: # name not in company list
+        if not companies:  # name not in company list
             return None
         else:
             company_ticker = companies[0].symbol
