@@ -15,6 +15,7 @@ test:
     only: 
         - ci_test
     script: 
+        - python manage.py flush --database test_webappdb
         - python manage.py test
 
 deploy: 
