@@ -10,7 +10,8 @@ before_script:
 
 test: 
     stage: test
-    only: ci_test
+    only: 
+        - ci_test
     script: 
         - az login --msi
         - az webapp deployment source sync -n prodigal-gamma -g prodigal
@@ -18,6 +19,8 @@ test:
 
 deploy: 
     stage: deploy
+    only: 
+        - ci_test
     script: 
         - pip install azure-cli 
         - az login --msi
