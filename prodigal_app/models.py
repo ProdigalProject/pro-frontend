@@ -75,7 +75,7 @@ class User(models.Model):
         return 0
 
     @staticmethod
-    def verify_login(username, email, pw):
+    def verify_login(username, pw):
         """
         Verifies given login credentials.
         Class doesn't need to be instantiated before calling this function.
