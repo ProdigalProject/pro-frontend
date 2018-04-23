@@ -5,9 +5,7 @@ stages:
     - deploy 
 
 before_script: 
-    - find / -iname "chromedriver"
-    - export PATH=$PATH:$(find / -iname "chromedriver")
-    - echo $PATH
+    - export PATH=$PATH:/builds/prodigal/pro-frontend/
     - apt update -qq && apt install -y libmysqlclient-dev
     - pip install -r requirements.txt
 
