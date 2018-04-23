@@ -227,7 +227,6 @@ class SearchUtility(User):
         # start scraper
         news_list, company_desc = nasdaq_scraper.scrape(ticker)
         # use ticker symbol to get info from API
-        # TODO: duplicate data
         url = "https://prodigal-ml.azurewebsites.net" \
               "/stocks/" + ticker
         headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)'

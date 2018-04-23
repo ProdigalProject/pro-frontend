@@ -213,42 +213,47 @@ def search(request):
             return render(request, "search.html", return_dict)
         # compare companies
         else:
-            # TODO: add comparison for more than two factors
-            # just come up with a method that compare two companies
-            # get first company (base company) data
-            first_dict, company_sym_first = \
-                user_obj.nasdaq_search(request.session.get('last_search'))
-            # get pridiction for further use
-            pridiction = user_obj.pridict(request.session.get('last_search'))
-            if first_dict is None:  # no first company match
-                return render(request, "search.html",
-                              {"msg": "No Comparison Object.",
-                               "company_list": company_list})
-            # get second compant data
-            second_dict, company_sym_second = user_obj.nasdaq_search(ticker)
-            # don't allow comparing same company
-            if company_sym_first == company_sym_second:
-                print(1)
-                first_dict["pridiction"] = pridiction
-                first_dict["company_list"] = company_list
-                return render(request, "search.html", first_dict)
-            pridiction_second = user_obj.pridict(ticker)
-            if second_dict is None:  # no second compant match
-                if pridiction is not None:
-                    first_dict["pridiction"] = pridiction
-                    first_dict["company_list"] = company_list
-                return render(request, "search.html", first_dict)
-            return_dict = first_dict.copy()
-            return_dict["name_second"] = second_dict["name"]
-            return_dict["chart_json_second"] = second_dict["chart_json"]
-            if pridiction is not None:
-                return_dict["pridiction"] = pridiction
-            if pridiction_second is not None:
-                return_dict["pridiction_second"] = pridiction_second
-            return_dict["company_list"] = company_list
-            print(mode)
-            return_dict["mode"] = mode
-            return render(request, "search.html", return_dict)
+            return compare_company(
+                request, mode, user_obj, ticker, company_list)
+
+
+def compare_company(request, mode, user_obj, ticker, company_list):
+    """
+    Helper function for comparison
+    :param request: request from user
+    :return: rendered html
+    """
+    # get first company (base company) data
+    first_dict, company_sym_first = \
+        user_obj.nasdaq_search(request.session.get('last_search'))
+    # get pridiction for further use
+    pridiction = user_obj.pridict(request.session.get('last_search'))
+    if first_dict is None:  # no first company match
+        return render(request, "search.html",
+                      {"msg": "No Comparison Object.",
+                       "company_list": company_list})
+    # get second compant data
+    second_dict, company_sym_second = user_obj.nasdaq_search(ticker)
+    if company_sym_first == company_sym_second:
+        first_dict["pridiction"] = pridiction
+        first_dict["company_list"] = company_list
+        return render(request, "search.html", first_dict)
+    pridiction_second = user_obj.pridict(ticker)
+    if second_dict is None:  # no second compant match
+        if pridiction is not None:
+            first_dict["pridiction"] = pridiction
+            first_dict["company_list"] = company_list
+        return render(request, "search.html", first_dict)
+    return_dict = first_dict.copy()
+    return_dict["name_second"] = second_dict["name"]
+    return_dict["chart_json_second"] = second_dict["chart_json"]
+    if pridiction is not None:
+        return_dict["pridiction"] = pridiction
+    if pridiction_second is not None:
+        return_dict["pridiction_second"] = pridiction_second
+    return_dict["company_list"] = company_list
+    return_dict["mode"] = mode
+    return render(request, "search.html", return_dict)
 
 
 def receive_token(request):
