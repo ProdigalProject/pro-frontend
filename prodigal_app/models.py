@@ -2,7 +2,7 @@ from django.db import models
 from os import urandom
 from base64 import b64encode
 from . import nasdaq_scraper
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 import hashlib
 import requests
 import re
@@ -78,17 +78,30 @@ class User(models.Model):
         return False
 
     @staticmethod
-    def verify_email(email):
+    def verify_email(email, username):
         """
         Sends welcome mail to given email address.
-        :param email:
-        :return:
+        :param email: user's email address
+        :param username: username of user
+        :return: No return value
         """
-        send_mail('Welcome from Prodigal', '- Balaji Pandurangan Baskaran, '
-                                           'Gabrielle Chen, Htut Khine Win, '
-                                           'Jamie Paterson, Sean Lin, '
-                                           'Wonwoo Seo',
-                  'prodigalapp@gmail.com', [email], fail_silently=False)
+        msg = EmailMessage(
+            'Welcome to Prodigal',
+            '<html><head><link rel="stylesheet" href="https://stackpath.'
+            'bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"></head>'
+            '<body><div class="container"><div class="jumbotron">'
+            '<h3>Welcome to Prodigal, ' + '<strong>' + username +
+            '!</strong></h3></div><img src="https://prodigal-beta.'
+            'azurewebsites.net/static/images/main_logo.png"><br></br>'
+            '<p>Thank you for signing up</p><br></br>'
+            '<form action="https://prodigal-beta.azurewebsites.net/">'
+            '<input type="submit" value="Go to Prodigal"/><br></form></div>'
+            '</body></html>',
+            'prodigalapp@gmail.com',
+            [email],
+        )
+        msg.content_subtype = "html"
+        msg.send(fail_silently=True)
 
     @staticmethod
     def verify_login(username, pw):
@@ -99,16 +112,14 @@ class User(models.Model):
         :param pw: password input from view
         :return: User object on success, None on fail
         """
-        i = 0
         try:
             user_obj = User.objects.get(username=username)
         except User.DoesNotExist:
-            i = 1
-        if (i == 1):
+            # try finding user by email
             try:
-                user_obj = User.objects.get(username=email)
+                user_obj = User.objects.get(email=username)
             except User.DoesNotExist:
-                return None 
+                return None
         # Check password hash
         salt = user_obj.salt
         input_hash = hashlib.sha256((salt + pw).encode()).hexdigest()

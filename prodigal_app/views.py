@@ -108,10 +108,6 @@ def signout(request):
     return redirect('index')
 
 
-def unsubscribe():
-    return 0    
-
-
 def create_user(request):
     """
     Create a user with given username, email address and password.
@@ -148,7 +144,7 @@ def create_user(request):
     else:
         # Redirect to login page
         messages.add_message(request, messages.INFO, 'Account created!')
-        User.verify_email(email)
+        User.verify_email(email, username)
         return redirect('login')
 
 
