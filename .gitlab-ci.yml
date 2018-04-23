@@ -6,7 +6,6 @@ stages:
 
 before_script: 
     - python --version
-    - echo "HELLO WORLD"
     - export PATH=$PATH:/builds/prodigal/pro-frontend/
     - apt update -qq && apt install -y libmysqlclient-dev
     - pip install -r requirements.txt
@@ -16,7 +15,6 @@ test:
     only: 
         - ci_test
     script: 
-        - python manage.py flush --database test_webappdb
         - python manage.py test
 
 deploy: 
