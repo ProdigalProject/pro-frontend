@@ -1,9 +1,11 @@
 Selenium_Test:
   script:
+    - pip3 install -r requirements.txt
     - az login --msi
     - az webapp deployment source sync -n prodigal-gamma -g prodigal
     - cd /home/gitlab-runner/builds/b74f8bb5/0/prodigal/pro-frontend/
-    - python3 prodigal_app/tests.py
+    - coverage run manage.py test prodigal_app/
+    - coverage report
 
   stage: test
   only:
