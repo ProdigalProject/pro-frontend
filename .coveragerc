@@ -14,6 +14,9 @@ omit =
     prodigal_app/test*.py
     prodigal_app/views.py
     prodigal_app/urls.py
+    # for VM
+    /home/*
+    /usr/*
 
 [html]
 directory = cover
