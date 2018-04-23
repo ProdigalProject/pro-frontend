@@ -6,11 +6,10 @@ stages:
 
 before_script: 
     - find / -iname "chromedriver"
-    - export PATH=$PATH:$(find ~/ -iname "chromedriver")
+    - export PATH=$PATH:$(find / -iname "chromedriver")
     - echo $PATH
     - apt update -qq && apt install -y libmysqlclient-dev
     - pip install -r requirements.txt
-    - export PATH=$PATH:$(find ~/ -iname "chromedriver")
 
 test: 
     stage: test
