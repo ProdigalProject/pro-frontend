@@ -83,10 +83,16 @@ class User(models.Model):
         :param pw: password input from view
         :return: User object on success, None on fail
         """
+        i = 0
         try:
             user_obj = User.objects.get(username=username)
         except User.DoesNotExist:
-            return None
+            i = 1
+        if (i == 1):
+            try:
+                user_obj = User.objects.get(username=email)
+            except User.DoesNotExist:
+                return None 
         # Check password hash
         salt = user_obj.salt
         input_hash = hashlib.sha256((salt + pw).encode()).hexdigest()
