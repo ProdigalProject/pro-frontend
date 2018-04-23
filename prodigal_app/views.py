@@ -114,7 +114,7 @@ def validateEmail(email):
 def verifyEmail(email, username):
     msg = EmailMessage(
     'Welcome to Prodigal',
-    '<h3><strong>Welcome to Prodigal, ' + [username] + '!</strong></h3><img src="https://prodigal-beta.azurewebsites.net/static/images/main_logo.png">',
+    '<h3>Welcome to Prodigal, ' + '<strong>' + [username] + '!</strong></h3><img src="https://prodigal-beta.azurewebsites.net/static/images/main_logo.png"><br></br><p>Thank you for signing up</p><br></br><form action="https://prodigal-beta.azurewebsites.net/profile"><input type="submit" value="Go to Your Profile"/></form>',
     'prodigalapp@gmail.com',
     [email],
     )
