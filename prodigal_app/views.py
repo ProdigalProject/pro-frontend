@@ -1,9 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
-from django.core.mail import send_mail
 from prodigal_app.models import *
-import re
 
 
 # Create your views here.
@@ -109,16 +107,6 @@ def signout(request):
     return redirect('index')
 
 
-def validateEmail(email):
-    if re.match("[a-zA-Z0-9][a-zA-Z0-9.\-_]*@[a-zA-Z0-9]+[.][a-zA-Z]+\Z", email):
-        return True
-    return False
-
-    
-def verifyEmail(email):
-    send_mail('Welcome from Prodigal', '- Balaji Pandurangan Baskaran, Gabrielle Chen, Htut Khine Win, Jamie Paterson, Sean Lin, Wonwoo Seo', 'prodigalapp@gmail.com', [email], fail_silently=False)
-
-
 def create_user(request):
     """
     Create a user with given username, email address and password.
@@ -134,33 +122,35 @@ def create_user(request):
     gender = request.POST.get('gender', '')
     # fail if blank
     if username == '':
-        messages.add_message(request, messages.INFO, 'username is required')
+        messages.add_message(request, messages.INFO, 'Username is required')
         return render(request, "Signup.html")
     elif email == '':
-        messages.add_message(request, messages.INFO, 'email is required')
+        messages.add_message(request, messages.INFO, 'Email is required')
         return render(request, "Signup.html")
-    elif validateEmail(email) == False:
-        messages.add_message(request, messages.INFO, 'email is invalid')
+    elif User.validate_email(email) is False:
+        messages.add_message(request, messages.INFO, 'Email is invalid')
         return render(request, "Signup.html")
     elif password == '':
-        messages.add_message(request, messages.INFO, 'password is required')
+        messages.add_message(request, messages.INFO, 'Password is required')
         return render(request, "Signup.html")
     # Create user using given values
     signup_status = User.create_user(username, email, gender, password)
     if signup_status == 1:
         # Username / email already used
-        messages.add_message(request, messages.INFO, 'Username/Email is already used.')
+        messages.add_message(request, messages.INFO,
+                             'Username/Email is already used.')
         return redirect('signup')
     else:
         # Redirect to login page
         messages.add_message(request, messages.INFO, 'Account created!')
-        verifyEmail(email)
+        User.verify_email(email)
         return redirect('login')
 
 
 def signup(request):
     """
-    Renders signup page from template. Signup process links 3rd-party auth data with prodigal profile.
+    Renders signup page from template. Signup process links 3rd-party auth data
+    with prodigal profile.
     :param request: request from user
     :return: rendered html
     """
@@ -191,8 +181,10 @@ def search(request):
         sector_symbol = company_search.lstrip("sector = ")
         result_list = user_obj.search_by_sector(sector_symbol)
         if result_list is None:
-            return render(request, "sector.html", {"msg": "Sector didn't find.", "company_list": company_list})
-        return_dict = {}
+            return render(request, "sector.html",
+                          {"msg": "Sector didn't find.",
+                           "company_list": company_list})
+        return_dict = dict()
         return_dict["list"] = result_list
         return_dict["sector"] = sector_symbol
         return_dict["company_list"] = company_list
@@ -201,7 +193,9 @@ def search(request):
     else:
         ticker = user_obj.getTickerByName(company_search)
         if ticker is None:
-            return render(request, "search.html", {"msg": "No Matching Result.", "company_list": company_list})
+            return render(request, "search.html",
+                          {"msg": "No Matching Result.",
+                           "company_list": company_list})
         # search for new company
         if 'comparison' not in mode:
             # search first and create a record endpoint
@@ -209,8 +203,10 @@ def search(request):
             # get pridiction for further use
             pridiction = user_obj.pridict(ticker)
             if return_dict is None:
-                return render(request, "search.html", {"msg": "No Matching Result.", "company_list": company_list})
-            request.session["last_search"] = company_sym  # For use in favorites
+                return render(request, "search.html",
+                              {"msg": "No Matching Result.",
+                               "company_list": company_list})
+            request.session["last_search"] = company_sym  # For favorites
             if pridiction is not None:
                 return_dict["pridiction"] = pridiction
             return_dict["company_list"] = company_list
@@ -220,14 +216,18 @@ def search(request):
             # TODO: add comparison for more than two factors
             # just come up with a method that compare two companies
             # get first company (base company) data
-            first_dict, company_sym_first = user_obj.nasdaq_search(request.session.get('last_search'))
+            first_dict, company_sym_first = \
+                user_obj.nasdaq_search(request.session.get('last_search'))
             # get pridiction for further use
             pridiction = user_obj.pridict(request.session.get('last_search'))
             if first_dict is None:  # no first company match
-                return render(request, "search.html", {"msg": "No Comparison Object.", "company_list": company_list})
+                return render(request, "search.html",
+                              {"msg": "No Comparison Object.",
+                               "company_list": company_list})
             # get second compant data
             second_dict, company_sym_second = user_obj.nasdaq_search(ticker)
-            if company_sym_first == company_sym_second:  # don't allow comparing same company
+            # don't allow comparing same company
+            if company_sym_first == company_sym_second:
                 print(1)
                 first_dict["pridiction"] = pridiction
                 first_dict["company_list"] = company_list
@@ -262,8 +262,9 @@ def receive_token(request):
 
 def favorite(request):
     """
-    Only called when first displaying the search page. Checks if currently displaying company is in favorite
-    list and display favorite button or unfavorite button.
+    Only called when first displaying the search page. Checks if currently
+    displaying company is in favorite list and display favorite button or
+    unfavorite button.
     :param request: request from user
     :return: rendered html
     """
@@ -283,7 +284,8 @@ def favorite(request):
 
 def add_favorite(request):
     """
-    Adds favorite company to database. This function only renders a button to iframe in search page.
+    Adds favorite company to database. This function only renders a button to
+    iframe in search page.
     :param request: request from user
     :return: rendered html
     """
@@ -297,7 +299,8 @@ def add_favorite(request):
 
 def remove_favorite(request):
     """
-    Removes favorite company from database. This function only renders a button to iframe in search page.
+    Removes favorite company from database. This function only renders a
+    button to iframe in search page.
     :param request: request from user
     :return: rendered html
     """

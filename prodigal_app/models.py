@@ -1,18 +1,11 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey has `on_delete` set to the desired behavior.
-#   * Remove `managed = False` lines if you wish to allow Django to create,
-#   * modify, and delete the table
-# Feel free to rename the models,
-# but don't rename db_table values or field names.
 from django.db import models
 from os import urandom
 from base64 import b64encode
 from . import nasdaq_scraper
+from django.core.mail import send_mail
 import hashlib
 import requests
+import re
 
 
 class NasdaqCompanies(models.Model):
@@ -69,10 +62,33 @@ class User(models.Model):
         hashed_pw = hashlib.sha256((salt + pw).encode()).hexdigest()
         user_obj = User(username=username, email=email,
                         gender=gender, password=hashed_pw, salt=salt)
-        # TODO: email verification require
-
         user_obj.save()
         return 0
+
+    @staticmethod
+    def validate_email(email):
+        """
+        Checks if email address is valid using regex matching.
+        :param email: email address string
+        :return: True if valid, False if not.
+        """
+        if re.match(r"[a-zA-Z0-9][a-zA-Z0-9.\-_]*@[a-zA-Z0-9]+[.][a-zA-Z]+\Z",
+                    email):
+            return True
+        return False
+
+    @staticmethod
+    def verify_email(email):
+        """
+        Sends welcome mail to given email address.
+        :param email:
+        :return:
+        """
+        send_mail('Welcome from Prodigal', '- Balaji Pandurangan Baskaran, '
+                                           'Gabrielle Chen, Htut Khine Win, '
+                                           'Jamie Paterson, Sean Lin, '
+                                           'Wonwoo Seo',
+                  'prodigalapp@gmail.com', [email], fail_silently=False)
 
     @staticmethod
     def verify_login(username, pw):

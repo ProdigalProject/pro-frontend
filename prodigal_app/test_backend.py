@@ -1,6 +1,5 @@
 #!/home/gitlab-runner/builds/b74f8bb5/0/prodigal/pro-frontend/venv/bin/python3
 from django.test import TestCase
-import django
 from prodigal_app.models import NasdaqCompanies, User, SearchUtility
 from prodigal_app.nasdaq_scraper import *
 
@@ -44,9 +43,23 @@ class UserTestCase(TestCase):
         assert self.test_user.create_user(
             "testab", "test235@gmail.com", "male", "1234") == 0
 
+    def test_verify_valid_email(self):
+        result = User.validate_email('test@gmail.com')
+        self.assertTrue(result)
+
+    def test_verify_invalid_email(self):
+        self.assertFalse(User.validate_email('test'))
+        self.assertFalse(User.validate_email('test@gmail'))
+        self.assertFalse(User.validate_email('test@.com'))
+
     def test_verify_login(self):
-        result = self.test_user.verify_login("test", "1234")
-        assert self.test_user
+        User.create_user("test10", "test10@gmail.com", "male", "1234")
+        result = User.verify_login("test10", "1234")
+        self.assertIsNotNone(result)
+
+    def test_verify_invalid_login(self):
+        result = User.verify_login("testinv", "1234")
+        self.assertIsNone(result)
 
     def test_favorite(self):
         self.test_user.add_favorite("AAPL")
