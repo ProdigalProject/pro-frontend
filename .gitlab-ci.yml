@@ -5,6 +5,7 @@ stages:
     - deploy 
 
 before_script: 
+    - python --version
     - export PATH=$PATH:/builds/prodigal/pro-frontend/
     - apt update -qq && apt install -y libmysqlclient-dev
     - pip install -r requirements.txt
