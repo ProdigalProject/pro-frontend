@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.core.mail import EmailMessage
 from prodigal_app.models import *
 
 
@@ -105,6 +106,10 @@ def signout(request):
     """
     request.session.flush()
     return redirect('index')
+
+
+def unsubscribe():
+    return 0    
 
 
 def create_user(request):
@@ -299,6 +304,15 @@ def add_favorite(request):
     company_sym = request.session.get('last_search')
     user_obj.add_favorite(company_sym)
     request.session['favorites'] = user_obj.get_favorite()
+    msg = EmailMessage(
+        ' ' + company_sym + ' has been added to your favorites',
+        '<img src="https://prodigal-beta.azurewebsites.net/'
+        'static/images/main_logo.png">',
+        'prodigalapp@gmail.com',
+        [request.session.get('email')],
+        )
+    msg.content_subtype = "html"
+    msg.send(fail_silently=True)
     return render(request, "favorite_btn.html", {'favorited': True})
 
 
@@ -314,6 +328,15 @@ def remove_favorite(request):
     company_sym = request.session.get('last_search')
     user_obj.remove_favorite(company_sym)
     request.session['favorites'] = user_obj.get_favorite()
+    msg = EmailMessage(
+        ' ' + company_sym + ' has been removed from your favorites',
+        '<img src="https://prodigal-beta.azurewebsites.net/'
+        'static/images/main_logo.png">',
+        'prodigalapp@gmail.com',
+        [request.session.get('email')],
+        )
+    msg.content_subtype = "html"
+    msg.send(fail_silently=True)
     return render(request, "favorite_btn.html", {'favorited': False})
 
 
