@@ -13,8 +13,6 @@ test:
     only: 
         - ci_test
     script: 
-        - az login --msi
-        - az webapp deployment source sync -n prodigal-gamma -g prodigal
         - python prodigal_app/tests.py
 
 deploy: 
@@ -22,8 +20,4 @@ deploy:
     only: 
         - ci_test
     script: 
-        - pip install azure-cli 
-        - az login --msi
-        - az webapp deployment source sync -n Prodigal-beta -g Prodigal-beta
-        - az logout
         - echo "[INFO] Currently testing out with docker deploy."
