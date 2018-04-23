@@ -1,18 +1,11 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey has `on_delete` set to the desired behavior.
-#   * Remove `managed = False` lines if you wish to allow Django to create,
-#   * modify, and delete the table
-# Feel free to rename the models,
-# but don't rename db_table values or field names.
 from django.db import models
 from os import urandom
 from base64 import b64encode
 from . import nasdaq_scraper
+from django.core.mail import send_mail, EmailMessage
 import hashlib
 import requests
+import re
 
 
 class NasdaqCompanies(models.Model):
@@ -69,10 +62,46 @@ class User(models.Model):
         hashed_pw = hashlib.sha256((salt + pw).encode()).hexdigest()
         user_obj = User(username=username, email=email,
                         gender=gender, password=hashed_pw, salt=salt)
-        # TODO: email verification require
-
         user_obj.save()
         return 0
+
+    @staticmethod
+    def validate_email(email):
+        """
+        Checks if email address is valid using regex matching.
+        :param email: email address string
+        :return: True if valid, False if not.
+        """
+        if re.match(r"[a-zA-Z0-9][a-zA-Z0-9.\-_]*@[a-zA-Z0-9]+[.][a-zA-Z]+\Z",
+                    email):
+            return True
+        return False
+
+    @staticmethod
+    def verify_email(email, username):
+        """
+        Sends welcome mail to given email address.
+        :param email: user's email address
+        :param username: username of user
+        :return: No return value
+        """
+        msg = EmailMessage(
+            'Welcome to Prodigal',
+            '<html><head><link rel="stylesheet" href="https://stackpath.'
+            'bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"></head>'
+            '<body><div class="container"><div class="jumbotron">'
+            '<h3>Welcome to Prodigal, ' + '<strong>' + username +
+            '!</strong></h3></div><img src="https://prodigal-beta.'
+            'azurewebsites.net/static/images/main_logo.png"><br></br>'
+            '<p>Thank you for signing up</p><br></br>'
+            '<form action="https://prodigal-beta.azurewebsites.net/">'
+            '<input type="submit" value="Go to Prodigal"/><br></form></div>'
+            '</body></html>',
+            'prodigalapp@gmail.com',
+            [email],
+        )
+        msg.content_subtype = "html"
+        msg.send(fail_silently=True)
 
     @staticmethod
     def verify_login(username, pw):
@@ -83,16 +112,14 @@ class User(models.Model):
         :param pw: password input from view
         :return: User object on success, None on fail
         """
-        i = 0
         try:
             user_obj = User.objects.get(username=username)
         except User.DoesNotExist:
-            i = 1
-        if (i == 1):
+            # try finding user by email
             try:
-                user_obj = User.objects.get(username=email)
+                user_obj = User.objects.get(email=username)
             except User.DoesNotExist:
-                return None 
+                return None
         # Check password hash
         salt = user_obj.salt
         input_hash = hashlib.sha256((salt + pw).encode()).hexdigest()
@@ -217,7 +244,6 @@ class SearchUtility(User):
         # start scraper
         news_list, company_desc = nasdaq_scraper.scrape(ticker)
         # use ticker symbol to get info from API
-        # TODO: duplicate data
         url = "https://prodigal-ml.azurewebsites.net" \
               "/stocks/" + ticker
         headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)'
