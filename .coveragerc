@@ -15,7 +15,7 @@ omit =
     prodigal_app/views.py
     prodigal_app/urls.py
     # for VM
-    /home/*
+    /home/gitlab-runner/.local/*
     /usr/*
 
 [html]
