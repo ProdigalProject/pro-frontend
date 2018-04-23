@@ -220,8 +220,9 @@ class SearchUtility(User):
         # TODO: duplicate data
         url = "https://prodigal-ml.azurewebsites.net" \
               "/stocks/" + ticker
-        headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)' \
-        'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.90 Safari/537.36'}
+        headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)'
+                                 'AppleWebKit/537.36 (KHTML, like Gecko) \
+                   Chrome/54.0.2840.90 Safari/537.36'}
         response = requests.get(url, headers=headers)
         if response.status_code == 404:  # company not found in api
             return_dict = dict(newslist=news_list,
@@ -284,7 +285,8 @@ class SearchUtility(User):
         """
         # list for all companies name
         company_list = []
-        company_obj_all = NasdaqCompanies.objects.values_list('name', flat=True)
+        company_obj_all = NasdaqCompanies.objects.values_list('name',
+                                                              flat=True)
         company_obj_all = company_obj_all.distinct()  # get all tickers
         for company in company_obj_all:
             company_list.append(company)
@@ -298,7 +300,7 @@ class SearchUtility(User):
         company ticker
         """
         companies = NasdaqCompanies.objects.filter(name=search_name)
-        if not companies: # name not in company list
+        if not companies:  # name not in company list
             return None
         else:
             company_ticker = companies[0].symbol

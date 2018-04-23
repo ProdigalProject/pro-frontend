@@ -68,11 +68,15 @@ def login_query(request):
     """
     username = request.POST.get('username')
     password = request.POST.get('password')
+    remember = request.POST.get('remember')
     # Try login
     user_obj = User.verify_login(username, password)
     if user_obj is None:  # login failed
         messages.add_message(request, messages.INFO, 'Login Failed!')
         return redirect('login')
+    # If 'Remember Me' is checked, keep session cookies for a week
+    if remember is not None:
+        request.session.set_expiry(604800)
     # Update session to pass to profile
     request.session['user_id'] = int(user_obj.userid)
     request.session['username'] = user_obj.username
@@ -110,6 +114,7 @@ def validateEmail(email):
     if re.match("[a-zA-Z0-9][a-zA-Z0-9.\-_]*@[a-zA-Z0-9]+[.][a-zA-Z]+\Z", email):
         return True
     return False
+
     
 def unsubscribe():
     return 0    
@@ -124,6 +129,7 @@ def verifyEmail(email, username):
     msg.content_subtype = "html"
     msg.attach_file('https://prodigal-beta.azurewebsites.net/static/images/main_logo.png')
     msg.send(fail_silently=True)
+
 
 def create_user(request):
     """
@@ -193,8 +199,8 @@ def search(request):
     company_list = user_obj.getCompaniesName()
 
     # search by sector
-    if 'sector:' in company_search:
-        sector_symbol = company_search.lstrip("sector:")
+    if 'sector = ' in company_search:
+        sector_symbol = company_search.lstrip("sector = ")
         result_list = user_obj.search_by_sector(sector_symbol)
         if result_list is None:
             return render(request, "sector.html", {"msg": "Sector didn't find.", "company_list": company_list})
@@ -207,9 +213,9 @@ def search(request):
     else:
         ticker = user_obj.getTickerByName(company_search)
         if ticker is None:
-            return render(request, "search.html", {"msg": "Search by company name, please.", "company_list": company_list})
+            return render(request, "search.html", {"msg": "No Matching Result.", "company_list": company_list})
         # search for new company
-        if mode != 'comparison':
+        if 'comparison' not in mode:
             # search first and create a record endpoint
             return_dict, company_sym = user_obj.nasdaq_search(ticker)
             # get pridiction for further use
@@ -233,6 +239,11 @@ def search(request):
                 return render(request, "search.html", {"msg": "No Comparison Object.", "company_list": company_list})
             # get second compant data
             second_dict, company_sym_second = user_obj.nasdaq_search(ticker)
+            if company_sym_first == company_sym_second:  # don't allow comparing same company
+                print(1)
+                first_dict["pridiction"] = pridiction
+                first_dict["company_list"] = company_list
+                return render(request, "search.html", first_dict)
             pridiction_second = user_obj.pridict(ticker)
             if second_dict is None:  # no second compant match
                 if pridiction is not None:
@@ -247,6 +258,8 @@ def search(request):
             if pridiction_second is not None:
                 return_dict["pridiction_second"] = pridiction_second
             return_dict["company_list"] = company_list
+            print(mode)
+            return_dict["mode"] = mode
             return render(request, "search.html", return_dict)
 
 

@@ -1,6 +1,5 @@
 from django.test import TestCase
-
-# Create your tests here.
+import pycodestyle
 import unittest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -16,7 +15,7 @@ class TestSignup(unittest.TestCase):
         chrome_opts.add_argument("--disable-gpu")
         self.driver = webdriver.Chrome(options=chrome_opts)
         self.driver.get("https://prodigal-gamma.azurewebsites.net/")
-        # self.driver.get("http://0.0.0.0:8000/")
+        #  self.driver.get("http://0.0.0.0:8000/")
 
     def test_homepage_rendering(self):
         assert "Welcome to Prodigal!" in self.driver.title
@@ -27,53 +26,43 @@ class TestSignup(unittest.TestCase):
         elem = self.driver.find_element_by_id('navbar_logo')
         elem.click()
         assert "Welcome to Prodigal!" in self.driver.title
-    
+
     def test_login_success(self):
         elem = self.driver.find_element_by_id('navbar_login')
         elem.click()
         elem = self.driver.find_element_by_id('usr')
         elem.send_keys('test')
-
         elem = self.driver.find_element_by_id('pass')
         elem.send_keys('pw')
-        
         elem = self.driver.find_element_by_id('submit')
-        elem.click() 
-        
+        elem.click()
         elem = self.driver.find_element_by_id('profile_email')
         assert elem.text == 'test@gmail.com'
-        
+
     def test_login_epic_fail(self):
         elem = self.driver.find_element_by_id('navbar_login')
         elem.click()
         elem = self.driver.find_element_by_id('usr')
         elem.send_keys('test')
-
         elem = self.driver.find_element_by_id('pass')
         elem.send_keys('pwd')
-        
         elem = self.driver.find_element_by_id('submit')
-        elem.click() 
-        
+        elem.click()
         elem = self.driver.find_element_by_id('login_fail_msg')
-        assert elem.text == 'Login Failed!'    
-    
+        assert elem.text == 'Login Failed!'
+
     def test_search_bar_on_success(self):
         elem = self.driver.find_element_by_id('navbar_login')
         elem.click()
         elem = self.driver.find_element_by_id('usr')
         elem.send_keys('test')
-
         elem = self.driver.find_element_by_id('pass')
         elem.send_keys('pw')
-        
         elem = self.driver.find_element_by_id('submit')
-        elem.click() 
-        
+        elem.click()
         elem = self.driver.find_element_by_id('navbar_searchbox')
         elem.send_keys('Apple Inc.')
         elem.submit()
-        
         elem = self.driver.find_element_by_id('company_name')
         assert 'Apple' in elem.text
         elem = self.driver.find_element_by_id('company_description')
@@ -86,44 +75,48 @@ class TestSignup(unittest.TestCase):
         elem.click()
         elem = self.driver.find_element_by_id('usr')
         elem.send_keys('test')
-
         elem = self.driver.find_element_by_id('pass')
         elem.send_keys('pw')
-        
         elem = self.driver.find_element_by_id('submit')
-        elem.click() 
-        
+        elem.click()
         elem = self.driver.find_element_by_id('navbar_searchbox')
         elem.send_keys('xyz')
         elem.submit()
-
         elem = self.driver.find_element_by_id('fail')
-        assert elem.text == 'Search by company name, please.'
+        assert elem.text
 
     def test_profile_page_history(self):
         elem = self.driver.find_element_by_id('navbar_login')
         elem.click()
         elem = self.driver.find_element_by_id('usr')
         elem.send_keys('test')
-
         elem = self.driver.find_element_by_id('pass')
         elem.send_keys('pw')
-
         elem = self.driver.find_element_by_id('submit')
         elem.click()
-
         elem = self.driver.find_element_by_id('navbar_searchbox')
         elem.send_keys('Adobe Systems Incorporated')
         elem.submit()
-
         elem = self.driver.find_element_by_id('navbar_logo')
         elem.click()
-
         elem = self.driver.find_element_by_id('ADBE')
         assert elem.get_attribute("value") == 'Adobe Systems Incorporated'
 
     def tearDown(self):
-        self.driver.quit
+        self.driver.quit()
+
+
+class CodeStyleTestCase(TestCase):
+
+    def test_pep8(self):
+        # ignore trailing whitespace warning
+        pep = pycodestyle.StyleGuide()
+        test_files = ['prodigal_app/views.py', 'prodigal_app/models.py',
+                      'prodigal_app/tests.py', 'prodigal_app/test_backend.py',
+                      'prodigal_app/urls.py', 'prodigal_app/nasdaq_scraper.py',
+                      ]
+        result = pep.check_files(test_files)
+        self.assertEqual(result.total_errors, 0)
 
 
 if __name__ == '__main__':

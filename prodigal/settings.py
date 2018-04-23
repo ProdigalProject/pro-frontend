@@ -58,6 +58,8 @@ NOSE_ARGS = [
 '''
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
