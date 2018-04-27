@@ -83,8 +83,8 @@
                 console.log('{{mode}}');
                 if ('{{ mode }}' == "comparison_absolute"){
                     data.addColumn('date', 'Date');
-                    data.addColumn('number', '{{ name }}' + 'Closing');
-                    data.addColumn('number', '{{ name_second }}' + 'Closing');
+                    data.addColumn('number', '{{ name }}'.replace(/&amp;/g,'&') + 'Closing');
+                    data.addColumn('number', '{{ name_second }}'.replace(/&amp;/g,'&') + 'Closing');
                     console.log('{{mode}}');
                     for (var i = 0; i < numRows; i++){
                         var a = chart_json_first[i].date;
@@ -98,13 +98,13 @@
                         pridiction_first_on = 1;
                         var decoded_pridiction_first = ('{{ pridiction }}').replace(/&#39;/g,'\"');
                         pridiction_json_first = JSON.parse( decoded_pridiction_first );
-                        data.addColumn('number', '{{ name }}' + 'Prediction');
+                        data.addColumn('number', '{{ name }}'.replace(/&amp;/g,'&') + 'Prediction');
                     }
                     if(('{{ pridiction_second }}') != ""){
                         pridiction_second_on = 1;
                         var decoded_pridiction_second = ('{{ pridiction_second }}').replace(/&#39;/g,'\"');
                         pridiction_json_second = JSON.parse( decoded_pridiction_second );
-                        data.addColumn('number', '{{ name_second }}' + 'Prediction');
+                        data.addColumn('number', '{{ name_second }}'.replace(/&amp;/g,'&') + 'Prediction');
                     }
 
                     var date = ('{{ latest_date }}').split("-");
@@ -144,8 +144,8 @@
 
                 if ('{{ mode }}' == "comparison_percentage"){
                     data.addColumn('date', 'Date');
-                    data.addColumn('number', '{{ name }}' + 'Percentage Change');
-                    data.addColumn('number', '{{ name_second }}' + 'Percentage Change');
+                    data.addColumn('number', '{{ name }}'.replace(/&amp;/g,'&') + 'Percentage Change');
+                    data.addColumn('number', '{{ name_second }}'.replace(/&amp;/g,'&') + 'Percentage Change');
                     console.log('{{mode}}');
                     for (var i = 1; i < numRows; i++){
                         var a = chart_json_first[i].date;
@@ -160,7 +160,7 @@
 
                 if ('{{ mode }}' == "comparison_tendency"){
                     data.addColumn('date', 'Date');
-                    data.addColumn('number', '{{ name }} Tendency with respect to {{ name_second  }} \n Tendency is defined as {{ name }}daily percentage change -  {{ name_second }} daily percentage change');
+                    data.addColumn('number', 'Tendency is defined as' + '{{ name }}'.replace(/&amp;/g,'&') + 'daily percentage change minus' + '{{ name_second }}'.replace(/&amp;/g,'&') + 'daily percentage change');
                     console.log('{{mode}}');
                     for (var i = 1; i < numRows; i++){
                         var a = chart_json_first[i].date;
@@ -178,7 +178,7 @@
 
                 var data = new google.visualization.DataTable();
                 data.addColumn('date', 'Date');
-                data.addColumn('number', '{{ name }}' + 'Closing');
+                data.addColumn('number', '{{ name }}'.replace(/&amp;/g,'&') + 'Closing');
 
 
                 var numRows = chart_json_first.length;
@@ -195,7 +195,7 @@
                     pridiction_first_on = 1;
                     var decoded_pridiction_first = ('{{ pridiction }}').replace(/&#39;/g,'\"');
                     pridiction_json_first = JSON.parse( decoded_pridiction_first );
-                    data.addColumn('number', '{{ name }}' + ' Prediction');
+                    data.addColumn('number', '{{ name }}'.replace(/&amp;/g,'&') + ' Prediction');
                 }
 
                 var date = ('{{ latest_date }}').split("-");
@@ -253,10 +253,10 @@
                     <select class="custom-select" name="mode" style="width: 230px; font-size: 14px">
                       <option value="">New Search</option>
                       <option value="comparison_absolute">Compare Absolute Value</option>
-                      <option value="comparison_percentage">Compare Percentage Change</option>
+                      <option value="comparison_percentage">Compare Daily Percentage Change</option>
                       <option value="comparison_tendency">Compare Tendency</option>
                     </select>
-                    <button id="navbar_search_submit" type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                    <button id="navbar_search_submit" type="submit" class="btn btn-primary" style="color:green;"><i class="fa fa-arrow-right"></i></button>
                 </form>
                 <script>
                  var stocks = JSON.parse(('{{ company_list }}').replace(/&#39;/g,'\"'));
