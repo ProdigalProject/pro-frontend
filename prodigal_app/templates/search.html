@@ -160,7 +160,7 @@
 
                 if ('{{ mode }}' == "comparison_tendency"){
                     data.addColumn('date', 'Date');
-                    data.addColumn('number', 'Tendency is defined as' + '{{ name }}'.replace(/&amp;/g,'&') + 'daily percentage change minus' + '{{ name_second }}'.replace(/&amp;/g,'&') + 'daily percentage change');
+                    data.addColumn('number', 'Tendency is defined as ' + '{{ name }}'.replace(/&amp;/g,'&') + ' daily percentage change minus ' + '{{ name_second }}'.replace(/&amp;/g,'&') + ' daily percentage change');
                     console.log('{{mode}}');
                     for (var i = 1; i < numRows; i++){
                         var a = chart_json_first[i].date;
