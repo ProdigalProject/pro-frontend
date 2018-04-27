@@ -205,6 +205,10 @@ class User(models.Model):
             for entry in h:
                 if int(entry) == company_id:
                     modify = 1
+                    h.remove(entry)
+                    history = str(company_id)
+                    for new_entry in h:
+                        history += ',' + new_entry
                     break
             if modify == 0:
                 # history search less than 5
@@ -251,7 +255,8 @@ class SearchUtility(User):
               "/stocks/" + ticker + "?apikey=cHJvZGlnYWxfYXBwX2FwaV9rZXk="
         headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64)'
                                  'AppleWebKit/537.36 (KHTML, like Gecko) \
-                   Chrome/54.0.2840.90 Safari/537.36'}
+                   Chrome/54.0.2840.90 Safari/537.36',
+                   'apikey': 'cHJvZGlnYWxfYXBwX2FwaV9rZXk='}
         response = requests.get(url, headers=headers)
         if response.status_code == 404:  # company not found in api
             return_dict = dict(newslist=news_list,
