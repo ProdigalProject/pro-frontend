@@ -83,8 +83,8 @@
                 console.log('{{mode}}');
                 if ('{{ mode }}' == "comparison_absolute"){
                     data.addColumn('date', 'Date');
-                    data.addColumn('number', '{{ name }}'.replace(/&amp;/g,'&') + 'Closing');
-                    data.addColumn('number', '{{ name_second }}'.replace(/&amp;/g,'&') + 'Closing');
+                    data.addColumn('number', '{{ name }}'.replace(/&amp;/g,'&').replace(/&#39;/g,'\'') + ' Closing');
+                    data.addColumn('number', '{{ name_second }}'.replace(/&amp;/g,'&').replace(/&#39;/g,'\'') + ' Closing');
                     console.log('{{mode}}');
                     for (var i = 0; i < numRows; i++){
                         var a = chart_json_first[i].date;
@@ -98,13 +98,13 @@
                         pridiction_first_on = 1;
                         var decoded_pridiction_first = ('{{ pridiction }}').replace(/&#39;/g,'\"');
                         pridiction_json_first = JSON.parse( decoded_pridiction_first );
-                        data.addColumn('number', '{{ name }}'.replace(/&amp;/g,'&') + 'Prediction');
+                        data.addColumn('number', '{{ name }}'.replace(/&amp;/g,'&').replace(/&#39;/g,'\'') + ' Prediction');
                     }
                     if(('{{ pridiction_second }}') != ""){
                         pridiction_second_on = 1;
                         var decoded_pridiction_second = ('{{ pridiction_second }}').replace(/&#39;/g,'\"');
                         pridiction_json_second = JSON.parse( decoded_pridiction_second );
-                        data.addColumn('number', '{{ name_second }}'.replace(/&amp;/g,'&') + 'Prediction');
+                        data.addColumn('number', '{{ name_second }}'.replace(/&amp;/g,'&').replace(/&#39;/g,'\'') + ' Prediction');
                     }
 
                     var date = ('{{ latest_date }}').split("-");
@@ -144,8 +144,8 @@
 
                 if ('{{ mode }}' == "comparison_percentage"){
                     data.addColumn('date', 'Date');
-                    data.addColumn('number', '{{ name }}'.replace(/&amp;/g,'&') + 'Percentage Change');
-                    data.addColumn('number', '{{ name_second }}'.replace(/&amp;/g,'&') + 'Percentage Change');
+                    data.addColumn('number', '{{ name }}'.replace(/&amp;/g,'&').replace(/&#39;/g,'\'') + ' Percentage Change');
+                    data.addColumn('number', '{{ name_second }}'.replace(/&amp;/g,'&').replace(/&#39;/g,'\'') + ' Percentage Change');
                     console.log('{{mode}}');
                     for (var i = 1; i < numRows; i++){
                         var a = chart_json_first[i].date;
@@ -160,7 +160,7 @@
 
                 if ('{{ mode }}' == "comparison_tendency"){
                     data.addColumn('date', 'Date');
-                    data.addColumn('number', 'Tendency is defined as ' + '{{ name }}'.replace(/&amp;/g,'&') + ' daily percentage change minus ' + '{{ name_second }}'.replace(/&amp;/g,'&') + ' daily percentage change');
+                    data.addColumn('number', 'Tendency');
                     console.log('{{mode}}');
                     for (var i = 1; i < numRows; i++){
                         var a = chart_json_first[i].date;
@@ -178,7 +178,7 @@
 
                 var data = new google.visualization.DataTable();
                 data.addColumn('date', 'Date');
-                data.addColumn('number', '{{ name }}'.replace(/&amp;/g,'&') + 'Closing');
+                data.addColumn('number', '{{ name }}'.replace(/&amp;/g,'&').replace(/&#39;/g,'\'') + ' Closing');
 
 
                 var numRows = chart_json_first.length;
@@ -195,7 +195,7 @@
                     pridiction_first_on = 1;
                     var decoded_pridiction_first = ('{{ pridiction }}').replace(/&#39;/g,'\"');
                     pridiction_json_first = JSON.parse( decoded_pridiction_first );
-                    data.addColumn('number', '{{ name }}'.replace(/&amp;/g,'&') + ' Prediction');
+                    data.addColumn('number', '{{ name }}'.replace(/&amp;/g,'&').replace(/&#39;/g,'\'') + ' Prediction');
                 }
 
                 var date = ('{{ latest_date }}').split("-");
@@ -249,14 +249,8 @@
             <div class="mx-auto">
                 <form class="form-inline" id="search" method="POST" name="search_form" action="search">
                     {% csrf_token %}
-                    <input class="form-control" type="search" id="navbar_searchbox" name="search_key" style="width: 300px" placeholder="Enter Company Name..."/>
-                    <select class="custom-select" name="mode" style="width: 230px; font-size: 14px">
-                      <option value="">New Search</option>
-                      <option value="comparison_absolute">Compare Absolute Value</option>
-                      <option value="comparison_percentage">Compare Daily Percentage Change</option>
-                      <option value="comparison_tendency">Compare Tendency</option>
-                    </select>
-                    <button id="navbar_search_submit" type="submit" class="btn btn-primary" style="background-color:green;"><i class="fa fa-arrow-right"></i></button>
+                    <input class="form-control" type="search" id="navbar_searchbox" name="search_key" style="width: 270px" placeholder="Enter Company Name..." required>
+                    <button id="navbar_search_submit" type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </form>
                 <script>
                  var stocks = JSON.parse(('{{ company_list }}').replace(/&#39;/g,'\"'));
@@ -266,6 +260,40 @@
                 </script>
             </div>
             <ul class="nav navbar-nav justify-content-end">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="compare_dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 20px">
+                        Compare
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="compare_dropdown" id="compare_dropmenu" style="width: 320px">
+                        <form class="px-4 py-3" id="compare" method="POST" name="compare_form" action="search">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label>Company Name:</label>
+                                <input type="text" class="form-control" id="compare_searchbox" name="search_key" placeholder="Enter Company Name..." required>
+                                <script>
+                                    $('#compare_dropmenu').on('click', function(e) {
+                                        e.stopPropagation();
+                                    });
+                                   var stocks = JSON.parse(('{{ company_list }}').replace(/&#39;/g,'\"'));
+                                   var searchBox = document.getElementById("compare_searchbox");
+                                   searchBox.autocomplete = 'off';
+                                   autocomplete(searchBox, stocks);
+                                </script>
+                            </div>
+                            <div class="form-group">
+                                <label>Comparison Mode:</label>
+                                <select class="form-control" name="mode" style="font-size: 14px">
+                                    <option value="comparison_absolute">Compare Absolute Value</option>
+                                    <option value="comparison_percentage">Compare Daily Percentage Change&nbsp;&nbsp;&nbsp;</option>
+                                    <option value="comparison_tendency">Compare Tendency</option>
+                                </select>
+                            </div>
+                            <div class="form-group text-center" style="margin-top: 10px; margin-bottom: 0">
+                                <button type="submit" class="btn btn-primary">Compare</button>
+                            </div>
+                        </form>
+                    </div>
+                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="sector_dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 20px">
                         Sectors
@@ -306,7 +334,12 @@
         {% else %}
         <div class="card shadow-lg" style="width: 100%; max-width: 70%; margin: 100px auto 0 auto">
             <div class="card-body" id="company_name">
-                <h1>{{ name }}</h1>
+                <h1 class="display-4">{{ name | safe }}</h1>
+                {% if mode %}
+                    <p class="lead px-1" style="font-size: 24px">In Comparison With {{ name_second | safe }}</p>
+                {% else %}
+                    <p class="lead px-1" style="font-size: 24px">Summary Data</p>
+                {% endif %}
                 <iframe src="favorite" width="250px" height="74px" style="border:none;"></iframe>
             </div>
         </div>
@@ -318,6 +351,11 @@
                 <div id="stock_chart" style="height:400px">
                     <!-- Div for chart -->
                 </div>
+                {% if mode == 'comparison_tendency' %}
+                    <div class="text-center">
+                        <small class="text-muted">Note: Tendency = ({{ name | safe }} daily percentage change)  - ({{ name_second | safe }} daily percent change) </small>
+                    </div>
+                {% endif %}
             </div>
         </div>
         {% if high %}

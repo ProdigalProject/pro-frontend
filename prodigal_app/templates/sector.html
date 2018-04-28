@@ -78,7 +78,7 @@
                         {% for name, ticker in list %}
                             <li class="list-group-item">
                                 <button id="{{ ticker }}" class="btn btn-outline-dark" type="submit" name="search_key" value="{{ name }}" form="hisfav_search">
-                                    {{ ticker }} - {{ name }}
+                                    {{ ticker }} - {{ name | safe }}
                                 </button>
                             </li>
                         {% endfor %}

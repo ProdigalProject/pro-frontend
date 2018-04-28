@@ -7,28 +7,26 @@ function autocomplete(inp, arr) {
       currentFocus = -1;
       a = document.createElement("DIV");
       a.setAttribute("id", this.id + "autocomplete-list");
-      a.setAttribute("class", "autocomplete-items position-absolute shadow-lg");
+      a.setAttribute("class", "autocomplete-items shadow-lg");
+      a.style.width = inp.offsetWidth + 'px';
+      a.style.position = 'absolute';
+      a.style.left = inp.offsetLeft + 'px';
+      a.style.top = inp.offsetTop + 40 + 'px';
       this.parentNode.appendChild(a);
       x = 0;
       for (i = 0; i < arr.length; i++) {
         if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
           b = document.createElement("DIV");
-          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-          b.innerHTML += arr[i].substr(val.length);
+          b.innerHTML = "<strong>" + arr[i].substr(0, val.length).replace(/&amp;/g,'&').replace(/&#39;/g,'\'') + "</strong>";
+          b.innerHTML += arr[i].substr(val.length).replace(/&amp;/g,'&').replace(/&#39;/g,'\'');
           b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
               b.addEventListener("click", function(e) {
               inp.value = this.getElementsByTagName("input")[0].value;
               closeAllLists();
-              var form = document.getElementById("search");
-              form.submit();
           });
           a.appendChild(b);
           x++;
         }
-        /*if (x > 20) {
-            x = 0;
-            break;
-        }*/
       }
     });
     inp.addEventListener("keydown", function(e) {
@@ -41,7 +39,6 @@ function autocomplete(inp, arr) {
         currentFocus--;
         addActive(x);
       } else if (e.keyCode == 13) {
-        e.preventDefault();
         if (currentFocus > -1) {
           if (x) x[currentFocus].click();
         }
