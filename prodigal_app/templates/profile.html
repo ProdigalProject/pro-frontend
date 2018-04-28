@@ -70,7 +70,7 @@
                         {% endif %}
                     </div>
                     <div id="text" class="align-self-center">
-                        <h1 id="profile_username">{{ request.session.username }}</h1>
+                        <h1 id="profile_username" class="display-4">{{ request.session.username }}</h1>
                         <h4 id="profile_email">{{ request.session.email }}</h4>
                     </div>
                 </div>
@@ -86,7 +86,7 @@
                         {% for ticker, name in history %}
                             <li class="list-group-item">
                                 <button id="{{ ticker }}" class="btn btn-outline-dark" type="submit" name="search_key" value="{{ name }}" form="hisfav_search">
-                                        {{ ticker }} - {{ name }}
+                                        {{ ticker }} - {{ name | safe }}
                                 </button>
                             </li>
                         {% endfor %}
@@ -108,7 +108,7 @@
                         {% for ticker, name in favorites %}
                             <li class="list-group-item">
                                 <button id="fav_{{ ticker }}" class="btn btn-outline-dark" type="submit" name="search_key" value="{{ name }}" form="hisfav_search">
-                                    {{ ticker }} - {{ name }}
+                                    {{ ticker }} - {{ name | safe }}
                                 </button>
                             </li>
                         {% endfor %}
