@@ -8,6 +8,9 @@ from selenium.webdriver.chrome.options import Options
 class TestSignup(unittest.TestCase):
 
     def setUp(self):
+        """
+        Stuffs to set up before running test cases.
+        """
         chrome_opts = Options()
         chrome_opts.add_argument("--disable-extensions")
         chrome_opts.add_argument("--headless")
@@ -15,12 +18,17 @@ class TestSignup(unittest.TestCase):
         chrome_opts.add_argument("--disable-gpu")
         self.driver = webdriver.Chrome(options=chrome_opts)
         self.driver.get("https://prodigal-gamma.azurewebsites.net/")
-        #  self.driver.get("http://0.0.0.0:8000/")
 
     def test_homepage_rendering(self):
+        """
+        Tests reaching index page.
+        """
         assert "Welcome to Prodigal!" in self.driver.title
 
     def test_logo_return_to_homepage(self):
+        """
+        Tests if clicking on logo returns to index (before logging in)
+        """
         elem = self.driver.find_element_by_id('navbar_login')
         elem.click()
         elem = self.driver.find_element_by_id('navbar_logo')
@@ -28,6 +36,9 @@ class TestSignup(unittest.TestCase):
         assert "Welcome to Prodigal!" in self.driver.title
 
     def test_login_success(self):
+        """
+        Tests login and redirect to profile page after success.
+        """
         elem = self.driver.find_element_by_id('navbar_login')
         elem.click()
         elem = self.driver.find_element_by_id('usr')
@@ -40,6 +51,9 @@ class TestSignup(unittest.TestCase):
         assert elem.text == 'test@gmail.com'
 
     def test_login_epic_fail(self):
+        """
+        Tests login with invalid credentials.
+        """
         elem = self.driver.find_element_by_id('navbar_login')
         elem.click()
         elem = self.driver.find_element_by_id('usr')
@@ -51,7 +65,26 @@ class TestSignup(unittest.TestCase):
         elem = self.driver.find_element_by_id('login_fail_msg')
         assert elem.text == 'Login Failed!'
 
+    def test_sign_out(self):
+        """
+        Tests logging out from app.
+        """
+        elem = self.driver.find_element_by_id('navbar_login')
+        elem.click()
+        elem = self.driver.find_element_by_id('usr')
+        elem.send_keys('test')
+        elem = self.driver.find_element_by_id('pass')
+        elem.send_keys('pw')
+        elem = self.driver.find_element_by_id('submit')
+        elem.click()
+        elem = self.driver.find_element_by_xpath('/html/body/nav/ul/li[2]/a')
+        elem.click()
+        self.assertEqual(self.driver.title, 'Welcome to Prodigal!')
+
     def test_search_bar_on_success(self):
+        """
+        Tests if search returns right results.
+        """
         elem = self.driver.find_element_by_id('navbar_login')
         elem.click()
         elem = self.driver.find_element_by_id('usr')
@@ -71,6 +104,9 @@ class TestSignup(unittest.TestCase):
         assert elem.text
 
     def test_search_bar_on_epic_fail(self):
+        """
+        Tests searching for non-existing company.
+        """
         elem = self.driver.find_element_by_id('navbar_login')
         elem.click()
         elem = self.driver.find_element_by_id('usr')
@@ -86,6 +122,9 @@ class TestSignup(unittest.TestCase):
         assert elem.text
 
     def test_profile_page_history(self):
+        """
+        Tests if search history is properly updated.
+        """
         elem = self.driver.find_element_by_id('navbar_login')
         elem.click()
         elem = self.driver.find_element_by_id('usr')
@@ -102,6 +141,25 @@ class TestSignup(unittest.TestCase):
         elem = self.driver.find_element_by_id('ADBE')
         assert elem.get_attribute("value") == 'Adobe Systems Incorporated'
 
+    def test_search_sector(self):
+        """
+        Tests reaching search by sector page.
+        """
+        elem = self.driver.find_element_by_id('navbar_login')
+        elem.click()
+        elem = self.driver.find_element_by_id('usr')
+        elem.send_keys('test')
+        elem = self.driver.find_element_by_id('pass')
+        elem.send_keys('pw')
+        elem = self.driver.find_element_by_id('submit')
+        elem.click()
+        elem = self.driver.find_element_by_id('sector_dropdown')
+        elem.click()
+        elem = self.driver.find_element_by_id('Basic Industries')
+        elem.click()
+        elem = self.driver.find_elements_by_class_name('list-group-item')
+        self.assertTrue(len(elem) > 0)
+
     def tearDown(self):
         self.driver.quit()
 
@@ -109,7 +167,9 @@ class TestSignup(unittest.TestCase):
 class CodeStyleTestCase(TestCase):
 
     def test_pep8(self):
-        # ignore trailing whitespace warning
+        """
+        Tests if files in test_files are PEP8 compliant.
+        """
         pep = pycodestyle.StyleGuide()
         test_files = ['prodigal_app/views.py', 'prodigal_app/models.py',
                       'prodigal_app/tests.py', 'prodigal_app/test_backend.py',
@@ -117,7 +177,3 @@ class CodeStyleTestCase(TestCase):
                       ]
         result = pep.check_files(test_files)
         self.assertEqual(result.total_errors, 0)
-
-
-if __name__ == '__main__':
-    unittest.main()

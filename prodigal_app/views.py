@@ -1,11 +1,9 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import messages
-from django.core.mail import EmailMessage
 from prodigal_app.models import *
 
 
-# Create your views here.
 def index(request):
     """
     Renders index page from template.
@@ -74,7 +72,7 @@ def login_query(request):
         return redirect('login')
     # If 'Remember Me' is checked, keep session cookies for a week
     if remember is not None:
-        request.session.set_expiry(604800)
+        request.session.set_expiry(604800)  # 60 * 60 * 24 * 7
     # Update session to pass to profile
     request.session['user_id'] = int(user_obj.userid)
     request.session['username'] = user_obj.username
@@ -111,8 +109,8 @@ def signout(request):
 def create_user(request):
     """
     Create a user with given username, email address and password.
-    Signup fail if customer leave any line blank
-    or have same username with others.
+    Signup fails if any of the POST input is blank or have same
+    username / email with others.
     :param request: request from user
     :return: profile page if signup succeed and automatically login,
     stay signup and show error message if fail
@@ -150,8 +148,8 @@ def create_user(request):
 
 def signup(request):
     """
-    Renders signup page from template. Signup process links 3rd-party auth data
-    with prodigal profile.
+    Renders signup page from template. signup.html contains a form that
+    posts gender, username, password and email input.
     :param request: request from user
     :return: rendered html
     """
@@ -164,6 +162,8 @@ def search(request):
     """
     Renders search page from template, filled with fetched data.
     If no match is found in search, render page notifying user no result found.
+    Sector search is also handled in this function.
+    If mode is set to comparison, compare_company function is called.
     :param request: request from user
     :return: rendered html
     """
@@ -220,8 +220,12 @@ def search(request):
 
 def compare_company(request, mode, user_obj, ticker, company_list):
     """
-    Helper function for comparison
-    :param request: request from user
+    Helper function extracted from search for comparison feature.
+    :param request: request from user.
+    :param mode: mode of search, from POST
+    :param user_obj: user object of currently logged in user
+    :param ticker: ticker symbol of company to compare
+    :param company_list: list of companies in database
     :return: rendered html
     """
     # get first company (base company) data
@@ -233,7 +237,7 @@ def compare_company(request, mode, user_obj, ticker, company_list):
         return render(request, "search.html",
                       {"msg": "No Comparison Object.",
                        "company_list": company_list})
-    # get second compant data
+    # get second company data
     second_dict, company_sym_second = user_obj.nasdaq_search(ticker)
     if company_sym_first == company_sym_second:
         first_dict["pridiction"] = pridiction
