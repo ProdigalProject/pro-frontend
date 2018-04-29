@@ -2,7 +2,7 @@ from django.db import models
 from os import urandom
 from base64 import b64encode
 from . import nasdaq_scraper
-from django.core.mail import send_mail, EmailMessage
+from django.core.mail import EmailMessage
 import hashlib
 import requests
 import re
@@ -12,13 +12,9 @@ class NasdaqCompanies(models.Model):
     """
     Model for companies listed in Nasdaq market.
     """
-    # Field name made lowercase.
     companyid = models.AutoField(db_column='companyID', primary_key=True)
-    # Field name made lowercase.
     symbol = models.CharField(db_column='Symbol', max_length=5)
-    # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=75)
-    # Field name made lowercase.
     sector = models.CharField(db_column='Sector', max_length=50)
 
     class Meta:
@@ -30,7 +26,6 @@ class User(models.Model):
     """
     Model for user. All user related actions will be taken care by this class.
     """
-    # Field name made lowercase.
     userid = models.AutoField(db_column='userID', primary_key=True)
     username = models.CharField(max_length=50)
     email = models.CharField(max_length=50)
@@ -78,7 +73,7 @@ class User(models.Model):
         return False
 
     @staticmethod
-    def verify_email(email, username):
+    def welcome_email(email, username):
         """
         Sends welcome mail to given email address.
         :param email: user's email address
@@ -201,7 +196,7 @@ class User(models.Model):
             history = self.history
             h = history.split(',')
             modify = 0  # flag for modify the history
-            # compare the histroy with search result this term
+            # compare the history with search result this term
             for entry in h:
                 if int(entry) == company_id:
                     modify = 1
@@ -294,11 +289,11 @@ class SearchUtility(User):
             return_list.append(temp)
         return return_list
 
-    def pridict(self, ticker):
+    def predict(self, ticker):
         """
         Query pridiction data from api service by ticker.
         :param ticker: ticker symbol passed in from view.
-        :return: None if no data proviede,
+        :return: None if no data provided,
         list of following five days closing price if found
         """
         url = "https://prodigal-ml.a" \
@@ -311,12 +306,10 @@ class SearchUtility(User):
             pridiction = response.json()
             return pridiction
 
-    def getCompaniesName(self):
+    def get_companies_name(self):
         """
         Query all company names from database.
-        :param None
-        :return: None if no data proviede,
-        list of company name
+        :return: None if no data provided, list of company name otherwise
         """
         # list for all companies name
         company_list = []
@@ -327,12 +320,11 @@ class SearchUtility(User):
             company_list.append(company)
         return company_list
 
-    def getTickerByName(self, search_name):
+    def get_ticker_by_name(self, search_name):
         """
         Query company ticker from database by name.
         :param search_name: key name
-        :return: None if no data proviede,
-        company ticker
+        :return: None if no data provided, ticker symbol otherwise
         """
         companies = NasdaqCompanies.objects.filter(name=search_name)
         if not companies:  # name not in company list
