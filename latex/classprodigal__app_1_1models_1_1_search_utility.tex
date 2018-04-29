@@ -1,0 +1,97 @@
+\hypertarget{classprodigal__app_1_1models_1_1_search_utility}{}\section{prodigal\+\_\+app.\+models.\+Search\+Utility Class Reference}
+\label{classprodigal__app_1_1models_1_1_search_utility}\index{prodigal\+\_\+app.\+models.\+Search\+Utility@{prodigal\+\_\+app.\+models.\+Search\+Utility}}
+Inheritance diagram for prodigal\+\_\+app.\+models.\+Search\+Utility\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classprodigal__app_1_1models_1_1_search_utility}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classprodigal__app_1_1models_1_1_search_utility_1_1_meta}{Meta}}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{classprodigal__app_1_1models_1_1_search_utility_a2675d62b9de091c0eb4d0e800ed3a083}{nasdaq\+\_\+search}} (self, ticker)
+\item 
+def \mbox{\hyperlink{classprodigal__app_1_1models_1_1_search_utility_af846eae6287a4470507a1646d9924167}{search\+\_\+by\+\_\+sector}} (self, sector\+\_\+symbol)
+\item 
+def \mbox{\hyperlink{classprodigal__app_1_1models_1_1_search_utility_a82375f3ad93900b3e7e9e6a336406de7}{predict}} (self, ticker)
+\item 
+def \mbox{\hyperlink{classprodigal__app_1_1models_1_1_search_utility_a3083578d1a1a282d1ec4f69dcca19254}{get\+\_\+companies\+\_\+name}} (self)
+\item 
+def \mbox{\hyperlink{classprodigal__app_1_1models_1_1_search_utility_ac3431632ae234dd98737631334b44938}{get\+\_\+ticker\+\_\+by\+\_\+name}} (self, search\+\_\+name)
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}Class to handle searches.
+Since search function doesn't need its own table
+and updates history field of User.
+it is made a proxy class of User class.
+\end{DoxyVerb}
+ 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classprodigal__app_1_1models_1_1_search_utility_a3083578d1a1a282d1ec4f69dcca19254}\label{classprodigal__app_1_1models_1_1_search_utility_a3083578d1a1a282d1ec4f69dcca19254}} 
+\index{prodigal\+\_\+app\+::models\+::\+Search\+Utility@{prodigal\+\_\+app\+::models\+::\+Search\+Utility}!get\+\_\+companies\+\_\+name@{get\+\_\+companies\+\_\+name}}
+\index{get\+\_\+companies\+\_\+name@{get\+\_\+companies\+\_\+name}!prodigal\+\_\+app\+::models\+::\+Search\+Utility@{prodigal\+\_\+app\+::models\+::\+Search\+Utility}}
+\subsubsection{\texorpdfstring{get\+\_\+companies\+\_\+name()}{get\_companies\_name()}}
+{\footnotesize\ttfamily def prodigal\+\_\+app.\+models.\+Search\+Utility.\+get\+\_\+companies\+\_\+name (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Query all company names from database.
+:return: None if no data provided, list of company name otherwise
+\end{DoxyVerb}
+ \mbox{\Hypertarget{classprodigal__app_1_1models_1_1_search_utility_ac3431632ae234dd98737631334b44938}\label{classprodigal__app_1_1models_1_1_search_utility_ac3431632ae234dd98737631334b44938}} 
+\index{prodigal\+\_\+app\+::models\+::\+Search\+Utility@{prodigal\+\_\+app\+::models\+::\+Search\+Utility}!get\+\_\+ticker\+\_\+by\+\_\+name@{get\+\_\+ticker\+\_\+by\+\_\+name}}
+\index{get\+\_\+ticker\+\_\+by\+\_\+name@{get\+\_\+ticker\+\_\+by\+\_\+name}!prodigal\+\_\+app\+::models\+::\+Search\+Utility@{prodigal\+\_\+app\+::models\+::\+Search\+Utility}}
+\subsubsection{\texorpdfstring{get\+\_\+ticker\+\_\+by\+\_\+name()}{get\_ticker\_by\_name()}}
+{\footnotesize\ttfamily def prodigal\+\_\+app.\+models.\+Search\+Utility.\+get\+\_\+ticker\+\_\+by\+\_\+name (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{search\+\_\+name }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Query company ticker from database by name.
+:param search_name: key name
+:return: None if no data provided, ticker symbol otherwise
+\end{DoxyVerb}
+ \mbox{\Hypertarget{classprodigal__app_1_1models_1_1_search_utility_a2675d62b9de091c0eb4d0e800ed3a083}\label{classprodigal__app_1_1models_1_1_search_utility_a2675d62b9de091c0eb4d0e800ed3a083}} 
+\index{prodigal\+\_\+app\+::models\+::\+Search\+Utility@{prodigal\+\_\+app\+::models\+::\+Search\+Utility}!nasdaq\+\_\+search@{nasdaq\+\_\+search}}
+\index{nasdaq\+\_\+search@{nasdaq\+\_\+search}!prodigal\+\_\+app\+::models\+::\+Search\+Utility@{prodigal\+\_\+app\+::models\+::\+Search\+Utility}}
+\subsubsection{\texorpdfstring{nasdaq\+\_\+search()}{nasdaq\_search()}}
+{\footnotesize\ttfamily def prodigal\+\_\+app.\+models.\+Search\+Utility.\+nasdaq\+\_\+search (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{ticker }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Query user input of ticker symbol to database,
+then uses API and scraper to fetch data.
+Search history is also updated.
+:param ticker: ticker symbol passed in from view.
+:return: None if no match,
+dictionary of required data if match is found
+\end{DoxyVerb}
+ \mbox{\Hypertarget{classprodigal__app_1_1models_1_1_search_utility_a82375f3ad93900b3e7e9e6a336406de7}\label{classprodigal__app_1_1models_1_1_search_utility_a82375f3ad93900b3e7e9e6a336406de7}} 
+\index{prodigal\+\_\+app\+::models\+::\+Search\+Utility@{prodigal\+\_\+app\+::models\+::\+Search\+Utility}!predict@{predict}}
+\index{predict@{predict}!prodigal\+\_\+app\+::models\+::\+Search\+Utility@{prodigal\+\_\+app\+::models\+::\+Search\+Utility}}
+\subsubsection{\texorpdfstring{predict()}{predict()}}
+{\footnotesize\ttfamily def prodigal\+\_\+app.\+models.\+Search\+Utility.\+predict (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{ticker }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Query pridiction data from api service by ticker.
+:param ticker: ticker symbol passed in from view.
+:return: None if no data provided,
+list of following five days closing price if found
+\end{DoxyVerb}
+ \mbox{\Hypertarget{classprodigal__app_1_1models_1_1_search_utility_af846eae6287a4470507a1646d9924167}\label{classprodigal__app_1_1models_1_1_search_utility_af846eae6287a4470507a1646d9924167}} 
+\index{prodigal\+\_\+app\+::models\+::\+Search\+Utility@{prodigal\+\_\+app\+::models\+::\+Search\+Utility}!search\+\_\+by\+\_\+sector@{search\+\_\+by\+\_\+sector}}
+\index{search\+\_\+by\+\_\+sector@{search\+\_\+by\+\_\+sector}!prodigal\+\_\+app\+::models\+::\+Search\+Utility@{prodigal\+\_\+app\+::models\+::\+Search\+Utility}}
+\subsubsection{\texorpdfstring{search\+\_\+by\+\_\+sector()}{search\_by\_sector()}}
+{\footnotesize\ttfamily def prodigal\+\_\+app.\+models.\+Search\+Utility.\+search\+\_\+by\+\_\+sector (\begin{DoxyParamCaption}\item[{}]{self,  }\item[{}]{sector\+\_\+symbol }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Query user input of sector to database.
+Search history is also updated if click the button in the return list.
+:param sector_symbol: sector passed in from view.
+:return: None if no match, list of required data if match is found
+\end{DoxyVerb}
+ 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+prodigal\+\_\+app/models.\+py\end{DoxyCompactItemize}
