@@ -130,5 +130,5 @@ class UserTestCase(TestCase):
         """
         Tests if getting prediction data works properly.
         """
-        array = self.test_user_search.pridict("AAPL")
+        array = self.test_user_search.predict("AAPL")
         assert array is not None

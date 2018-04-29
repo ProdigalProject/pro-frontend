@@ -73,7 +73,7 @@ class User(models.Model):
         return False
 
     @staticmethod
-    def verify_email(email, username):
+    def welcome_email(email, username):
         """
         Sends welcome mail to given email address.
         :param email: user's email address
@@ -196,7 +196,7 @@ class User(models.Model):
             history = self.history
             h = history.split(',')
             modify = 0  # flag for modify the history
-            # compare the histroy with search result this term
+            # compare the history with search result this term
             for entry in h:
                 if int(entry) == company_id:
                     modify = 1
@@ -289,7 +289,7 @@ class SearchUtility(User):
             return_list.append(temp)
         return return_list
 
-    def pridict(self, ticker):
+    def predict(self, ticker):
         """
         Query pridiction data from api service by ticker.
         :param ticker: ticker symbol passed in from view.
@@ -306,7 +306,7 @@ class SearchUtility(User):
             pridiction = response.json()
             return pridiction
 
-    def getCompaniesName(self):
+    def get_companies_name(self):
         """
         Query all company names from database.
         :return: None if no data provided, list of company name otherwise
@@ -320,7 +320,7 @@ class SearchUtility(User):
             company_list.append(company)
         return company_list
 
-    def getTickerByName(self, search_name):
+    def get_ticker_by_name(self, search_name):
         """
         Query company ticker from database by name.
         :param search_name: key name

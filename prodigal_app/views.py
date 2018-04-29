@@ -31,7 +31,7 @@ def profile(request):
 
     # get company list for further use
     user_obj = SearchUtility.objects.get(userid=user_id)
-    company_list = user_obj.getCompaniesName()
+    company_list = user_obj.get_companies_name()
 
     return_dict = {}
     # Update history, favorites to reflect changes real time
@@ -142,7 +142,7 @@ def create_user(request):
     else:
         # Redirect to login page
         messages.add_message(request, messages.INFO, 'Account created!')
-        User.verify_email(email, username)
+        User.welcome_email(email, username)
         return redirect('login')
 
 
@@ -175,7 +175,7 @@ def search(request):
     company_search = request.POST.get('search_key', '')
     mode = request.POST.get('mode', '')
     # get company list for further use
-    company_list = user_obj.getCompaniesName()
+    company_list = user_obj.get_companies_name()
 
     # search by sector
     if 'sector = ' in company_search:
@@ -192,7 +192,7 @@ def search(request):
         return render(request, "sector.html", return_dict)
     # search/compare by ticker/company name
     else:
-        ticker = user_obj.getTickerByName(company_search)
+        ticker = user_obj.get_ticker_by_name(company_search)
         if ticker is None:
             return render(request, "search.html",
                           {"msg": "No Matching Result.",
@@ -202,7 +202,7 @@ def search(request):
             # search first and create a record endpoint
             return_dict, company_sym = user_obj.nasdaq_search(ticker)
             # get pridiction for further use
-            pridiction = user_obj.pridict(ticker)
+            pridiction = user_obj.predict(ticker)
             if return_dict is None:
                 return render(request, "search.html",
                               {"msg": "No Matching Result.",
@@ -232,7 +232,7 @@ def compare_company(request, mode, user_obj, ticker, company_list):
     first_dict, company_sym_first = \
         user_obj.nasdaq_search(request.session.get('last_search'))
     # get pridiction for further use
-    pridiction = user_obj.pridict(request.session.get('last_search'))
+    pridiction = user_obj.predict(request.session.get('last_search'))
     if first_dict is None:  # no first company match
         return render(request, "search.html",
                       {"msg": "No Comparison Object.",
@@ -243,7 +243,7 @@ def compare_company(request, mode, user_obj, ticker, company_list):
         first_dict["pridiction"] = pridiction
         first_dict["company_list"] = company_list
         return render(request, "search.html", first_dict)
-    pridiction_second = user_obj.pridict(ticker)
+    pridiction_second = user_obj.predict(ticker)
     if second_dict is None:  # no second compant match
         if pridiction is not None:
             first_dict["pridiction"] = pridiction
