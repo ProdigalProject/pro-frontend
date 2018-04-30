@@ -24,8 +24,8 @@ https://prodigal-beta.azurewebsites.net
 
 ## Docker Deployment Instructions
 1. Run Docker container.
-2. Run ```docker pull hwin16/pro-frontend:v1.0.3```
-3. Run ```docker run -p 8000:8000 hwin16/pro-frontend:v1.0.3```
+2. Run ```docker pull hwin16/pro-frontend:v1.0.4```
+3. Run ```docker run -p 8000:8000 hwin16/pro-frontend:v1.0.4```
 
 ## Documentations
 [Documentation pdf](prodigal_documentation.pdf)
