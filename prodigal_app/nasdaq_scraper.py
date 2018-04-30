@@ -30,6 +30,6 @@ def scrape(ticker):
     for p in bio_plist:
         text = p.text
         if "... More ..." in text:
-            text = text.rstrip("... More ...")
+            text = text[:-16]
         return_desc.append(text)
     return return_news, return_desc
